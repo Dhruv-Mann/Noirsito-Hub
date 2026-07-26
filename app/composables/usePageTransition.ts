@@ -1,0 +1,30 @@
+import { ref } from 'vue'
+
+const sweepStage = ref<'idle' | 'halfway' | 'recoil' | 'full'>('idle')
+const isSweeping = ref(false)
+
+export function usePageTransition() {
+  function startPinkSweep() {
+    if (isSweeping.value) return
+    isSweeping.value = true
+
+    // Phase 1: Sweep halfway up
+    sweepStage.value = 'halfway'
+
+    // Phase 2: Elastic recoil
+    setTimeout(() => {
+      sweepStage.value = 'recoil'
+
+      // Phase 3: Accelerate to 100% full screen coverage and LOCK THERE
+      setTimeout(() => {
+        sweepStage.value = 'full'
+      }, 220)
+    }, 400)
+  }
+
+  return {
+    sweepStage,
+    isSweeping,
+    startPinkSweep
+  }
+}

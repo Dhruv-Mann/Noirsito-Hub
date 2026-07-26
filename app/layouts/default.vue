@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import AppCommandPalette from '~/components/core/AppCommandPalette.vue'
+import PageTransitionSheet from '~/components/core/PageTransitionSheet.vue'
 </script>
 
 <template>
   <div class="layout-wrapper">
+    <!-- Cinematic Elastic Pink Sheet Sweep Transition Layer -->
+    <PageTransitionSheet />
     <!-- Full Page Background holding Hero_section.png without modifying the image -->
     <div class="page-background-image" aria-hidden="true" />
     <AppGrain />

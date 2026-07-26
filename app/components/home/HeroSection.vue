@@ -5,8 +5,10 @@ import FractalTree from './FractalTree.vue'
 import LissajousOrbit from './LissajousOrbit.vue'
 import CornerStarsCanvas from './CornerStarsCanvas.vue'
 import { useSystemState } from '~/composables/useSystemState'
+import { usePageTransition } from '~/composables/usePageTransition'
 
 const { isStarted, isAssembled, triggerInitialization } = useSystemState()
+const { startPinkSweep } = usePageTransition()
 
 const tiltX = ref(0)
 const tiltY = ref(0)
@@ -15,6 +17,12 @@ const mousePctY = ref(50)
 
 const handleSingleClick = () => {
   triggerInitialization()
+}
+
+function handleHeadToHubClick(e: MouseEvent) {
+  e.preventDefault()
+  e.stopPropagation()
+  startPinkSweep()
 }
 
 function handleMouseMove(e: MouseEvent) {
@@ -91,10 +99,9 @@ onUnmounted(() => {
         <!-- Meta Block: Head to Hub Button with Inner Text Scroll Animation -->
         <div class="meta-block">
           <a 
-            href="https://github.com/Dhruv-Mann" 
-            target="_blank" 
-            rel="noopener noreferrer" 
+            href="#" 
             class="btn btn-hub font-body"
+            @click="handleHeadToHubClick"
           >
             <span class="btn-hub-scroll">
               <span class="btn-hub-text btn-hub-default">

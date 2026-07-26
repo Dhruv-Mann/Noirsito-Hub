@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useSystemState } from '~/composables/useSystemState'
+
+const { isStarted } = useSystemState()
 
 const isOpen = ref(false)
 const searchQuery = ref('')
@@ -53,6 +56,8 @@ function showToast(msg: string) {
 }
 
 function handleKeyDown(e: KeyboardEvent) {
+  if (!isStarted.value) return
+
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
     e.preventDefault()
     isOpen.value = !isOpen.value
@@ -94,7 +99,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div>
+  <div v-if="isStarted">
     <!-- Floating Ctrl+K Trigger Badge -->
     <button class="cmd-k-trigger font-mono" @click="isOpen = true">
       <span>Ctrl+K</span>

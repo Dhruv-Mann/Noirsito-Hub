@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import PixelMatrixCanvas from './PixelMatrixCanvas.vue'
+import { useSystemState } from '~/composables/useSystemState'
 
-const isStarted = ref(false)
-const isAssembled = ref(false)
+const { isStarted, isAssembled, triggerInitialization } = useSystemState()
+
 const tiltX = ref(0)
 const tiltY = ref(0)
 const mousePctX = ref(50)
 const mousePctY = ref(50)
-
-function triggerInitialization() {
-  if (isStarted.value) return
-  isStarted.value = true
-  isAssembled.value = true
-}
 
 const handleSingleClick = () => {
   triggerInitialization()
@@ -56,8 +51,10 @@ onUnmounted(() => {
     <!-- Pixel Matrix Canvas: #341514 screen base, #AE3B8B pixels emerge on click -->
     <PixelMatrixCanvas :is-started="isStarted" />
 
-    <!-- Ambient Dynamic Color Spotlight Mesh -->
-    <div class="ambient-mesh" aria-hidden="true" />
+    <!-- Ambient Dynamic Color Spotlight Mesh (Only visible on initial prompt page before click) -->
+    <Transition name="fade">
+      <div v-if="!isStarted" class="ambient-mesh" aria-hidden="true" />
+    </Transition>
 
     <div class="container hero-content-container">
       <div 
@@ -127,11 +124,11 @@ onUnmounted(() => {
   pointer-events: none;
   background: radial-gradient(
     600px circle at var(--mouse-pct-x, 50%) var(--mouse-pct-y, 50%),
-    rgba(174, 59, 139, 0.14) 0%,
-    rgba(225, 120, 136, 0.05) 40%,
+    rgba(174, 59, 139, 0.18) 0%,
+    rgba(225, 120, 136, 0.07) 40%,
     transparent 80%
   );
-  transition: opacity 0.5s ease;
+  transition: opacity 0.6s var(--ease-out);
 }
 
 .hero-content-container {
@@ -338,5 +335,14 @@ onUnmounted(() => {
 
 .btn-hub:hover .btn-hub-hover {
   transform: translateY(0%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.6s var(--ease-out);
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

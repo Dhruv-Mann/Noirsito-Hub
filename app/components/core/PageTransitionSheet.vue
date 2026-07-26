@@ -2,30 +2,78 @@
   <div 
     class="pink-sweep-sheet" 
     :class="[sweepStage, { 'red-mode': isBloodHovered }]"
-    aria-hidden="true"
+    @wheel="handleWheel"
+    @touchstart="handleTouchStart"
+    @touchmove="handleTouchMove"
   >
     <!-- Blood Droplets Canvas Layer -->
     <canvas ref="dropletsCanvasRef" class="blood-droplets-canvas" />
 
+    <!-- Dispersal Quote Text Container: Words Fly Out to 4 Screen Corners on Scroll -->
     <div class="quote-editorial-wrapper font-display">
-      <!-- Line 1: Giving up is not in the BLOOD, sir, -->
+      <!-- Line 1: Giving up (TL) | is not in the BLOOD, sir, (TR) -->
       <div class="quote-line line-1">
-        <span class="phrase-medium">Giving up is not in the</span>
         <span 
-          class="blood-giant"
+          class="phrase-medium word-tl"
+          :style="{
+            transform: `translate(${offsetTL.x}px, ${offsetTL.y}px)`,
+            opacity: fragmentOpacity
+          }"
+        >
+          Giving up
+        </span>
+
+        <span 
+          class="phrase-medium word-tr-phrase"
+          :style="{
+            transform: `translate(${offsetTR.x}px, ${offsetTR.y}px)`,
+            opacity: fragmentOpacity
+          }"
+        >
+          is not in the
+        </span>
+
+        <span 
+          class="blood-giant word-tr-blood"
+          :style="{
+            transform: `translate(${offsetTR.x}px, ${offsetTR.y}px)`,
+            opacity: fragmentOpacity
+          }"
           @mouseenter="isBloodHovered = true"
           @mouseleave="isBloodHovered = false"
         >
           BLOOD
         </span>
-        <span class="sir-delicate">, sir,</span>
+
+        <span 
+          class="sir-delicate word-tr-sir"
+          :style="{
+            transform: `translate(${offsetTR.x}px, ${offsetTR.y}px)`,
+            opacity: fragmentOpacity
+          }"
+        >
+          , sir,
+        </span>
       </div>
       
-      <!-- Line 2: it's not in the BLOOD. -->
+      <!-- Line 2: it's not in the (BL) | BLOOD. (BR) -->
       <div class="quote-line line-2">
-        <span class="phrase-medium">it's not in the</span>
         <span 
-          class="blood-giant"
+          class="phrase-medium word-bl"
+          :style="{
+            transform: `translate(${offsetBL.x}px, ${offsetBL.y}px)`,
+            opacity: fragmentOpacity
+          }"
+        >
+          it's not in the
+        </span>
+
+        <span 
+          class="blood-giant word-br"
+          :style="{
+            transform: `translate(${offsetBR.x}px, ${offsetBR.y}px)`,
+            opacity: fragmentOpacity
+          }"
           @mouseenter="isBloodHovered = true"
           @mouseleave="isBloodHovered = false"
         >
@@ -33,18 +81,150 @@
         </span>
       </div>
     </div>
+
+    <!-- Secondary Exit Curtain Sheet Layer: Subtle Crimson Red gradient closing quote stage -->
+    <div class="exit-curtain-sheet" :class="{ active: isExitSweeping }" />
+
+    <!-- Scroll Progress Indicator Bar -->
+    <div v-if="sweepStage === 'full' && scrollProgress < 0.8 && !isExitSweeping" class="scroll-prompt font-mono">
+      <span>SCROLL DOWN TO ENTER HUB</span>
+      <div class="scroll-track">
+        <div class="scroll-thumb" :style="{ width: `${scrollProgress * 100}%` }" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
+import Lenis from 'lenis'
 import { usePageTransition } from '~/composables/usePageTransition'
 
+const router = useRouter()
 const { sweepStage } = usePageTransition()
-const isBloodHovered = ref(false)
 
+const isBloodHovered = ref(false)
+const isExitSweeping = ref(false)
 const dropletsCanvasRef = ref<HTMLCanvasElement | null>(null)
 let dropletRafId: number | null = null
+
+// Lenis Scroll Physics State
+const scrollProgress = ref(0)
+const hasNavigated = ref(false)
+let accumScroll = 0
+const maxScroll = 700
+let lenis: Lenis | null = null
+
+// 4 Corner Dispersal Position Calculations
+const fragmentOpacity = computed(() => {
+  if (scrollProgress.value <= 0.0) return 1.0
+  if (scrollProgress.value >= 0.75) return 0.0
+  return 1.0 - scrollProgress.value / 0.75
+})
+
+// Top-Left (TL): Moves UP & LEFT
+const offsetTL = computed(() => {
+  const p = Math.pow(scrollProgress.value, 1.4)
+  return {
+    x: -p * 600,
+    y: -p * 450
+  }
+})
+
+// Top-Right (TR): Moves UP & RIGHT
+const offsetTR = computed(() => {
+  const p = Math.pow(scrollProgress.value, 1.4)
+  return {
+    x: p * 600,
+    y: -p * 450
+  }
+})
+
+// Bottom-Left (BL): Moves DOWN & LEFT
+const offsetBL = computed(() => {
+  const p = Math.pow(scrollProgress.value, 1.4)
+  return {
+    x: -p * 600,
+    y: p * 450
+  }
+})
+
+// Bottom-Right (BR): Moves DOWN & RIGHT
+const offsetBR = computed(() => {
+  const p = Math.pow(scrollProgress.value, 1.4)
+  return {
+    x: p * 600,
+    y: p * 450
+  }
+})
+
+function handleWheel(e: WheelEvent) {
+  if (sweepStage.value !== 'full' || hasNavigated.value) return
+  accumScroll += e.deltaY * 0.9
+  accumScroll = Math.max(0, Math.min(maxScroll, accumScroll))
+  scrollProgress.value = accumScroll / maxScroll
+
+  // When scroll reaches 85%, activate Secondary Exit Curtain Sweep & navigate to /hub
+  if (scrollProgress.value >= 0.85 && !isExitSweeping.value && !hasNavigated.value) {
+    isExitSweeping.value = true
+    hasNavigated.value = true
+
+    setTimeout(() => {
+      router.push('/hub').then(() => {
+        // Uncover curtain sheet upwards to reveal the new /hub page cleanly!
+        setTimeout(() => {
+          sweepStage.value = 'uncover'
+          setTimeout(() => {
+            sweepStage.value = 'idle'
+            isExitSweeping.value = false
+            hasNavigated.value = false
+            scrollProgress.value = 0
+            accumScroll = 0
+          }, 500)
+        }, 150)
+      })
+    }, 450)
+  }
+}
+
+let touchStartY = 0
+function handleTouchStart(e: TouchEvent) {
+  if (e.touches.length > 0) {
+    touchStartY = e.touches[0].clientY
+  }
+}
+
+function handleTouchMove(e: TouchEvent) {
+  if (sweepStage.value !== 'full' || hasNavigated.value || e.touches.length === 0) return
+  const currentY = e.touches[0].clientY
+  const deltaY = (touchStartY - currentY) * 1.5
+  touchStartY = currentY
+
+  accumScroll += deltaY
+  accumScroll = Math.max(0, Math.min(maxScroll, accumScroll))
+  scrollProgress.value = accumScroll / maxScroll
+
+  if (scrollProgress.value >= 0.85 && !isExitSweeping.value && !hasNavigated.value) {
+    isExitSweeping.value = true
+    hasNavigated.value = true
+
+    setTimeout(() => {
+      router.push('/hub').then(() => {
+        setTimeout(() => {
+          sweepStage.value = 'uncover'
+          setTimeout(() => {
+            sweepStage.value = 'idle'
+            isExitSweeping.value = false
+            hasNavigated.value = false
+            scrollProgress.value = 0
+            accumScroll = 0
+          }, 500)
+        }, 150)
+      })
+    }, 450)
+  }
+}
 
 interface BloodDroplet {
   x: number
@@ -65,7 +245,7 @@ function initDroplets() {
   canvas.height = window.innerHeight
 
   droplets = []
-  const count = 42 // 42 organic dark crimson blood droplets
+  const count = 42
   const darkRedShades = ['#800014', '#5A000D', '#9A0019', '#3D0008', '#6B0010']
 
   for (let i = 0; i < count; i++) {
@@ -91,7 +271,6 @@ function renderDroplets() {
 
   if (isBloodHovered.value) {
     droplets.forEach(d => {
-      // Drip physics downward
       d.y += d.speed
 
       if (d.y > canvas.height + 40) {
@@ -105,14 +284,12 @@ function renderDroplets() {
       ctx.shadowColor = '#240005'
       ctx.shadowBlur = 10
 
-      // Draw teardrop / organic blood droplet shape
       ctx.beginPath()
-      ctx.arc(d.x, d.y, d.radius, 0, Math.PI) // Bottom curve
-      ctx.lineTo(d.x, d.y - d.length) // Top pointed tail
+      ctx.arc(d.x, d.y, d.radius, 0, Math.PI)
+      ctx.lineTo(d.x, d.y - d.length)
       ctx.closePath()
       ctx.fill()
 
-      // Glossy highlight reflection on top edge of droplet
       ctx.fillStyle = 'rgba(255, 255, 255, 0.4)'
       ctx.beginPath()
       ctx.arc(d.x - d.radius * 0.3, d.y - d.radius * 0.15, d.radius * 0.32, 0, Math.PI * 2)
@@ -133,10 +310,17 @@ onMounted(() => {
   window.addEventListener('resize', handleResize)
   initDroplets()
   dropletRafId = requestAnimationFrame(renderDroplets)
+
+  // Initialize Lenis smooth scroll engine
+  lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+  })
 })
 
 onBeforeUnmount(() => {
   if (dropletRafId) cancelAnimationFrame(dropletRafId)
+  if (lenis) lenis.destroy()
   window.removeEventListener('resize', handleResize)
 })
 </script>
@@ -154,6 +338,7 @@ onBeforeUnmount(() => {
   pointer-events: auto;
   transform: translateY(100%);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   will-change: transform, background;
@@ -171,29 +356,30 @@ onBeforeUnmount(() => {
   z-index: 1;
 }
 
-/* Hover on BLOOD: Entire background transitions to Vibrant Signature Neon Red (#FF2A5F)! */
 .pink-sweep-sheet.red-mode {
   background: radial-gradient(circle at 50% 50%, #FF2A5F 0%, #B30030 55%, #5E0018 100%);
   border-top-color: #ffffff;
   box-shadow: 0 0 140px rgba(255, 42, 95, 0.85), inset 0 0 160px rgba(255, 255, 255, 0.25);
 }
 
-/* Phase 1: Sweeps halfway up */
 .pink-sweep-sheet.halfway {
   transform: translateY(46%);
   transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Phase 2: Elastic recoil slightly back */
 .pink-sweep-sheet.recoil {
   transform: translateY(52%);
   transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Phase 3: Accelerates and completely covers the screen & locks */
 .pink-sweep-sheet.full {
   transform: translateY(0%);
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pink-sweep-sheet.uncover {
+  transform: translateY(-100%);
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .quote-editorial-wrapper {
@@ -206,15 +392,6 @@ onBeforeUnmount(() => {
   text-align: center;
   max-width: 1200px;
   padding: 0 var(--space-phi-lg);
-  opacity: 0;
-  transform: translateY(30px) scale(0.98);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
-              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
-}
-
-.pink-sweep-sheet.full .quote-editorial-wrapper {
-  opacity: 1;
-  transform: translateY(0) scale(1);
 }
 
 .quote-line {
@@ -226,17 +403,21 @@ onBeforeUnmount(() => {
   line-height: 1.05;
 }
 
-/* Base phrase text: sleek elegant soft champagne white */
+.phrase-medium,
+.blood-giant,
+.sir-delicate {
+  will-change: transform, opacity;
+  transition: transform 0.1s linear, opacity 0.1s linear, color 0.4s ease;
+}
+
 .phrase-medium {
   font-size: clamp(1.85rem, 4.4vw, 3.35rem);
   font-weight: 600;
   color: #FAFAFA;
   letter-spacing: -0.02em;
   opacity: 0.94;
-  transition: color 0.4s ease;
 }
 
-/* HUGE GIANT BLOOD TEXT: Vibrant Neon Red (#FF2A5F) with massive glow */
 .blood-giant {
   font-size: clamp(3.85rem, 9.5vw, 7.25rem);
   font-weight: 900;
@@ -248,31 +429,75 @@ onBeforeUnmount(() => {
   text-transform: uppercase;
   transform: translateY(4px);
   cursor: pointer;
-  transition: transform 0.3s var(--ease-out), color 0.4s ease, text-shadow 0.4s ease;
 }
 
 .blood-giant:hover {
   transform: scale(1.06) translateY(2px);
 }
 
-/* In Red Mode, BLOOD text switches to Obsidian Black with White Glow for high contrast! */
 .pink-sweep-sheet.red-mode .blood-giant {
   color: #000000;
   text-shadow: 0 0 30px rgba(255, 255, 255, 0.9), 0 0 60px rgba(255, 255, 255, 0.5);
 }
 
-/* Delicate italic 'sir,' text — Switches from dusty pink to Pure White in Red Mode */
 .sir-delicate {
   font-size: clamp(1.35rem, 2.8vw, 2.25rem);
   font-weight: 400;
   font-style: italic;
   color: #E17888;
   letter-spacing: 0.04em;
-  transition: color 0.4s ease, text-shadow 0.4s ease;
 }
 
 .pink-sweep-sheet.red-mode .sir-delicate {
   color: #ffffff;
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+}
+
+/* Secondary Exit Curtain Sheet: Subtle Crimson Red Gradient closing quote stage */
+.exit-curtain-sheet {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #8A0E2B 0%, #4A0515 50%, #200208 100%);
+  border-top: 2px solid #FF2A5F;
+  box-shadow: 0 -20px 80px rgba(138, 14, 43, 0.6);
+  z-index: 100;
+  pointer-events: none;
+  transform: translateY(100%);
+  transition: transform 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.exit-curtain-sheet.active {
+  transform: translateY(0%);
+}
+
+/* Scroll Progress Indicator Bar */
+.scroll-prompt {
+  position: absolute;
+  bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 20;
+  color: #E17888;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+}
+
+.scroll-track {
+  width: 140px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.scroll-thumb {
+  height: 100%;
+  background: #FF2A5F;
+  box-shadow: 0 0 10px #FF2A5F;
+  transition: width 0.1s linear;
 }
 </style>

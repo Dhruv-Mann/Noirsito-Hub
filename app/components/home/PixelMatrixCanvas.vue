@@ -42,6 +42,8 @@ interface PixelBlock {
   targetAlpha: number
   emergeDelay: number
   cornerType: 'bottom-right' | 'top-left' | 'bottom-left'
+  microJitter: number // Individual per-pixel micro timing delay offset
+  currentScale: number // Individual per-pixel pop scale (0.2 -> 1.0)
 }
 
 let pixelGrid: PixelBlock[] = []
@@ -71,7 +73,7 @@ function handleMouseMove(e: MouseEvent) {
 }
 
 function handleCanvasClick(e: MouseEvent) {
-  // Add a expanding pixel shockwave on click
+  // Add an expanding pixel shockwave on click
   shockwaves.push({
     x: e.clientX,
     y: e.clientY,
@@ -139,6 +141,9 @@ function initDeterministicGrid() {
         continue // Skip smoothly without creating a square box outline
       }
 
+      // Individual per-pixel micro-jitter delay (0 to 180ms individual stagger)
+      const microJitter = seededRandom(c * 17.3, r * 31.7) * 0.18
+
       // 1. BOTTOM-RIGHT CORNER PATTERN (Dense Stepped Wave — 100 Ratio Weight + 10% Boost)
       const distBR = Math.sqrt(Math.pow(cols - 1 - c, 2) + Math.pow(rows - 1 - r, 2))
       const isBRZone = (c / cols > 0.35 || r / rows > 0.45)
@@ -154,7 +159,9 @@ function initDeterministicGrid() {
           alpha: 0,
           targetAlpha: 0.4 + seed * 0.6,
           emergeDelay: delayBR,
-          cornerType: 'bottom-right'
+          cornerType: 'bottom-right',
+          microJitter,
+          currentScale: 0.2
         })
         continue
       }
@@ -174,7 +181,9 @@ function initDeterministicGrid() {
           alpha: 0,
           targetAlpha: 0.3 + seed * 0.5,
           emergeDelay: delayTL,
-          cornerType: 'top-left'
+          cornerType: 'top-left',
+          microJitter,
+          currentScale: 0.2
         })
         continue
       }
@@ -194,7 +203,9 @@ function initDeterministicGrid() {
           alpha: 0,
           targetAlpha: 0.35 + seed * 0.55,
           emergeDelay: delayBL,
-          cornerType: 'bottom-left'
+          cornerType: 'bottom-left',
+          microJitter,
+          currentScale: 0.2
         })
       }
     }
@@ -240,15 +251,22 @@ function render(time: number) {
     }
   }
 
-  // 2. Render solid contiguous pixels (ZERO GAP) after user single click
+  // 2. Render solid contiguous pixels with INDIVIDUAL STAGGERED PER-PIXEL RENDERING after user single click
   if (props.isStarted) {
     if (!startTime) startTime = time
     const elapsed = (time - startTime) / 1000
 
     pixelGrid.forEach(p => {
-      if (elapsed > p.emergeDelay) {
-        const easeProgress = Math.min(1, (elapsed - p.emergeDelay) * 2.42)
-        p.alpha += (p.targetAlpha * easeProgress - p.alpha) * 0.088
+      // Individual per-pixel emergence timing (base delay + individual micro-jitter offset)
+      const pixelEmergeTime = p.emergeDelay + p.microJitter
+
+      if (elapsed > pixelEmergeTime) {
+        // Individual pixel scale pop (0.2 -> 1.0)
+        p.currentScale += (1.0 - p.currentScale) * 0.16
+        
+        // Individual pixel alpha interpolation
+        const easeProgress = Math.min(1, (elapsed - pixelEmergeTime) * 2.8)
+        p.alpha += (p.targetAlpha * easeProgress - p.alpha) * 0.095
 
         // Proximity reaction & shockwave boosting
         const dx = mouseX - (p.x + p.size / 2)
@@ -272,11 +290,15 @@ function render(time: number) {
           }
         })
 
+        // Draw each pixel tile individually with its micro-scale & opacity
+        const renderSize = p.size * p.currentScale
+        const renderOffsetX = (p.size - renderSize) / 2
+        const renderOffsetY = (p.size - renderSize) / 2
+
         ctx.fillStyle = '#AE3B8B'
         ctx.globalAlpha = Math.min(1, p.alpha * opacityMultiplier)
         
-        // ZERO GAP: Exact solid pixelSize x pixelSize tile fill
-        ctx.fillRect(p.x, p.y, p.size, p.size)
+        ctx.fillRect(p.x + renderOffsetX, p.y + renderOffsetY, renderSize, renderSize)
       }
     })
   }

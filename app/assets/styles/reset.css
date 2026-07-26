@@ -12,9 +12,6 @@ html {
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: 1.5;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -22,18 +19,14 @@ html {
 }
 
 body {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
+  min-height: 100vh;
   background-color: var(--color-bg);
   color: var(--color-text);
   position: relative;
 }
 
 #___nuxt {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
+  min-height: 100vh;
 }
 
 img,
@@ -64,14 +57,42 @@ a {
   text-decoration: none;
 }
 
-/* Hide all scrollbars */
-::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
+/* Official Lenis Smooth Scroll CSS Rules */
+html.lenis,
+html.lenis body {
+  height: auto;
 }
 
-* {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #341514;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #AE3B8B;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c4479e;
 }

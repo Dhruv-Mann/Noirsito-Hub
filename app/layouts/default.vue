@@ -1,6 +1,6 @@
 <template>
   <div class="layout-wrapper">
-    <!-- Requirement 3: Full Page Background holding Hero_section.png without modifying the image -->
+    <!-- Full Page Background holding Hero_section.png without modifying the image -->
     <div class="page-background-image" aria-hidden="true" />
     <AppGrain />
     <AppNav />
@@ -13,9 +13,7 @@
 <style scoped>
 .layout-wrapper {
   position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
   background-color: #341514;
 }
 
@@ -35,10 +33,8 @@
 }
 
 .layout-main {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
   position: relative;
   z-index: 1;
+  min-height: 100vh;
 }
 </style>

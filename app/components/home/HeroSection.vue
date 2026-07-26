@@ -44,12 +44,17 @@ onUnmounted(() => {
 
         <!-- Meta Block: Head to Hub Button -->
         <div class="meta-block">
-          <NuxtLink to="/projects" class="btn btn-hub font-body">
+          <a 
+            href="https://github.com/Dhruv-Mann" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-hub font-body"
+          >
             Head to Hub
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </NuxtLink>
+          </a>
         </div>
       </div>
     </div>
@@ -162,7 +167,7 @@ onUnmounted(() => {
   transition-delay: 0.35s;
 }
 
-/* Head to Hub Action Button */
+/* Head to Hub Small Button */
 .btn-hub {
   display: inline-flex;
   align-items: center;

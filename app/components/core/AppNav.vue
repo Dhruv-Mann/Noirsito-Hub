@@ -1,16 +1,5 @@
 <script setup lang="ts">
 const route = useRoute()
-
-const navLinks = [
-  { label: 'Overview', path: '/' },
-  { label: 'Projects', path: '/projects' },
-  { label: 'About', path: '/about' }
-]
-
-function isActive(path: string) {
-  if (path === '/') return route.path === '/'
-  return route.path.startsWith(path)
-}
 </script>
 
 <template>
@@ -21,21 +10,6 @@ function isActive(path: string) {
         <span class="brand-name">Dhruv Mann</span>
         <span class="brand-badge">B.Tech</span>
       </NuxtLink>
-
-      <nav class="nav-menu" aria-label="Main Navigation">
-        <ul class="nav-list">
-          <li v-for="link in navLinks" :key="link.path" class="nav-item">
-            <NuxtLink 
-              :to="link.path" 
-              class="nav-link" 
-              :class="{ active: isActive(link.path) }"
-            >
-              {{ link.label }}
-              <span v-if="isActive(link.path)" class="active-indicator" />
-            </NuxtLink>
-          </li>
-        </ul>
-      </nav>
 
       <div class="nav-actions">
         <a 
@@ -110,42 +84,6 @@ function isActive(path: string) {
   padding: 2px 8px;
   border-radius: var(--radius-full);
   border: 1px solid rgba(174, 59, 139, 0.3);
-}
-
-.nav-list {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-  list-style: none;
-  background-color: rgba(0, 0, 0, 0.25);
-  padding: 4px;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--color-border);
-}
-
-.nav-link {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  height: 36px;
-  padding: 0 var(--space-4);
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #E17888;
-  border-radius: var(--radius-full);
-  transition: all var(--duration-fast) var(--ease-out);
-}
-
-.nav-link:hover {
-  color: #ffffff;
-  background-color: rgba(225, 120, 136, 0.1);
-}
-
-.nav-link.active {
-  color: #ffffff;
-  background-color: #AE3B8B;
-  font-weight: 600;
 }
 
 .nav-actions {

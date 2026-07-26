@@ -10,9 +10,6 @@ const actions = [
   {
     id: 'github',
     title: 'Open GitHub Profile',
-    category: 'Navigation',
-    icon: 'github',
-    shortcut: '↵',
     handler: () => {
       window.open('https://github.com/Dhruv-Mann', '_blank')
     }
@@ -20,9 +17,6 @@ const actions = [
   {
     id: 'copy-email',
     title: 'Copy Contact Email',
-    category: 'Action',
-    icon: 'email',
-    shortcut: '⌘C',
     handler: () => {
       navigator.clipboard.writeText('dhruv.mann.dev@gmail.com')
       showToast('Email copied to clipboard!')
@@ -31,9 +25,6 @@ const actions = [
   {
     id: 'copy-github',
     title: 'Copy GitHub Repository URL',
-    category: 'Action',
-    icon: 'copy',
-    shortcut: '⌘G',
     handler: () => {
       navigator.clipboard.writeText('https://github.com/Dhruv-Mann/Noir-Hub')
       showToast('GitHub URL copied to clipboard!')
@@ -42,9 +33,6 @@ const actions = [
   {
     id: 'stack',
     title: 'Inspect System Architecture Stack',
-    category: 'Info',
-    icon: 'cpu',
-    shortcut: 'S',
     handler: () => {
       showToast('Nuxt 4 • Vue 3 • WebGL • SIMD C++ WASM • Raft Consensus')
     }
@@ -54,9 +42,7 @@ const actions = [
 const filteredActions = computed(() => {
   if (!searchQuery.value.trim()) return actions
   const q = searchQuery.value.toLowerCase().trim()
-  return actions.filter(
-    a => a.title.toLowerCase().includes(q) || a.category.toLowerCase().includes(q)
-  )
+  return actions.filter(a => a.title.toLowerCase().includes(q))
 })
 
 function showToast(msg: string) {
@@ -109,13 +95,13 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <!-- Floating Cmd+K Trigger Badge -->
+    <!-- Floating Ctrl+K Trigger Badge -->
     <button class="cmd-k-trigger font-mono" @click="isOpen = true">
-      <span>⌘K</span>
+      <span>Ctrl+K</span>
       <span class="cmd-k-label">Command Palette</span>
     </button>
 
-    <!-- Raycast OS Command Palette Modal -->
+    <!-- Command Palette Modal -->
     <Transition name="palette-fade">
       <div v-if="isOpen" class="palette-backdrop" @click.self="isOpen = false">
         <div class="palette-modal font-body">
@@ -144,11 +130,7 @@ onUnmounted(() => {
                 @click="action.handler(); isOpen = false;"
                 @mouseenter="selectedIndex = index"
               >
-                <div class="action-left">
-                  <span class="action-category font-mono">{{ action.category }}</span>
-                  <span class="action-title">{{ action.title }}</span>
-                </div>
-                <span class="action-shortcut font-mono">{{ action.shortcut }}</span>
+                <span class="action-title">{{ action.title }}</span>
               </div>
             </div>
             <div v-else class="no-results font-mono">
@@ -263,7 +245,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px var(--space-phi-lg);
+  padding: 12px var(--space-phi-lg);
   cursor: pointer;
   transition: background 0.15s ease;
 }
@@ -272,29 +254,9 @@ onUnmounted(() => {
   background: rgba(174, 59, 139, 0.25);
 }
 
-.action-left {
-  display: flex;
-  align-items: center;
-  gap: var(--space-phi-md);
-}
-
-.action-category {
-  font-size: 0.6875rem;
-  color: #AE3B8B;
-  background: rgba(174, 59, 139, 0.2);
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
-  text-transform: uppercase;
-}
-
 .action-title {
   font-size: 0.9375rem;
   color: #ffffff;
-}
-
-.action-shortcut {
-  font-size: 0.8125rem;
-  color: rgba(225, 120, 136, 0.7);
 }
 
 .no-results {

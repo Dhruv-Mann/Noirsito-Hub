@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import PixelMatrixCanvas from './PixelMatrixCanvas.vue'
+import FractalTree from './FractalTree.vue'
+import LissajousOrbit from './LissajousOrbit.vue'
 import { useSystemState } from '~/composables/useSystemState'
 
 const { isStarted, isAssembled, triggerInitialization } = useSystemState()
@@ -56,6 +58,11 @@ onUnmounted(() => {
       <div v-if="!isStarted" class="ambient-mesh" aria-hidden="true" />
     </Transition>
 
+    <!-- Big Background Lissajous Harmonic Orbit (Freezes & Expands smoothly over 2.88s on click) -->
+    <div class="initial-lissajous-backdrop" :class="{ expanding: isStarted }" aria-hidden="true">
+      <LissajousOrbit :is-started="isStarted" />
+    </div>
+
     <div class="container hero-content-container">
       <div 
         id="hero-text-block" 
@@ -63,10 +70,13 @@ onUnmounted(() => {
         :class="{ Assembled: isAssembled }"
         :style="{ transform: isAssembled ? `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)` : undefined }"
       >
-        <!-- Stacked Name Heading with Metallic Shimmer Reveal -->
+        <!-- Stacked Name Heading with Metallic Shimmer Reveal & Animated Fractal Tree -->
         <h1 class="main-name-heading font-display">
-          <!-- Line 1: Dhruv in Luminous Metallic Shimmer Gradient -->
-          <span class="first-name">Dhruv</span>
+          <!-- Line 1: Dhruv with Animated Fractal Tree placed right after -->
+          <span class="first-name">
+            <span class="first-name-text">Dhruv</span>
+            <FractalTree />
+          </span>
           <!-- Line 2: Mann (Bright Pink) with aka Noirsito tag -->
           <span class="last-name">
             <span class="name-text">Mann</span>
@@ -128,7 +138,26 @@ onUnmounted(() => {
     rgba(225, 120, 136, 0.07) 40%,
     transparent 80%
   );
-  transition: opacity 0.6s var(--ease-out);
+  transition: opacity 0.8s var(--ease-out);
+}
+
+/* Big Background Lissajous Orbit behind prompt button */
+.initial-lissajous-backdrop {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0.5;
+  transition: transform 2.88s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 2.88s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.initial-lissajous-backdrop.expanding {
+  transform: translate(-50%, -50%) scale(9.5);
+  opacity: 0;
 }
 
 .hero-content-container {
@@ -170,7 +199,13 @@ onUnmounted(() => {
 
 /* Line 1: Dhruv in Luminous Pure White & Metallic Champagne Shimmer Gradient */
 .first-name {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.first-name-text {
+  display: inline-block;
   color: #ffffff;
   background: linear-gradient(
     135deg,
@@ -196,7 +231,7 @@ onUnmounted(() => {
   }
 }
 
-.first-name:hover {
+.first-name-text:hover {
   filter: drop-shadow(0 0 32px rgba(245, 184, 209, 0.85));
 }
 
@@ -339,7 +374,7 @@ onUnmounted(() => {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.6s var(--ease-out);
+  transition: opacity 0.8s var(--ease-out);
 }
 .fade-enter-from,
 .fade-leave-to {

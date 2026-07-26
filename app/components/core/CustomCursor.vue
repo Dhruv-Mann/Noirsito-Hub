@@ -7,10 +7,30 @@ const followerX = ref(-100)
 const followerY = ref(-100)
 const isHovered = ref(false)
 const isClicked = ref(false)
+const isInitialized = ref(false)
 
 let animationFrameId: number | null = null
 
 function updateCursorPosition(e: MouseEvent) {
+  // On initial mouse movement or large distance jump (e.g. taskbar re-entry), snap position instantly
+  if (!isInitialized.value) {
+    cursorX.value = e.clientX
+    cursorY.value = e.clientY
+    followerX.value = e.clientX
+    followerY.value = e.clientY
+    isInitialized.value = true
+    return
+  }
+
+  const dx = Math.abs(e.clientX - cursorX.value)
+  const dy = Math.abs(e.clientY - cursorY.value)
+
+  // Snap instantly if cursor jumped across window edge (> 300px jump)
+  if (dx > 300 || dy > 300) {
+    followerX.value = e.clientX
+    followerY.value = e.clientY
+  }
+
   cursorX.value = e.clientX
   cursorY.value = e.clientY
 
@@ -34,9 +54,11 @@ function handleMouseUp() {
 }
 
 function animateFollower() {
-  // Smooth spring follower interpolation
-  followerX.value += (cursorX.value - followerX.value) * 0.18
-  followerY.value += (cursorY.value - followerY.value) * 0.18
+  if (isInitialized.value) {
+    // Ultra-responsive spring follower interpolation (0.35 factor)
+    followerX.value += (cursorX.value - followerX.value) * 0.35
+    followerY.value += (cursorY.value - followerY.value) * 0.35
+  }
 
   animationFrameId = requestAnimationFrame(animateFollower)
 }
@@ -59,7 +81,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="custom-cursor-container">
+  <div class="custom-cursor-container" :class="{ visible: isInitialized }">
     <!-- Center Dot -->
     <div
       class="cursor-dot"
@@ -82,6 +104,12 @@ onUnmounted(() => {
   position: fixed;
   inset: 0;
   z-index: 99999;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.custom-cursor-container.visible {
+  opacity: 1;
 }
 
 .cursor-dot {
@@ -116,9 +144,9 @@ onUnmounted(() => {
   left: -20px;
   width: 40px;
   height: 40px;
-  border: 1.5px solid rgba(225, 120, 136, 0.4);
+  border: 1.5px solid rgba(225, 120, 136, 0.45);
   border-radius: 50%;
-  background: rgba(174, 59, 139, 0.05);
+  background: rgba(174, 59, 139, 0.08);
   backdrop-filter: blur(1px);
   display: flex;
   align-items: center;
@@ -138,7 +166,7 @@ onUnmounted(() => {
   width: 48px;
   height: 48px;
   border-color: #AE3B8B;
-  background: rgba(174, 59, 139, 0.15);
+  background: rgba(174, 59, 139, 0.18);
   box-shadow: 0 0 24px rgba(174, 59, 139, 0.35);
 }
 

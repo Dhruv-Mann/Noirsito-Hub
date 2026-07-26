@@ -6,6 +6,8 @@ const isStarted = ref(false)
 const isAssembled = ref(false)
 const tiltX = ref(0)
 const tiltY = ref(0)
+const mousePctX = ref(50)
+const mousePctY = ref(50)
 
 function triggerInitialization() {
   if (isStarted.value) return
@@ -22,9 +24,13 @@ function handleMouseMove(e: MouseEvent) {
   const cx = window.innerWidth / 2
   const cy = window.innerHeight / 2
   
-  // Subtle 3D perspective rotational tilt (-4.5deg to +4.5deg)
+  // 3D perspective rotational tilt (-4.5deg to +4.5deg)
   tiltX.value = -((e.clientY - cy) / cy) * 4.5
   tiltY.value = ((e.clientX - cx) / cx) * 4.5
+
+  // Calculate cursor background percentage for ambient spotlight mesh
+  mousePctX.value = Math.round((e.clientX / window.innerWidth) * 100)
+  mousePctY.value = Math.round((e.clientY / window.innerHeight) * 100)
 }
 
 onMounted(() => {
@@ -39,9 +45,19 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="hero-stage" @click="triggerInitialization">
+  <section 
+    class="hero-stage" 
+    :style="{
+      '--mouse-pct-x': `${mousePctX}%`,
+      '--mouse-pct-y': `${mousePctY}%`
+    }"
+    @click="triggerInitialization"
+  >
     <!-- Pixel Matrix Canvas: #341514 screen base, #AE3B8B pixels emerge on click -->
     <PixelMatrixCanvas :is-started="isStarted" />
+
+    <!-- Ambient Dynamic Color Spotlight Mesh -->
+    <div class="ambient-mesh" aria-hidden="true" />
 
     <div class="container hero-content-container">
       <div 
@@ -50,9 +66,9 @@ onUnmounted(() => {
         :class="{ Assembled: isAssembled }"
         :style="{ transform: isAssembled ? `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)` : undefined }"
       >
-        <!-- Stacked Name Heading -->
+        <!-- Stacked Name Heading with Metallic Shimmer Reveal -->
         <h1 class="main-name-heading font-display">
-          <!-- Line 1: Dhruv (Pitch Black) -->
+          <!-- Line 1: Dhruv in Luminous Metallic Shimmer Gradient -->
           <span class="first-name">Dhruv</span>
           <!-- Line 2: Mann (Bright Pink) with aka Noirsito tag -->
           <span class="last-name">
@@ -103,6 +119,21 @@ onUnmounted(() => {
   cursor: default;
 }
 
+/* Ambient Dynamic Color Spotlight Mesh */
+.ambient-mesh {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    600px circle at var(--mouse-pct-x, 50%) var(--mouse-pct-y, 50%),
+    rgba(174, 59, 139, 0.14) 0%,
+    rgba(225, 120, 136, 0.05) 40%,
+    transparent 80%
+  );
+  transition: opacity 0.5s ease;
+}
+
 .hero-content-container {
   position: relative;
   z-index: 10;
@@ -140,15 +171,32 @@ onUnmounted(() => {
   transition-delay: 0.15s;
 }
 
-/* Line 1: Dhruv in Luminous Pure White & Soft Champagne Gradient */
+/* Line 1: Dhruv in Luminous Pure White & Metallic Champagne Shimmer Gradient */
 .first-name {
   display: block;
   color: #ffffff;
-  background: linear-gradient(135deg, #ffffff 35%, #F5B8D1 100%);
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #ffffff 40%,
+    #F5B8D1 70%,
+    #AE3B8B 100%
+  );
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.5));
+  animation: metallic-shimmer 6s ease-in-out infinite alternate;
   transition: filter 0.3s ease;
+}
+
+@keyframes metallic-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }
 
 .first-name:hover {

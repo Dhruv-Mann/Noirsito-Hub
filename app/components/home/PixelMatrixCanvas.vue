@@ -21,6 +21,17 @@ interface Shockwave {
 }
 let shockwaves: Shockwave[] = []
 
+interface Particle {
+  x: number
+  y: number
+  vx: number
+  vy: number
+  size: number
+  alpha: number
+  color: string
+}
+let particles: Particle[] = []
+
 interface PixelBlock {
   col: number
   row: number
@@ -68,6 +79,22 @@ function handleCanvasClick(e: MouseEvent) {
     maxRadius: Math.max(width, height) * 0.75,
     speed: 18
   })
+
+  // Spawn explosive micro spark particles on click
+  const colors = ['#AE3B8B', '#E17888', '#ffffff', '#F5B8D1']
+  for (let i = 0; i < 22; i++) {
+    const angle = Math.random() * Math.PI * 2
+    const speed = 2.5 + Math.random() * 6.5
+    particles.push({
+      x: e.clientX,
+      y: e.clientY,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      size: 2 + Math.random() * 3,
+      alpha: 1,
+      color: colors[Math.floor(Math.random() * colors.length)]
+    })
+  }
 }
 
 // Initialize Grid with Smooth Elliptical Falloff (NO BBOX / NO SQUARE CUTOUT BOX)
@@ -192,6 +219,24 @@ function render(time: number) {
     sw.radius += sw.speed
     if (sw.radius > sw.maxRadius) {
       shockwaves.splice(i, 1)
+    }
+  }
+
+  // Render & update micro spark particles
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const pt = particles[i]
+    pt.x += pt.vx
+    pt.y += pt.vy
+    pt.vx *= 0.94
+    pt.vy *= 0.94
+    pt.alpha -= 0.024
+
+    if (pt.alpha <= 0) {
+      particles.splice(i, 1)
+    } else {
+      ctx.fillStyle = pt.color
+      ctx.globalAlpha = Math.max(0, pt.alpha)
+      ctx.fillRect(pt.x, pt.y, pt.size, pt.size)
     }
   }
 

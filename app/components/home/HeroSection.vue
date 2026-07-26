@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import PixelMatrixCanvas from './PixelMatrixCanvas.vue'
 import FractalTree from './FractalTree.vue'
 import LissajousOrbit from './LissajousOrbit.vue'
+import CornerStarsCanvas from './CornerStarsCanvas.vue'
 import { useSystemState } from '~/composables/useSystemState'
 
 const { isStarted, isAssembled, triggerInitialization } = useSystemState()
@@ -52,6 +53,9 @@ onUnmounted(() => {
   >
     <!-- Pixel Matrix Canvas: #341514 screen base, #AE3B8B pixels emerge on click -->
     <PixelMatrixCanvas :is-started="isStarted" />
+
+    <!-- 4 Complex Lissajous Harmonic Corner Stars with Diagonal Swap Physics & Red Shift -->
+    <CornerStarsCanvas :is-started="isStarted" />
 
     <!-- Ambient Dynamic Color Spotlight Mesh (Only visible on initial prompt page before click) -->
     <Transition name="fade">

@@ -100,7 +100,7 @@ onUnmounted(() => {
   padding: 0;
   overflow: hidden;
   background-color: #341514;
-  cursor: pointer;
+  cursor: default;
 }
 
 .hero-content-container {

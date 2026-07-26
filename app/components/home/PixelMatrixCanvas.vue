@@ -27,6 +27,8 @@ interface PixelBlock {
 let pixelGrid: PixelBlock[] = []
 let cols = 0
 let rows = 0
+let width = 0
+let height = 0
 const pixelSize = 20 // 20px solid square blocks (zero gap)
 
 // Seeded math for 100% deterministic pattern every reload
@@ -35,180 +37,187 @@ function seededRandom(x: number, y: number) {
   return sinVal - Math.floor(sinVal)
 }
 
-onMounted(() => {
+function handleResize() {
+  const canvas = canvasRef.value
+  if (!canvas) return
+  width = canvas.width = window.innerWidth
+  height = canvas.height = window.innerHeight
+  initDeterministicGrid()
+}
+
+function handleMouseMove(e: MouseEvent) {
+  mouseX = e.clientX
+  mouseY = e.clientY
+}
+
+// Initialize Grid with Smooth Elliptical Falloff (NO BBOX / NO SQUARE CUTOUT BOX)
+function initDeterministicGrid() {
+  pixelGrid = []
+  if (width === 0 || height === 0) return
+
+  cols = Math.ceil(width / pixelSize)
+  rows = Math.ceil(height / pixelSize)
+
+  // Text focal point (Center of text block region: ~28% width, ~48% height)
+  const textFocusX = width * 0.28
+  const textFocusY = height * 0.48
+
+  // Elliptical exclusion radiuses (no sharp box edges)
+  const radiusX = Math.max(300, width * 0.38)
+  const radiusY = Math.max(260, height * 0.38)
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const x = c * pixelSize
+      const y = r * pixelSize
+
+      // Smooth Elliptical Radial Distance (NO rectangular bbox)
+      const dx = (x - textFocusX) / radiusX
+      const dy = (y - textFocusY) / radiusY
+      const dist = Math.sqrt(dx * dx + dy * dy)
+
+      // Smooth density probability (0 near text center, ramping up softly outward)
+      const seed = seededRandom(c, r)
+      let densityProb = 1
+
+      if (dist < 0.65) {
+        densityProb = 0 // Keep text core completely clear
+      } else if (dist < 1.15) {
+        // Smooth radial fade out from text (no sharp box line)
+        const t = (dist - 0.65) / 0.5
+        densityProb = t * t // Smooth quadratic curve
+      }
+
+      if (densityProb <= 0 || seed > densityProb) {
+        continue // Skip smoothly without creating a square box outline
+      }
+
+      // 1. BOTTOM-RIGHT CORNER PATTERN (Dense Stepped Wave — 100 Ratio Weight)
+      const distBR = Math.sqrt(Math.pow(cols - 1 - c, 2) + Math.pow(rows - 1 - r, 2))
+      const isBRZone = (c / cols > 0.35 || r / rows > 0.45)
+
+      if (isBRZone && seed < 0.75 * densityProb) {
+        const delayBR = distBR * 0.05
+        pixelGrid.push({
+          col: c,
+          row: r,
+          x,
+          y,
+          size: pixelSize,
+          alpha: 0,
+          targetAlpha: 0.4 + seed * 0.6,
+          emergeDelay: delayBR,
+          cornerType: 'bottom-right'
+        })
+        continue
+      }
+
+      // 2. TOP-LEFT CORNER PATTERN (Sparse Cluster — 15 Ratio Weight, 1.0s delay)
+      const distTL = Math.sqrt(Math.pow(c, 2) + Math.pow(r, 2))
+      const isTLZone = (c / cols < 0.35 && r / rows < 0.35)
+
+      if (isTLZone && seed < 0.2 * densityProb) {
+        const delayTL = 1.0 + distTL * 0.07
+        pixelGrid.push({
+          col: c,
+          row: r,
+          x,
+          y,
+          size: pixelSize,
+          alpha: 0,
+          targetAlpha: 0.3 + seed * 0.5,
+          emergeDelay: delayTL,
+          cornerType: 'top-left'
+        })
+        continue
+      }
+
+      // 3. BOTTOM-LEFT CORNER PATTERN (Horizontal Band — 15 Ratio Weight, 1.0s delay)
+      const distBL = Math.sqrt(Math.pow(c, 2) + Math.pow(rows - 1 - r, 2))
+      const isBLZone = (c / cols < 0.4 && r / rows > 0.7)
+
+      if (isBLZone && seed < 0.24 * densityProb) {
+        const delayBL = 1.0 + distBL * 0.06
+        pixelGrid.push({
+          col: c,
+          row: r,
+          x,
+          y,
+          size: pixelSize,
+          alpha: 0,
+          targetAlpha: 0.35 + seed * 0.55,
+          emergeDelay: delayBL,
+          cornerType: 'bottom-left'
+        })
+      }
+    }
+  }
+}
+
+let startTime: number | null = null
+
+function render(time: number) {
   const canvas = canvasRef.value
   if (!canvas) return
   const ctx = canvas.getContext('2d')
   if (!ctx) return
 
-  let width = (canvas.width = window.innerWidth)
-  let height = (canvas.height = window.innerHeight)
+  // 1. Entire screen starts with #341514
+  ctx.fillStyle = '#341514'
+  ctx.fillRect(0, 0, width, height)
 
-  const handleResize = () => {
-    if (!canvas) return
-    width = canvas.width = window.innerWidth
-    height = canvas.height = window.innerHeight
-    initDeterministicGrid()
+  // 2. Render solid contiguous pixels (ZERO GAP) after user single click
+  if (props.isStarted) {
+    if (!startTime) startTime = time
+    const elapsed = (time - startTime) / 1000
+
+    pixelGrid.forEach(p => {
+      if (elapsed > p.emergeDelay) {
+        const easeProgress = Math.min(1, (elapsed - p.emergeDelay) * 2.2)
+        p.alpha += (p.targetAlpha * easeProgress - p.alpha) * 0.08
+
+        // Proximity reaction
+        const dx = mouseX - (p.x + p.size / 2)
+        const dy = mouseY - (p.y + p.size / 2)
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        let opacityMultiplier = 1
+
+        if (dist < 140) {
+          opacityMultiplier = 1.3 - (dist / 140) * 0.3
+        }
+
+        ctx.fillStyle = '#AE3B8B'
+        ctx.globalAlpha = Math.min(1, p.alpha * opacityMultiplier)
+        
+        // ZERO GAP: Exact solid pixelSize x pixelSize tile fill
+        ctx.fillRect(p.x, p.y, p.size, p.size)
+      }
+    })
   }
+
+  ctx.globalAlpha = 1
+  animationFrameId = requestAnimationFrame(render)
+}
+
+onMounted(() => {
+  const canvas = canvasRef.value
+  if (!canvas) return
+  width = canvas.width = window.innerWidth
+  height = canvas.height = window.innerHeight
+
   window.addEventListener('resize', handleResize)
-
-  const handleMouseMove = (e: MouseEvent) => {
-    mouseX = e.clientX
-    mouseY = e.clientY
-  }
   window.addEventListener('mousemove', handleMouseMove)
 
-  // Initialize Grid with Smooth Elliptical Falloff (NO BBOX / NO SQUARE CUTOUT BOX)
-  function initDeterministicGrid() {
-    pixelGrid = []
-    cols = Math.ceil(width / pixelSize)
-    rows = Math.ceil(height / pixelSize)
-
-    // Text focal point (Center of text block region: ~30% width, ~48% height)
-    const textFocusX = width * 0.28
-    const textFocusY = height * 0.48
-
-    // Elliptical exclusion radiuses (no sharp box edges)
-    const radiusX = Math.max(300, width * 0.38)
-    const radiusY = Math.max(260, height * 0.38)
-
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const x = c * pixelSize
-        const y = r * pixelSize
-
-        // Smooth Elliptical Radial Distance (NO rectangular bbox)
-        const dx = (x - textFocusX) / radiusX
-        const dy = (y - textFocusY) / radiusY
-        const dist = Math.sqrt(dx * dx + dy * dy)
-
-        // Smooth density probability (0 near text center, ramping up softly outward)
-        const seed = seededRandom(c, r)
-        let densityProb = 1
-
-        if (dist < 0.6) {
-          densityProb = 0 // Keep text core completely clear
-        } else if (dist < 1.1) {
-          // Smooth radial fade out from text (no sharp box line)
-          const t = (dist - 0.6) / 0.5
-          densityProb = t * t // Smooth quadratic curve
-        }
-
-        if (densityProb <= 0 || seed > densityProb) {
-          continue // Skip smoothly without creating a square box outline
-        }
-
-        // 1. BOTTOM-RIGHT CORNER PATTERN (Dense Stepped Wave — 100 Ratio Weight)
-        const distBR = Math.sqrt(Math.pow(cols - 1 - c, 2) + Math.pow(rows - 1 - r, 2))
-        const isBRZone = (c / cols > 0.35 || r / rows > 0.45)
-
-        if (isBRZone && seed < 0.75 * densityProb) {
-          const delayBR = distBR * 0.05
-          pixelGrid.push({
-            col: c,
-            row: r,
-            x,
-            y,
-            size: pixelSize,
-            alpha: 0,
-            targetAlpha: 0.4 + seed * 0.6,
-            emergeDelay: delayBR,
-            cornerType: 'bottom-right'
-          })
-          continue
-        }
-
-        // 2. TOP-LEFT CORNER PATTERN (Sparse Cluster — 15 Ratio Weight, 1.0s delay)
-        const distTL = Math.sqrt(Math.pow(c, 2) + Math.pow(r, 2))
-        const isTLZone = (c / cols < 0.35 && r / rows < 0.35)
-
-        if (isTLZone && seed < 0.2 * densityProb) {
-          const delayTL = 1.0 + distTL * 0.07
-          pixelGrid.push({
-            col: c,
-            row: r,
-            x,
-            y,
-            size: pixelSize,
-            alpha: 0,
-            targetAlpha: 0.3 + seed * 0.5,
-            emergeDelay: delayTL,
-            cornerType: 'top-left'
-          })
-          continue
-        }
-
-        // 3. BOTTOM-LEFT CORNER PATTERN (Horizontal Band — 15 Ratio Weight, 1.0s delay)
-        const distBL = Math.sqrt(Math.pow(c, 2) + Math.pow(rows - 1 - r, 2))
-        const isBLZone = (c / cols < 0.4 && r / rows > 0.7)
-
-        if (isBLZone && seed < 0.24 * densityProb) {
-          const delayBL = 1.0 + distBL * 0.06
-          pixelGrid.push({
-            col: c,
-            row: r,
-            x,
-            y,
-            size: pixelSize,
-            alpha: 0,
-            targetAlpha: 0.35 + seed * 0.55,
-            emergeDelay: delayBL,
-            cornerType: 'bottom-left'
-          })
-        }
-      }
-    }
-  }
-
+  initDeterministicGrid()
   setTimeout(initDeterministicGrid, 50)
 
-  let startTime: number | null = null
-
-  const render = (time: number) => {
-    // 1. Entire screen starts with #341514
-    ctx.fillStyle = '#341514'
-    ctx.fillRect(0, 0, width, height)
-
-    // 2. Render solid contiguous pixels (ZERO GAP) after user single click
-    if (props.isStarted) {
-      if (!startTime) startTime = time
-      const elapsed = (time - startTime) / 1000
-
-      pixelGrid.forEach(p => {
-        if (elapsed > p.emergeDelay) {
-          const easeProgress = Math.min(1, (elapsed - p.emergeDelay) * 2.2)
-          p.alpha += (p.targetAlpha * easeProgress - p.alpha) * 0.08
-
-          // Proximity reaction
-          const dx = mouseX - (p.x + p.size / 2)
-          const dy = mouseY - (p.y + p.size / 2)
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          let opacityMultiplier = 1
-
-          if (dist < 140) {
-            opacityMultiplier = 1.3 - (dist / 140) * 0.3
-          }
-
-          ctx.fillStyle = '#AE3B8B'
-          ctx.globalAlpha = Math.min(1, p.alpha * opacityMultiplier)
-          
-          // ZERO GAP: Exact solid pixelSize x pixelSize tile fill
-          ctx.fillRect(p.x, p.y, p.size, p.size)
-        }
-      })
-    }
-
-    ctx.globalAlpha = 1
-    animationFrameId = requestAnimationFrame(render)
-  }
-
   animationFrameId = requestAnimationFrame(render)
+})
 
-  onUnmounted(() => {
-    if (animationFrameId) cancelAnimationFrame(animationFrameId)
-    window.removeEventListener('resize', handleResize)
-    window.removeEventListener('mousemove', handleMouseMove)
-  })
+onUnmounted(() => {
+  if (animationFrameId) cancelAnimationFrame(animationFrameId)
+  window.removeEventListener('resize', handleResize)
+  window.removeEventListener('mousemove', handleMouseMove)
 })
 </script>
 
@@ -247,7 +256,7 @@ onMounted(() => {
   display: block;
 }
 
-/* Jumping Cursor Prompt Overlay */
+/* Jumping Cursor Prompt Overlay — Centered in the middle of the screen */
 .click-prompt-overlay {
   position: absolute;
   inset: 0;

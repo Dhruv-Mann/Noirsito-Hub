@@ -56,7 +56,7 @@ function isActive(path: string) {
 
 <style scoped>
 .app-header {
-  position: sticky;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -66,6 +66,7 @@ function isActive(path: string) {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
+  pointer-events: none;
 }
 
 .header-inner {
@@ -73,91 +74,78 @@ function isActive(path: string) {
   align-items: center;
   justify-content: space-between;
   height: 100%;
+  pointer-events: auto;
 }
 
 .brand-logo {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  font-family: var(--font-display);
-  font-weight: 700;
-  color: #ffffff;
-  transition: opacity var(--duration-fast) var(--ease-out);
-}
-
-.brand-logo:hover {
-  opacity: 0.85;
+  gap: var(--space-2);
 }
 
 .brand-symbol {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: #AE3B8B;
-  border: 1px solid #AE3B8B;
-  border-radius: var(--radius-sm);
-  font-size: 0.8125rem;
   font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.875rem;
   color: #ffffff;
+  background-color: #AE3B8B;
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
 }
 
 .brand-name {
-  font-size: 1rem;
-  letter-spacing: -0.01em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.125rem;
   color: #ffffff;
+  letter-spacing: -0.02em;
 }
 
 .brand-badge {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
+  font-weight: 600;
   color: #E17888;
-  background: rgba(174, 59, 139, 0.2);
-  border: 1px solid rgba(174, 59, 139, 0.4);
-  padding: 1px 6px;
-  border-radius: var(--radius-xs);
+  background-color: rgba(174, 59, 139, 0.15);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(174, 59, 139, 0.3);
 }
 
 .nav-list {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-1);
   list-style: none;
+  background-color: rgba(0, 0, 0, 0.25);
+  padding: 4px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
 }
 
 .nav-link {
   position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  padding: var(--space-2) var(--space-4);
+  height: 36px;
+  padding: 0 var(--space-4);
   font-family: var(--font-body);
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #E17888;
-  border-radius: var(--radius-sm);
-  transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out);
+  border-radius: var(--radius-full);
+  transition: all var(--duration-fast) var(--ease-out);
 }
 
 .nav-link:hover {
   color: #ffffff;
-  background-color: rgba(174, 59, 139, 0.2);
+  background-color: rgba(225, 120, 136, 0.1);
 }
 
 .nav-link.active {
   color: #ffffff;
-  background-color: rgba(174, 59, 139, 0.35);
-}
-
-.active-indicator {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 16px;
-  height: 2px;
   background-color: #AE3B8B;
-  border-radius: var(--radius-full);
+  font-weight: 600;
 }
 
 .nav-actions {
@@ -170,24 +158,19 @@ function isActive(path: string) {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-sm);
-  background-color: rgba(174, 59, 139, 0.2);
-  border: 1px solid rgba(174, 59, 139, 0.4);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-full);
   color: #ffffff;
-  transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+  background-color: rgba(225, 120, 136, 0.1);
+  border: 1px solid var(--color-border);
+  transition: all var(--duration-fast) var(--ease-out);
 }
 
 .action-btn:hover {
   color: #ffffff;
+  background-color: #AE3B8B;
   border-color: #AE3B8B;
-  background-color: rgba(174, 59, 139, 0.4);
-}
-
-@media (max-width: 640px) {
-  .brand-name, .brand-badge {
-    display: none;
-  }
+  transform: translateY(-1px);
 }
 </style>

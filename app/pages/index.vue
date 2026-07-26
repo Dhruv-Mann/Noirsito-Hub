@@ -15,8 +15,8 @@ useSeoMeta({
 
 <style scoped>
 .page-landing {
-  width: 100%;
-  height: calc(100dvh - 64px);
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
 }
 </style>

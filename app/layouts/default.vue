@@ -1,9 +1,15 @@
 <script setup lang="ts">
+import CustomCursor from '~/components/core/CustomCursor.vue'
+import LiveSystemBadge from '~/components/core/LiveSystemBadge.vue'
 import AppCommandPalette from '~/components/core/AppCommandPalette.vue'
 </script>
 
 <template>
   <div class="layout-wrapper">
+    <!-- Interactive Spring Cursor Follower & Magnet -->
+    <CustomCursor />
+    <!-- System Operational Real-Time Telemetry Badge -->
+    <LiveSystemBadge />
     <!-- Full Page Background holding Hero_section.png without modifying the image -->
     <div class="page-background-image" aria-hidden="true" />
     <AppGrain />

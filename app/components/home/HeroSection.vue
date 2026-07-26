@@ -4,6 +4,8 @@ import PixelMatrixCanvas from './PixelMatrixCanvas.vue'
 
 const isStarted = ref(false)
 const isAssembled = ref(false)
+const tiltX = ref(0)
+const tiltY = ref(0)
 
 function triggerInitialization() {
   if (isStarted.value) return
@@ -15,12 +17,24 @@ const handleSingleClick = () => {
   triggerInitialization()
 }
 
+function handleMouseMove(e: MouseEvent) {
+  if (typeof window === 'undefined') return
+  const cx = window.innerWidth / 2
+  const cy = window.innerHeight / 2
+  
+  // Subtle 3D perspective rotational tilt (-4.5deg to +4.5deg)
+  tiltX.value = -((e.clientY - cy) / cy) * 4.5
+  tiltY.value = ((e.clientX - cx) / cx) * 4.5
+}
+
 onMounted(() => {
   window.addEventListener('click', handleSingleClick)
+  window.addEventListener('mousemove', handleMouseMove)
 })
 
 onUnmounted(() => {
   window.removeEventListener('click', handleSingleClick)
+  window.removeEventListener('mousemove', handleMouseMove)
 })
 </script>
 
@@ -30,7 +44,12 @@ onUnmounted(() => {
     <PixelMatrixCanvas :is-started="isStarted" />
 
     <div class="container hero-content-container">
-      <div id="hero-text-block" class="hero-text-block" :class="{ Assembled: isAssembled }">
+      <div 
+        id="hero-text-block" 
+        class="hero-text-block" 
+        :class="{ Assembled: isAssembled }"
+        :style="{ transform: isAssembled ? `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)` : undefined }"
+      >
         <!-- Stacked Name Heading -->
         <h1 class="main-name-heading font-display">
           <!-- Line 1: Dhruv (Pitch Black) -->
@@ -98,6 +117,8 @@ onUnmounted(() => {
   align-items: flex-start;
   max-width: 880px;
   pointer-events: auto;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 
 /* Main Name Heading — Hidden until user clicks to initialize */
@@ -119,11 +140,19 @@ onUnmounted(() => {
   transition-delay: 0.15s;
 }
 
-/* Line 1: Dhruv in Pitch Black */
+/* Line 1: Dhruv in Luminous Pure White & Soft Champagne Gradient */
 .first-name {
   display: block;
-  color: #000000;
-  text-shadow: none;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ffffff 35%, #F5B8D1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.5));
+  transition: filter 0.3s ease;
+}
+
+.first-name:hover {
+  filter: drop-shadow(0 0 32px rgba(245, 184, 209, 0.85));
 }
 
 /* Line 2: Mann in Bright Pink (#AE3B8B), starting halfway across Dhruv */
@@ -139,6 +168,12 @@ onUnmounted(() => {
 
 .name-text {
   color: #AE3B8B;
+  transition: text-shadow 0.3s ease, color 0.3s ease;
+}
+
+.name-text:hover {
+  color: #ffffff;
+  text-shadow: 0 0 32px rgba(174, 59, 139, 0.9), 0 0 60px rgba(174, 59, 139, 0.6);
 }
 
 /* aka Noirsito Tag (Dusty Pink / Espresso) */
@@ -156,6 +191,15 @@ onUnmounted(() => {
   border-radius: var(--radius-full);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
   vertical-align: middle;
+  transition: all 0.3s var(--ease-out);
+}
+
+.aka-tag:hover {
+  color: #ffffff;
+  background-color: #AE3B8B;
+  border-color: #AE3B8B;
+  box-shadow: 0 4px 20px rgba(174, 59, 139, 0.6);
+  transform: translateY(-2px) scale(1.04);
 }
 
 /* Meta Block with Head to Hub button — Hidden until user clicks to initialize */

@@ -8,9 +8,18 @@ const props = defineProps<{
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 let animationFrameId: number | null = null
 
-// Mouse tracking
+// Mouse tracking & shockwave ripple
 let mouseX = -1000
 let mouseY = -1000
+
+interface Shockwave {
+  x: number
+  y: number
+  radius: number
+  maxRadius: number
+  speed: number
+}
+let shockwaves: Shockwave[] = []
 
 interface PixelBlock {
   col: number
@@ -48,6 +57,17 @@ function handleResize() {
 function handleMouseMove(e: MouseEvent) {
   mouseX = e.clientX
   mouseY = e.clientY
+}
+
+function handleCanvasClick(e: MouseEvent) {
+  // Add a expanding pixel shockwave on click
+  shockwaves.push({
+    x: e.clientX,
+    y: e.clientY,
+    radius: 0,
+    maxRadius: Math.max(width, height) * 0.75,
+    speed: 18
+  })
 }
 
 // Initialize Grid with Smooth Elliptical Falloff (NO BBOX / NO SQUARE CUTOUT BOX)
@@ -92,12 +112,12 @@ function initDeterministicGrid() {
         continue // Skip smoothly without creating a square box outline
       }
 
-      // 1. BOTTOM-RIGHT CORNER PATTERN (Dense Stepped Wave — 100 Ratio Weight)
+      // 1. BOTTOM-RIGHT CORNER PATTERN (Dense Stepped Wave — 100 Ratio Weight + 10% Boost)
       const distBR = Math.sqrt(Math.pow(cols - 1 - c, 2) + Math.pow(rows - 1 - r, 2))
       const isBRZone = (c / cols > 0.35 || r / rows > 0.45)
 
-      if (isBRZone && seed < 0.75 * densityProb) {
-        const delayBR = distBR * 0.05
+      if (isBRZone && seed < 0.825 * densityProb) {
+        const delayBR = distBR * 0.045
         pixelGrid.push({
           col: c,
           row: r,
@@ -112,12 +132,12 @@ function initDeterministicGrid() {
         continue
       }
 
-      // 2. TOP-LEFT CORNER PATTERN (Sparse Cluster — 15 Ratio Weight, 1.0s delay)
+      // 2. TOP-LEFT CORNER PATTERN (Sparse Cluster — 15 Ratio Weight + 10% Boost)
       const distTL = Math.sqrt(Math.pow(c, 2) + Math.pow(r, 2))
       const isTLZone = (c / cols < 0.35 && r / rows < 0.35)
 
-      if (isTLZone && seed < 0.2 * densityProb) {
-        const delayTL = 1.0 + distTL * 0.07
+      if (isTLZone && seed < 0.22 * densityProb) {
+        const delayTL = 0.9 + distTL * 0.063
         pixelGrid.push({
           col: c,
           row: r,
@@ -132,12 +152,12 @@ function initDeterministicGrid() {
         continue
       }
 
-      // 3. BOTTOM-LEFT CORNER PATTERN (Horizontal Band — 15 Ratio Weight, 1.0s delay)
+      // 3. BOTTOM-LEFT CORNER PATTERN (Horizontal Band — 15 Ratio Weight + 10% Boost)
       const distBL = Math.sqrt(Math.pow(c, 2) + Math.pow(rows - 1 - r, 2))
       const isBLZone = (c / cols < 0.4 && r / rows > 0.7)
 
-      if (isBLZone && seed < 0.24 * densityProb) {
-        const delayBL = 1.0 + distBL * 0.06
+      if (isBLZone && seed < 0.264 * densityProb) {
+        const delayBL = 0.9 + distBL * 0.054
         pixelGrid.push({
           col: c,
           row: r,
@@ -166,6 +186,15 @@ function render(time: number) {
   ctx.fillStyle = '#341514'
   ctx.fillRect(0, 0, width, height)
 
+  // Update expanding shockwaves
+  for (let i = shockwaves.length - 1; i >= 0; i--) {
+    const sw = shockwaves[i]
+    sw.radius += sw.speed
+    if (sw.radius > sw.maxRadius) {
+      shockwaves.splice(i, 1)
+    }
+  }
+
   // 2. Render solid contiguous pixels (ZERO GAP) after user single click
   if (props.isStarted) {
     if (!startTime) startTime = time
@@ -173,10 +202,10 @@ function render(time: number) {
 
     pixelGrid.forEach(p => {
       if (elapsed > p.emergeDelay) {
-        const easeProgress = Math.min(1, (elapsed - p.emergeDelay) * 2.2)
-        p.alpha += (p.targetAlpha * easeProgress - p.alpha) * 0.08
+        const easeProgress = Math.min(1, (elapsed - p.emergeDelay) * 2.42)
+        p.alpha += (p.targetAlpha * easeProgress - p.alpha) * 0.088
 
-        // Proximity reaction
+        // Proximity reaction & shockwave boosting
         const dx = mouseX - (p.x + p.size / 2)
         const dy = mouseY - (p.y + p.size / 2)
         const dist = Math.sqrt(dx * dx + dy * dy)
@@ -185,6 +214,18 @@ function render(time: number) {
         if (dist < 140) {
           opacityMultiplier = 1.3 - (dist / 140) * 0.3
         }
+
+        // Apply click shockwave ripple intensity
+        shockwaves.forEach(sw => {
+          const swDx = (p.x + p.size / 2) - sw.x
+          const swDy = (p.y + p.size / 2) - sw.y
+          const swDist = Math.sqrt(swDx * swDx + swDy * swDy)
+          const ringWidth = 60
+          if (Math.abs(swDist - sw.radius) < ringWidth) {
+            const waveIntensity = 1 - Math.abs(swDist - sw.radius) / ringWidth
+            opacityMultiplier += waveIntensity * 0.65
+          }
+        })
 
         ctx.fillStyle = '#AE3B8B'
         ctx.globalAlpha = Math.min(1, p.alpha * opacityMultiplier)
@@ -207,6 +248,7 @@ onMounted(() => {
 
   window.addEventListener('resize', handleResize)
   window.addEventListener('mousemove', handleMouseMove)
+  window.addEventListener('click', handleCanvasClick)
 
   initDeterministicGrid()
   setTimeout(initDeterministicGrid, 50)
@@ -218,6 +260,7 @@ onUnmounted(() => {
   if (animationFrameId) cancelAnimationFrame(animationFrameId)
   window.removeEventListener('resize', handleResize)
   window.removeEventListener('mousemove', handleMouseMove)
+  window.removeEventListener('click', handleCanvasClick)
 })
 </script>
 

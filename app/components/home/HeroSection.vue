@@ -42,7 +42,7 @@ onUnmounted(() => {
           </span>
         </h1>
 
-        <!-- Meta Block: Head to Hub Button -->
+        <!-- Meta Block: Head to Hub Button with Inner Text Scroll Animation -->
         <div class="meta-block">
           <a 
             href="https://github.com/Dhruv-Mann" 
@@ -50,10 +50,20 @@ onUnmounted(() => {
             rel="noopener noreferrer" 
             class="btn btn-hub font-body"
           >
-            Head to Hub
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
-              <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <span class="btn-hub-scroll">
+              <span class="btn-hub-text btn-hub-default">
+                <span>Head to Hub</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="btn-hub-text btn-hub-hover" aria-hidden="true">
+                <span>Head to Hub</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </span>
           </a>
         </div>
       </div>
@@ -167,12 +177,12 @@ onUnmounted(() => {
   transition-delay: 0.35s;
 }
 
-/* Head to Hub Small Button */
+/* Head to Hub Button — Vertical Inner Scroll Animation on Hover */
 .btn-hub {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: var(--space-phi-sm);
-  height: 44px;
+  height: 46px;
   padding: 0 var(--space-phi-lg);
   font-size: 0.9375rem;
   font-weight: 600;
@@ -182,14 +192,59 @@ onUnmounted(() => {
   border: 1px solid #AE3B8B;
   text-decoration: none;
   white-space: nowrap;
+  overflow: hidden; /* Restricts scroll animation inside button bounds only */
   box-shadow: 0 4px 20px rgba(174, 59, 139, 0.4);
-  transition: all var(--duration-fast) var(--ease-out);
+  transition: border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.btn-hub-scroll {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-hub-text {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-phi-sm);
+  height: 100%;
+  white-space: nowrap;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-hub-default {
+  transform: translateY(0%);
+}
+
+.btn-hub-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateY(100%);
+  color: #ffffff;
+}
+
+/* Hover Action: Vertical inner text scroll and switch to Pitch Black */
 .btn-hub:hover {
-  background-color: #c4479e;
-  border-color: #c4479e;
+  background-color: #000000;
+  border-color: #000000;
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(174, 59, 139, 0.6);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
+}
+
+.btn-hub:hover .btn-hub-default {
+  transform: translateY(-100%);
+}
+
+.btn-hub:hover .btn-hub-hover {
+  transform: translateY(0%);
 }
 </style>

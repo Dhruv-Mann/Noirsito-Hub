@@ -1,12 +1,17 @@
+<script setup lang="ts">
+import AppCommandPalette from '~/components/core/AppCommandPalette.vue'
+</script>
+
 <template>
   <div class="layout-wrapper">
     <!-- Full Page Background holding Hero_section.png without modifying the image -->
     <div class="page-background-image" aria-hidden="true" />
     <AppGrain />
-    <AppNav />
     <main class="layout-main">
       <slot />
     </main>
+    <!-- Raycast OS Cmd+K Command Palette Modal & Trigger -->
+    <AppCommandPalette />
   </div>
 </template>
 

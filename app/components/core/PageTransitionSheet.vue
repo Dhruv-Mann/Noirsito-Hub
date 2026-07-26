@@ -82,8 +82,31 @@
       </div>
     </div>
 
-    <!-- Secondary Exit Curtain Sheet Layer: Subtle Crimson Red gradient closing quote stage -->
-    <div class="exit-curtain-sheet" :class="{ active: isExitSweeping }" />
+    <!-- Secondary Exit Curtain Sheet Layer with Lissajous Ribbon Bow & Collision Physics -->
+    <div class="exit-curtain-sheet" :class="{ active: isExitSweeping }">
+      <div v-if="isExitSweeping" class="curtain-stage">
+        
+        <!-- Top Half: 2D Collision Physics Floating Skill Badges (No red dots, 40% slower physics) -->
+        <FloatingSkillsPhysics />
+
+        <!-- Center Lissajous Ribbon Bow Canvas & Scissor Knot -->
+        <RibbonCutCanvas @ribbon-cut="handleRibbonCut" />
+
+        <!-- Bottom Half: Tech Stack Philosophy Section -->
+        <div class="bottom-philosophy-container font-body">
+          <h2 class="tech-stack-heading font-display">
+            <span>TECH STACK — </span>
+            <span class="highlight-text-red">You name it.</span>
+          </h2>
+          <p class="philosophy-para">
+            Tools and frameworks evolve rapidly, but architectural rigor, first-principles problem solving, 
+            and zero-compromise engineering remain timeless. From high-performance browser shaders to 
+            scalable distributed backend systems—if it can be conceptualized, it can be built with perfection.
+          </p>
+        </div>
+
+      </div>
+    </div>
 
     <!-- Scroll Progress Indicator Bar -->
     <div v-if="sweepStage === 'full' && scrollProgress < 0.8 && !isExitSweeping" class="scroll-prompt font-mono">
@@ -99,6 +122,8 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import Lenis from 'lenis'
+import RibbonCutCanvas from './RibbonCutCanvas.vue'
+import FloatingSkillsPhysics from './FloatingSkillsPhysics.vue'
 import { usePageTransition } from '~/composables/usePageTransition'
 
 const router = useRouter()
@@ -165,27 +190,30 @@ function handleWheel(e: WheelEvent) {
   accumScroll = Math.max(0, Math.min(maxScroll, accumScroll))
   scrollProgress.value = accumScroll / maxScroll
 
-  // When scroll reaches 85%, activate Secondary Exit Curtain Sweep & navigate to /hub
+  // When scroll reaches 85%, activate Secondary Exit Curtain Sweep
   if (scrollProgress.value >= 0.85 && !isExitSweeping.value && !hasNavigated.value) {
     isExitSweeping.value = true
-    hasNavigated.value = true
-
-    setTimeout(() => {
-      router.push('/hub').then(() => {
-        // Uncover curtain sheet upwards to reveal the new /hub page cleanly!
-        setTimeout(() => {
-          sweepStage.value = 'uncover'
-          setTimeout(() => {
-            sweepStage.value = 'idle'
-            isExitSweeping.value = false
-            hasNavigated.value = false
-            scrollProgress.value = 0
-            accumScroll = 0
-          }, 500)
-        }, 150)
-      })
-    }, 450)
   }
+}
+
+// When Ribbon Cutting action occurs
+function handleRibbonCut() {
+  if (hasNavigated.value) return
+  hasNavigated.value = true
+
+  router.push('/hub').then(() => {
+    // Uncover curtain sheet upwards to reveal the new /hub page cleanly!
+    setTimeout(() => {
+      sweepStage.value = 'uncover'
+      setTimeout(() => {
+        sweepStage.value = 'idle'
+        isExitSweeping.value = false
+        hasNavigated.value = false
+        scrollProgress.value = 0
+        accumScroll = 0
+      }, 500)
+    }, 150)
+  })
 }
 
 let touchStartY = 0
@@ -207,22 +235,6 @@ function handleTouchMove(e: TouchEvent) {
 
   if (scrollProgress.value >= 0.85 && !isExitSweeping.value && !hasNavigated.value) {
     isExitSweeping.value = true
-    hasNavigated.value = true
-
-    setTimeout(() => {
-      router.push('/hub').then(() => {
-        setTimeout(() => {
-          sweepStage.value = 'uncover'
-          setTimeout(() => {
-            sweepStage.value = 'idle'
-            isExitSweeping.value = false
-            hasNavigated.value = false
-            scrollProgress.value = 0
-            accumScroll = 0
-          }, 500)
-        }, 150)
-      })
-    }, 450)
   }
 }
 
@@ -453,7 +465,7 @@ onBeforeUnmount(() => {
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
 }
 
-/* Secondary Exit Curtain Sheet: Subtle Crimson Red Gradient closing quote stage */
+/* Secondary Exit Curtain Sheet Stage Container */
 .exit-curtain-sheet {
   position: absolute;
   inset: 0;
@@ -463,13 +475,78 @@ onBeforeUnmount(() => {
   border-top: 2px solid #FF2A5F;
   box-shadow: 0 -20px 80px rgba(138, 14, 43, 0.6);
   z-index: 100;
-  pointer-events: none;
+  pointer-events: auto;
   transform: translateY(100%);
   transition: transform 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
 }
 
 .exit-curtain-sheet.active {
   transform: translateY(0%);
+}
+
+.curtain-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Bottom Half: Tech Stack Philosophy Section */
+.bottom-philosophy-container {
+  position: absolute;
+  bottom: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 860px;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  animation: philosophy-entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+@keyframes philosophy-entrance {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 25px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.tech-stack-heading {
+  font-size: clamp(1.85rem, 4.2vw, 3.25rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin: 0;
+}
+
+/* Clean Solid Red Text for 'You name it.' with zero glow */
+.highlight-text-red {
+  color: #FF2A5F;
+  text-shadow: none;
+}
+
+.philosophy-para {
+  font-size: clamp(0.875rem, 1.3vw, 1.0625rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 720px;
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }
 
 /* Scroll Progress Indicator Bar */

@@ -1,61 +1,63 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import PixelMatrixCanvas from './PixelMatrixCanvas.vue'
 
-const isMounted = ref(false)
+const isStarted = ref(false)
+const isAssembled = ref(false)
+
+function triggerInitialization() {
+  if (isStarted.value) return
+  isStarted.value = true
+  isAssembled.value = true
+}
 
 onMounted(() => {
-  isMounted.value = true
+  // Single global click listener: A single click anywhere initializes canvas & text simultaneously
+  const handleSingleClick = () => {
+    triggerInitialization()
+  }
+  window.addEventListener('click', handleSingleClick)
+
+  onUnmounted(() => {
+    window.removeEventListener('click', handleSingleClick)
+  })
 })
 </script>
 
 <template>
-  <section class="hero-section">
-    <div class="container hero-container">
-      <div class="hero-content" :class="{ 'animate-in': isMounted }">
-        <div class="hero-eyebrow">
-          <span class="status-indicator" />
-          DIGITAL OPERATING SYSTEM
-        </div>
+  <section class="hero-stage" @click="triggerInitialization">
+    <!-- Pixel Matrix Canvas: Starts on #341514 screen with jumping cursor prompt. 
+         A single click anywhere initializes canvas emergence and text reveal simultaneously. 
+         Strict 120px text/button keep-away buffer. -->
+    <PixelMatrixCanvas :is-started="isStarted" />
 
-        <h1 class="hero-headline">
-          Building systems, AI models, and software that lasts.
+    <div class="container hero-content-container">
+      <div id="hero-text-block" class="hero-text-block" :class="{ Assembled: isAssembled }">
+        <!-- 1. Dhruv Mann: Golden Ratio Largest Text Hierarchy (Phi^4 scale = 6.854rem / 109.7px) -->
+        <h1 class="main-name-heading font-display">
+          Dhruv Mann
         </h1>
 
-        <p class="hero-subtext">
-          B.Tech student crafting low-latency vector engines, spatial browser graphics, and distributed system architectures.
-        </p>
+        <!-- 2. Info about Dhruv: Golden Ratio Vertical Rhythm -->
+        <div class="info-block">
+          <p class="role-tag font-mono">
+            B.Tech Student & Systems Architect
+          </p>
 
-        <div class="hero-actions">
-          <NuxtLink to="/projects" class="btn btn-primary">
-            Explore Projects
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-              <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </NuxtLink>
-          <NuxtLink to="/about" class="btn btn-secondary">
-            About & Stack
-          </NuxtLink>
-        </div>
-      </div>
+          <p class="info-paragraph body-text">
+            Building low-latency vector databases, browser compute engines, spatial visualization tools, and resilient distributed worker architectures.
+          </p>
 
-      <div class="hero-visual" :class="{ 'animate-in': isMounted }">
-        <div class="visual-card">
-          <div class="card-grid-pattern" />
-          <div class="card-glow" />
-          <div class="card-content">
-            <div class="terminal-header">
-              <span class="term-dot red" />
-              <span class="term-dot yellow" />
-              <span class="term-dot green" />
-              <span class="term-title">hub-kernel.sys</span>
-            </div>
-            <div class="terminal-body">
-              <div class="term-line"><span class="prompt">$</span> init --arch x86_64 --mode production</div>
-              <div class="term-line success"><span class="symbol">✓</span> Loaded vector DB index [0.42ms]</div>
-              <div class="term-line success"><span class="symbol">✓</span> WebGPU compute context active</div>
-              <div class="term-line success"><span class="symbol">✓</span> Distributed mesh online (6 nodes)</div>
-              <div class="term-line highlight"><span class="prompt">></span> Ready for execution</div>
-            </div>
+          <div class="hero-actions">
+            <NuxtLink to="/projects" class="btn btn-primary font-body">
+              Explore Projects
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </NuxtLink>
+            <NuxtLink to="/about" class="btn btn-secondary font-body">
+              About & Stack
+            </NuxtLink>
           </div>
         </div>
       </div>
@@ -64,224 +66,132 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.hero-section {
+.hero-stage {
   position: relative;
-  padding-top: var(--space-12);
-  padding-bottom: var(--space-16);
   min-height: calc(100dvh - 64px);
+  width: 100%;
   display: flex;
   align-items: center;
+  padding: var(--space-phi-xl) 0;
+  overflow: hidden;
+  background-color: #341514;
+  cursor: pointer;
 }
 
-.hero-container {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-12);
-  align-items: center;
+.hero-content-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  pointer-events: none; /* Let single click pass to stage */
 }
 
-@media (min-width: 992px) {
-  .hero-container {
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: var(--space-16);
-  }
-}
-
-.hero-content {
+.hero-text-block {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+  max-width: 840px;
+  pointer-events: auto; /* Re-enable pointer events for text and buttons */
 }
 
-.hero-content.animate-in {
+/* Golden Ratio Main Heading (Phi^3 to Phi^4: 67.8px - 109.7px) */
+.main-name-heading {
+  font-size: clamp(4.236rem, 9vw, 6.854rem);
+  font-weight: 800;
+  line-height: 1.058;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+  margin-bottom: var(--space-phi-lg);
+  opacity: 0;
+  transform: translateY(30px) scale(0.98);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-text-block.Assembled .main-name-heading {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.15s;
+}
+
+.info-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-phi-md);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-text-block.Assembled .info-block {
   opacity: 1;
   transform: translateY(0);
+  transition-delay: 0.35s;
 }
 
-.hero-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
+.role-tag {
+  font-size: var(--text-phi-xs); /* 0.618rem */
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--color-accent);
-  margin-bottom: var(--space-4);
-  background: var(--color-accent-dim);
-  padding: 4px 12px;
+  color: #AE3B8B;
+  background: rgba(174, 59, 139, 0.15);
+  padding: 6px 14px;
   border-radius: var(--radius-full);
-  border: 1px solid rgba(88, 166, 255, 0.2);
+  border: 1px solid rgba(174, 59, 139, 0.35);
+  align-self: flex-start;
 }
 
-.status-indicator {
-  width: 6px;
-  height: 6px;
-  border-radius: var(--radius-full);
-  background-color: var(--color-accent);
-  box-shadow: 0 0 8px var(--color-accent);
-}
-
-.hero-headline {
-  font-size: clamp(2.25rem, 4vw + 1rem, 4rem);
-  line-height: 1.08;
-  letter-spacing: -0.03em;
-  margin-bottom: var(--space-6);
-  color: var(--color-text);
-}
-
-.hero-subtext {
+.info-paragraph {
   font-size: 1.125rem;
-  line-height: 1.6;
-  color: var(--color-text-muted);
-  max-width: 52ch;
-  margin-bottom: var(--space-8);
+  line-height: 1.618; /* Golden Ratio line height */
+  color: #E17888;
+  max-width: 54ch;
 }
 
 .hero-actions {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-phi-md);
+  margin-top: var(--space-phi-lg);
   flex-wrap: wrap;
 }
 
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  height: 44px;
-  padding: 0 var(--space-6);
-  font-family: var(--font-body);
+  gap: var(--space-phi-sm);
+  height: 48px;
+  padding: 0 var(--space-phi-lg);
   font-size: 0.9375rem;
-  font-weight: 500;
+  font-weight: 600;
   border-radius: var(--radius-sm);
   white-space: nowrap;
-  transition: all var(--duration-normal) var(--ease-out);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--duration-fast) var(--ease-out);
 }
 
 .btn-primary {
-  background-color: var(--color-accent);
-  color: #341514;
-  font-weight: 600;
+  background-color: #AE3B8B;
+  color: #ffffff;
+  border: 1px solid #AE3B8B;
 }
 
 .btn-primary:hover {
-  background-color: var(--color-accent-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-accent);
-}
-
-.btn-primary:active {
-  transform: translateY(0) scale(0.98);
+  background-color: #c4479e;
+  border-color: #c4479e;
+  box-shadow: 0 4px 20px rgba(174, 59, 139, 0.4);
 }
 
 .btn-secondary {
-  background-color: var(--color-surface-2);
-  color: var(--color-text);
-  border: 1px solid var(--color-border-strong);
+  background-color: transparent;
+  color: #ffffff;
+  border: 2px solid rgba(225, 120, 136, 0.4);
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-surface-3);
-  border-color: var(--color-text-muted);
-}
-
-.btn-secondary:active {
-  transform: scale(0.98);
-}
-
-/* Visual Terminal Card */
-.hero-visual {
-  opacity: 0;
-  transform: translateY(30px) scale(0.98);
-  transition: opacity 0.8s var(--ease-out) 0.15s, transform 0.8s var(--ease-out) 0.15s;
-}
-
-.hero-visual.animate-in {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.visual-card {
-  position: relative;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-md);
-  padding: var(--space-6);
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-}
-
-.card-grid-pattern {
-  position: absolute;
-  inset: 0;
-  background-size: 24px 24px;
-  background-image: 
-    linear-gradient(to right, rgba(225, 120, 136, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(225, 120, 136, 0.05) 1px, transparent 1px);
-  pointer-events: none;
-}
-
-.card-glow {
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, var(--color-accent-dim) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.terminal-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-4);
-  padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.term-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: var(--radius-full);
-}
-.term-dot.red { background: #E17888; }
-.term-dot.yellow { background: #AE3B8B; }
-.term-dot.green { background: #1C5789; }
-
-.term-title {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--color-text-subtle);
-  margin-left: var(--space-2);
-}
-
-.terminal-body {
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  line-height: 1.8;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.term-line {
-  color: var(--color-text-muted);
-}
-.term-line .prompt {
-  color: var(--color-accent);
-}
-.term-line.success .symbol {
-  color: #E17888;
-  margin-right: 4px;
-}
-.term-line.highlight {
-  color: var(--color-text);
-  font-weight: 500;
+  background-color: rgba(225, 120, 136, 0.12);
+  border-color: #E17888;
 }
 </style>

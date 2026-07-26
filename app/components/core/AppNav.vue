@@ -62,7 +62,7 @@ function isActive(path: string) {
   width: 100%;
   height: 64px;
   z-index: var(--z-nav);
-  background-color: rgba(8, 10, 14, 0.8);
+  background-color: rgba(52, 21, 20, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
@@ -80,8 +80,8 @@ function isActive(path: string) {
   align-items: center;
   gap: var(--space-3);
   font-family: var(--font-display);
-  font-weight: 600;
-  color: var(--color-text);
+  font-weight: 700;
+  color: #ffffff;
   transition: opacity var(--duration-fast) var(--ease-out);
 }
 
@@ -95,25 +95,26 @@ function isActive(path: string) {
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: var(--color-surface-2);
-  border: 1px solid var(--color-border-strong);
+  background: #AE3B8B;
+  border: 1px solid #AE3B8B;
   border-radius: var(--radius-sm);
   font-size: 0.8125rem;
   font-family: var(--font-mono);
-  color: var(--color-accent);
+  color: #ffffff;
 }
 
 .brand-name {
   font-size: 1rem;
   letter-spacing: -0.01em;
+  color: #ffffff;
 }
 
 .brand-badge {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  color: var(--color-text-subtle);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  color: #E17888;
+  background: rgba(174, 59, 139, 0.2);
+  border: 1px solid rgba(174, 59, 139, 0.4);
   padding: 1px 6px;
   border-radius: var(--radius-xs);
 }
@@ -132,20 +133,20 @@ function isActive(path: string) {
   padding: var(--space-2) var(--space-4);
   font-family: var(--font-body);
   font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--color-text-muted);
+  font-weight: 600;
+  color: #E17888;
   border-radius: var(--radius-sm);
   transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out);
 }
 
 .nav-link:hover {
-  color: var(--color-text);
-  background-color: var(--color-surface);
+  color: #ffffff;
+  background-color: rgba(174, 59, 139, 0.2);
 }
 
 .nav-link.active {
-  color: var(--color-text);
-  background-color: var(--color-surface-2);
+  color: #ffffff;
+  background-color: rgba(174, 59, 139, 0.35);
 }
 
 .active-indicator {
@@ -155,7 +156,7 @@ function isActive(path: string) {
   transform: translateX(-50%);
   width: 16px;
   height: 2px;
-  background-color: var(--color-accent);
+  background-color: #AE3B8B;
   border-radius: var(--radius-full);
 }
 
@@ -172,15 +173,16 @@ function isActive(path: string) {
   width: 36px;
   height: 36px;
   border-radius: var(--radius-sm);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  color: var(--color-text-muted);
+  background-color: rgba(174, 59, 139, 0.2);
+  border: 1px solid rgba(174, 59, 139, 0.4);
+  color: #ffffff;
   transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
 }
 
 .action-btn:hover {
-  color: var(--color-text);
-  border-color: var(--color-border-strong);
+  color: #ffffff;
+  border-color: #AE3B8B;
+  background-color: rgba(174, 59, 139, 0.4);
 }
 
 @media (max-width: 640px) {

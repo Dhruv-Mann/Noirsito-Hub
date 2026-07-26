@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import HeroSection from '~/components/home/HeroSection.vue'
-import ProjectsGrid from '~/components/home/ProjectsGrid.vue'
-import ThinkingStrip from '~/components/home/ThinkingStrip.vue'
-import AboutSection from '~/components/home/AboutSection.vue'
 
 useSeoMeta({
   title: 'Dhruv Mann • Digital Hub & OS',
-  description: 'Central digital operating system of Dhruv Mann. AI engines, full-stack systems, research, and interaction design.'
+  description: 'Personal digital operating system of Dhruv Mann.'
 })
 </script>
 
 <template>
-  <div class="page-home">
+  <div class="page-landing">
     <HeroSection />
-    <ProjectsGrid />
-    <ThinkingStrip />
-    <AboutSection />
   </div>
 </template>
+
+<style scoped>
+.page-landing {
+  width: 100%;
+  height: calc(100dvh - 64px);
+  overflow: hidden;
+}
+</style>

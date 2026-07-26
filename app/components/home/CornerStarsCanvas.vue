@@ -98,6 +98,8 @@ function handleMouseMove(e: MouseEvent) {
 
   if (props.isStarted || isCollapsing) return
 
+  let insideAnySlot = false
+
   // Check proximity to any corner slot
   for (let slot = 0; slot < 4; slot++) {
     const slotPos = getSlotCoordinates(slot, width, height)
@@ -105,11 +107,19 @@ function handleMouseMove(e: MouseEvent) {
     const dy = mouseY - slotPos.y
     const dist = Math.sqrt(dx * dx + dy * dy)
 
-    if (dist < 150 && lastHoveredSlot !== slot) {
-      lastHoveredSlot = slot
-      triggerConstellationImplosion(slot)
+    if (dist < 180) {
+      insideAnySlot = true
+      if (lastHoveredSlot !== slot) {
+        lastHoveredSlot = slot
+        triggerConstellationImplosion(slot)
+      }
       break
     }
+  }
+
+  // Reset slot state when mouse leaves corner proximity so the same star can be triggered repeatedly
+  if (!insideAnySlot) {
+    lastHoveredSlot = -1
   }
 }
 
@@ -126,7 +136,7 @@ function triggerConstellationImplosion(hoveredSlot: number) {
     star.targetScale = 0.4
   })
 
-  // 2. Midpoint explosion & permutation shift after 240ms
+  // 2. Midpoint explosion & permutation shift after 220ms
   setTimeout(() => {
     // Spawn spark particles at center
     for (let i = 0; i < 28; i++) {
@@ -150,18 +160,19 @@ function triggerConstellationImplosion(hoveredSlot: number) {
       star.targetY = newPos.y
       star.targetScale = 1.3
       // Rotate color palette
-      const colorIdx = (star.slotIndex + hoveredSlot) % COLOR_PALETTE.length
+      const colorIdx = (star.slotIndex + hoveredSlot + Math.floor(Math.random() * 2)) % COLOR_PALETTE.length
       star.color = COLOR_PALETTE[colorIdx]
     })
 
-    // 3. Expand back to corner slots smoothly
+    // 3. Expand back to corner slots smoothly and reset hover slot block
     setTimeout(() => {
       stars.forEach(star => {
         star.targetScale = 1.0
       })
       isCollapsing = false
-    }, 320)
-  }, 240)
+      lastHoveredSlot = -1 // Reset so repeated visits to the same star trigger again infinitely!
+    }, 300)
+  }, 220)
 }
 
 function drawHarmonicStar(

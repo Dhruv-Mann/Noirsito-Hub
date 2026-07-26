@@ -123,7 +123,6 @@ onUnmounted(() => {
   padding: 0;
   overflow: hidden;
   background-color: #341514;
-  cursor: default;
 }
 
 /* Ambient Dynamic Color Spotlight Mesh */

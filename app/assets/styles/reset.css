@@ -7,6 +7,19 @@
   padding: 0;
 }
 
+/* Global Custom Orchid Pink Pointer Cursor (#AE3B8B fill + white outline) */
+html,
+body,
+*,
+*::before,
+*::after,
+a,
+button,
+input,
+[role="button"] {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23AE3B8B' stroke='%23ffffff' stroke-width='1.5' stroke-linejoin='round' d='M13.64 21.97l-3.22-6.66-3.83 3.83V2.5l14.7 11.47-5.4 1.13 3.22 6.66-5.47 2.21z'/%3E%3C/svg%3E") 3 2, auto !important;
+}
+
 html {
   font-family: var(--font-body);
   background-color: var(--color-bg);
@@ -49,7 +62,6 @@ select {
 button {
   background: none;
   border: none;
-  cursor: pointer;
 }
 
 a {
@@ -58,8 +70,7 @@ a {
 }
 
 /* Official Lenis Smooth Scroll CSS Rules */
-html.lenis,
-html.lenis body {
+html.lenis, html.lenis body {
   height: auto;
 }
 
@@ -75,24 +86,6 @@ html.lenis body {
   overflow: hidden;
 }
 
-.lenis.lenis-scrolling iframe {
+.lenis.lenis-smooth iframe {
   pointer-events: none;
-}
-
-/* Custom Scrollbar Styling */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #341514;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #AE3B8B;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #c4479e;
 }

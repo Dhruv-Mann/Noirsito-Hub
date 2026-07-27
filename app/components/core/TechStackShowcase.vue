@@ -16,10 +16,10 @@
 
     <!-- Main Stage: Full-viewport flex row - left content + right full-screen slanted sheet -->
     <div class="stage-container">
-      <!-- Left Side: Main Content Column (Animates immediately on page load) -->
+      <!-- Left Side: Main Content Column -->
       <div class="left-content-column">
         <!-- Main Section: TECH STACK Title & Primary Accent Line -->
-        <main class="content-main">
+        <main class="content-header-block">
           <!-- Segment 1: Title block — completes at 0.8s -->
           <h1 class="tech-title font-display anim-seg-1">
             <!-- TECH: white-to-blush metallic shimmer, mirrors home page 'Dhruv' -->
@@ -31,6 +31,51 @@
           <!-- Segment 2: Accent rule — completes at 1.0s -->
           <div class="divider-line anim-seg-2" />
         </main>
+
+        <!-- Minimal Expandable Accordion Categories (Progressive Disclosure) -->
+        <div class="minimal-accordion-container anim-seg-3">
+          <div
+            v-for="(cat, idx) in stackCategories"
+            :key="cat.id"
+            class="accordion-item"
+            :class="{ open: openCategories.includes(cat.id) }"
+          >
+            <!-- Minimal Category Header Row -->
+            <button
+              class="accordion-header font-mono"
+              @click="toggleCategory(cat.id)"
+            >
+              <div class="header-left">
+                <span class="index-num">0{{ idx + 1 }}</span>
+                <span class="category-name">{{ cat.title }}</span>
+              </div>
+
+              <div class="header-right">
+                <span class="expand-icon" :class="{ rotated: openCategories.includes(cat.id) }">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v14M5 12h14"/>
+                  </svg>
+                </span>
+              </div>
+            </button>
+
+            <!-- Minimal Text-Only Expanded Content -->
+            <div
+              v-show="openCategories.includes(cat.id)"
+              class="accordion-content font-mono"
+            >
+              <div class="tech-inline-list">
+                <span
+                  v-for="(tech, tIdx) in cat.items"
+                  :key="tech"
+                  class="tech-chip"
+                >
+                  {{ tech }}<span v-if="tIdx < cat.items.length - 1" class="dot-separator">•</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Right Side: Full-Screen Slanted Pink Sheet (Reveals across 100vh after 0.5s delay) -->
@@ -53,6 +98,55 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 defineEmits<{
   (e: 'returnHome'): void
 }>()
+
+interface StackCategory {
+  id: string
+  title: string
+  items: string[]
+}
+
+const stackCategories: StackCategory[] = [
+  {
+    id: 'languages',
+    title: 'LANGUAGES',
+    items: ['Python', 'TypeScript', 'JavaScript', 'C', 'Rust', 'Java']
+  },
+  {
+    id: 'frontend',
+    title: 'FRONTEND & WEB',
+    items: ['Nuxt 4', 'Vue.js 3', 'Next.js', 'React', 'Tailwind CSS', 'HTML5', 'Hono']
+  },
+  {
+    id: 'backend',
+    title: 'BACKEND & RUNTIMES',
+    items: ['Node.js', 'Bun', 'REST API Architecture']
+  },
+  {
+    id: 'ai-ml',
+    title: 'AI / ML & INTELLIGENT SYSTEMS',
+    items: ['PyTorch', 'LangChain', 'Autonomous AI Agents', 'Vector Math & Embeddings', 'Computer Vision (YOLO)']
+  },
+  {
+    id: 'database',
+    title: 'DATABASES & CLOUD',
+    items: ['PostgreSQL', 'Supabase', 'MySQL']
+  },
+  {
+    id: 'cs',
+    title: 'CORE CS & ALGORITHMS',
+    items: ['Data Structures & Algorithms (DSA)']
+  }
+]
+
+const openCategories = ref<string[]>([])
+
+function toggleCategory(catId: string) {
+  if (openCategories.value.includes(catId)) {
+    openCategories.value = openCategories.value.filter(id => id !== catId)
+  } else {
+    openCategories.value.push(catId)
+  }
+}
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const imgLoaded = ref(false)
@@ -361,12 +455,129 @@ onBeforeUnmount(() => {
 .anim-seg-1 { opacity: 0; animation: content-immediate-fade 0.80s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.05s; }
 /* Seg 2: Divider (0.25s delay, 0.55s dur, snappy) */
 .anim-seg-2 { opacity: 0; animation: content-immediate-fade 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.25s; }
+/* Seg 3: Minimal Accordion Container */
+.anim-seg-3 { opacity: 0; animation: content-immediate-fade 0.70s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.35s; }
 
-.content-main {
+.content-header-block {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
   max-width: 520px;
+}
+
+/* ============================================================
+   MINIMAL PROGRESSIVE DISCLOSURE ACCORDION
+   ============================================================ */
+.minimal-accordion-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 28px;
+  max-width: 520px;
+}
+
+.accordion-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 12px;
+  transition: border-color 0.25s ease;
+}
+
+.accordion-item.open {
+  border-color: rgba(174, 59, 139, 0.5);
+}
+
+.accordion-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+
+.accordion-header:hover {
+  color: #ffffff;
+}
+
+.accordion-item.open .accordion-header {
+  color: #AE3B8B;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.index-num {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.1em;
+}
+
+.category-name {
+  font-weight: 700;
+}
+
+.expand-icon {
+  display: flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.4);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease;
+}
+
+.expand-icon.rotated {
+  transform: rotate(45deg);
+  color: #AE3B8B;
+}
+
+.accordion-content {
+  padding-top: 10px;
+  padding-bottom: 6px;
+  padding-left: 32px;
+  animation: content-slide-down 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes content-slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tech-inline-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.8;
+}
+
+.tech-chip {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.04em;
+  transition: color 0.2s ease;
+}
+
+.tech-chip:hover {
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(174, 59, 139, 0.6);
+}
+
+.dot-separator {
+  margin-left: 8px;
+  color: rgba(174, 59, 139, 0.6);
 }
 
 /* ============================================================

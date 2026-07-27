@@ -86,11 +86,24 @@
       </div>
     </div>
 
-    <!-- Secondary Exit Curtain Sheet Layer with Lissajous Ribbon Bow -->
-    <div class="exit-curtain-sheet" :class="{ active: isExitSweeping }">
-      <div v-if="isExitSweeping" class="curtain-stage">
-        <!-- Center Lissajous Ribbon Bow Canvas & Scissor Knot -->
-        <RibbonCutCanvas @ribbon-cut="handleRibbonCut" />
+    <!-- Secondary Exit Curtain Sheet Stage with Giant Blended 'TECH STACK' BG & Rigid Curtain Split Reveal -->
+    <div class="exit-curtain-sheet" :class="{ active: isExitSweeping, 'split-open': isCurtainSplit }">
+      <!-- Revealed Tech Stack Showcase (Rendered Underneath Curtains) -->
+      <TechStackShowcase v-if="isExitSweeping" @return-home="handleReturnHome" />
+
+      <!-- Seamless Rigid Curtain Doors (No border lines, 100% unified until click!) -->
+      <div class="curtain-door door-top" />
+      <div class="curtain-door door-bottom" />
+
+      <!-- Unified Content Stage (Single Ribbon + Blended TECH STACK watermark) -->
+      <div class="curtain-content-stage">
+        <!-- Giant Blended 'TECH STACK' Background Watermark in Center -->
+        <div class="ribbon-bg-typography font-display select-none">
+          TECH STACK
+        </div>
+
+        <!-- Single Unified Ribbon Canvas in Center (Mounted fresh on exit stage reveal) -->
+        <RibbonCutCanvas v-if="isExitSweeping" :key="ribbonKey" @ribbon-cut="handleRibbonCut" />
       </div>
     </div>
 
@@ -109,13 +122,16 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import Lenis from 'lenis'
 import RibbonCutCanvas from './RibbonCutCanvas.vue'
+import TechStackShowcase from './TechStackShowcase.vue'
 import { usePageTransition } from '~/composables/usePageTransition'
 
 const router = useRouter()
-const { sweepStage } = usePageTransition()
+const { sweepStage, resetPinkSweep } = usePageTransition()
 
 const isBloodHovered = ref(false)
 const isExitSweeping = ref(false)
+const isCurtainSplit = ref(false)
+const ribbonKey = ref(0)
 const dropletsCanvasRef = ref<HTMLCanvasElement | null>(null)
 const sliceCanvasRef = ref<HTMLCanvasElement | null>(null)
 const bloodWord1Ref = ref<HTMLElement | null>(null)
@@ -299,17 +315,18 @@ function handleMouseDown() { isMouseDown.value = true }
 function handleMouseUp() { isMouseDown.value = false }
 
 function handleWheel(e: WheelEvent) {
-  if (sweepStage.value !== 'full' || hasNavigated.value) return
+  if (sweepStage.value !== 'full' || hasNavigated.value || isCurtainSplit.value) return
 
   if (e.deltaY < 0 && isExitSweeping.value) {
     isExitSweeping.value = false
+    isCurtainSplit.value = false
+    ribbonKey.value++
   }
 
   accumScroll += e.deltaY * 0.45
   accumScroll = Math.max(0, Math.min(maxScroll, accumScroll))
   scrollProgress.value = accumScroll / maxScroll
 
-  // Blood animation stays on during entire scroll phase; off only when back at start
   isScrollActive.value = accumScroll > 0
 
   if (e.deltaY > 0 && scrollProgress.value >= 0.85 && !isExitSweeping.value && !hasNavigated.value) {
@@ -317,23 +334,22 @@ function handleWheel(e: WheelEvent) {
   }
 }
 
+// Rigid Ribbon Cut Center Click -> Opens Rigid Cinema Curtains to reveal Tech Stack!
 function handleRibbonCut() {
-  if (hasNavigated.value) return
-  hasNavigated.value = true
+  if (isCurtainSplit.value) return
+  isCurtainSplit.value = true
+}
 
-  router.push('/hub').then(() => {
-    setTimeout(() => {
-      sweepStage.value = 'uncover'
-      setTimeout(() => {
-        sweepStage.value = 'idle'
-        isExitSweeping.value = false
-        hasNavigated.value = false
-        scrollProgress.value = 0
-        accumScroll = 0
-        isScrollActive.value = false
-      }, 500)
-    }, 150)
-  })
+function handleReturnHome() {
+  isCurtainSplit.value = false
+  isExitSweeping.value = false
+  ribbonKey.value++
+  scrollProgress.value = 0
+  accumScroll = 0
+  isScrollActive.value = false
+  isBloodHovered.value = false
+  hasNavigated.value = false
+  resetPinkSweep()
 }
 
 let touchStartY = 0
@@ -342,13 +358,15 @@ function handleTouchStart(e: TouchEvent) {
 }
 
 function handleTouchMove(e: TouchEvent) {
-  if (sweepStage.value !== 'full' || hasNavigated.value || e.touches.length === 0) return
+  if (sweepStage.value !== 'full' || hasNavigated.value || isCurtainSplit.value || e.touches.length === 0) return
   const currentY = e.touches[0].clientY
   const deltaY = (touchStartY - currentY) * 0.75
   touchStartY = currentY
 
   if (deltaY < 0 && isExitSweeping.value) {
     isExitSweeping.value = false
+    isCurtainSplit.value = false
+    ribbonKey.value++
   }
 
   accumScroll += deltaY
@@ -651,82 +669,83 @@ onBeforeUnmount(() => {
   inset: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #8A0E2B 0%, #4A0515 50%, #200208 100%);
-  border-top: 2px solid #FF2A5F;
-  box-shadow: 0 -20px 80px rgba(138, 14, 43, 0.6);
   z-index: 100;
   pointer-events: auto;
   transform: translateY(100%);
   transition: transform 0.48s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
+  background: #0b0305;
 }
 
 .exit-curtain-sheet.active {
   transform: translateY(0%);
 }
 
-.curtain-stage {
-  position: relative;
+/* Seamless Rigid Curtain Doors (No line dividers, completely seamless until click!) */
+.curtain-door {
+  position: absolute;
+  left: 0;
+  width: 100vw;
+  height: 50.5vh;
+  background: linear-gradient(135deg, #8A0E2B 0%, #4A0515 50%, #200208 100%);
+  z-index: 15;
+  transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.door-top {
+  top: 0;
+}
+
+.door-bottom {
+  bottom: 0;
+}
+
+.exit-curtain-sheet.split-open .door-top {
+  transform: translateY(-100%);
+}
+
+.exit-curtain-sheet.split-open .door-bottom {
+  transform: translateY(100%);
+}
+
+/* Unified Curtain Content Stage (Single Ribbon + Blended Watermark in Center) */
+.curtain-content-stage {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
+  z-index: 20;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-/* Bottom Half: Tech Stack Philosophy Section */
-.bottom-philosophy-container {
-  position: absolute;
-  bottom: 35px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 860px;
-  z-index: 120;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  text-align: center;
-  pointer-events: none;
+  justify-content: center;
+  pointer-events: auto;
+  transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+}
+
+.exit-curtain-sheet.split-open .curtain-content-stage {
+  transform: scale(1.06);
   opacity: 0;
-  animation: philosophy-entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  pointer-events: none;
 }
 
-@keyframes philosophy-entrance {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, 25px);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-}
-
-.tech-stack-heading {
-  font-size: clamp(1.85rem, 4.2vw, 3.25rem);
+/* Giant Blended Background Typography 'TECH STACK' */
+.ribbon-bg-typography {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(5.5rem, 17.5vw, 22rem);
   font-weight: 900;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  color: #ffffff;
-  margin: 0;
-}
-
-/* Clean Solid Red Text for 'You name it.' with zero glow */
-.highlight-text-red {
-  color: #FF2A5F;
-  text-shadow: none;
-}
-
-.philosophy-para {
-  font-size: clamp(0.875rem, 1.3vw, 1.0625rem);
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.85);
-  max-width: 720px;
-  margin: 0;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.04em;
+  color: rgba(235, 130, 150, 0.05);
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+  filter: blur(0.4px);
+  text-shadow: 0 0 50px rgba(138, 14, 43, 0.4);
 }
 
 /* Scroll Progress Indicator Bar */

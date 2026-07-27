@@ -22,9 +22,15 @@ export function usePageTransition() {
     }, 400)
   }
 
+  function resetPinkSweep() {
+    isSweeping.value = false
+    sweepStage.value = 'idle'
+  }
+
   return {
     sweepStage,
     isSweeping,
-    startPinkSweep
+    startPinkSweep,
+    resetPinkSweep
   }
 }

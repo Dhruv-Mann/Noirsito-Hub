@@ -31,7 +31,7 @@
               </a>
             </li>
             <li>
-              <a href="mailto:dhruvmann.dev@gmail.com" class="footer-link-btn">
+              <a href="mailto:dhruvmann139@gmail.com" class="footer-link-btn">
                 <span class="cute-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="4" width="20" height="16" rx="3"/>
@@ -42,7 +42,7 @@
               </a>
             </li>
             <li>
-              <a href="https://linkedin.com/in/dhruv-mann" target="_blank" rel="noopener" class="footer-link-btn">
+              <a href="https://www.linkedin.com/in/dhruv-mann-5b6894384/" target="_blank" rel="noopener" class="footer-link-btn">
                 <span class="cute-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
@@ -54,7 +54,7 @@
               </a>
             </li>
             <li>
-              <a href="https://x.com" target="_blank" rel="noopener" class="footer-link-btn">
+              <a href="https://x.com/DhruvMann64" target="_blank" rel="noopener" class="footer-link-btn">
                 <span class="cute-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>

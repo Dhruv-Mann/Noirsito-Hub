@@ -119,7 +119,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
-import Lenis from 'lenis'
+
 import RibbonCutCanvas from './RibbonCutCanvas.vue'
 import TechStackShowcase from './TechStackShowcase.vue'
 import { usePageTransition } from '~/composables/usePageTransition'
@@ -180,7 +180,7 @@ const hasNavigated = ref(false)
 const isScrollActive = ref(false) // true once user starts scrolling, false when back at 0
 let accumScroll = 0
 const maxScroll = 980
-let lenis: Lenis | null = null
+
 
 
 
@@ -526,16 +526,13 @@ onMounted(() => {
   dropletRafId = requestAnimationFrame(renderDroplets)
   sliceRafId = requestAnimationFrame(renderSliceCanvas)
 
-  lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-  })
+
 })
 
 onBeforeUnmount(() => {
   if (dropletRafId) cancelAnimationFrame(dropletRafId)
   if (sliceRafId) cancelAnimationFrame(sliceRafId)
-  if (lenis) lenis.destroy()
+
   if (bloodLeaveTimer) clearTimeout(bloodLeaveTimer)
   window.removeEventListener('resize', handleResize)
 })
@@ -551,7 +548,7 @@ onBeforeUnmount(() => {
   background: radial-gradient(circle at 50% 50%, #240b12 0%, #0d0506 65%, #000000 100%);
   border-top: 3px solid #AE3B8B;
   box-shadow: 0 -20px 90px rgba(0, 0, 0, 0.95), inset 0 0 140px rgba(174, 59, 139, 0.3);
-  pointer-events: auto;
+  pointer-events: none;
   transform: translateY(100%);
   display: flex;
   flex-direction: column;
@@ -561,6 +558,12 @@ onBeforeUnmount(() => {
   transition: background 0.42s cubic-bezier(0.16, 1, 0.3, 1), 
               border-color 0.42s ease, 
               box-shadow 0.42s ease;
+}
+
+.pink-sweep-sheet.full,
+.pink-sweep-sheet.sweeping,
+.pink-sweep-sheet.exit {
+  pointer-events: auto;
 }
 
 .blood-droplets-canvas,

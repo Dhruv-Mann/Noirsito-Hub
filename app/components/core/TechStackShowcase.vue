@@ -1,10 +1,6 @@
 <template>
   <div class="tech-stack-showcase font-body select-none">
-    <!-- Layered ambient glows matching home page pink-black canvas feel -->
-    <div class="ambient-glow glow-primary" />
-    <div class="ambient-glow glow-secondary" />
-    <div class="ambient-glow glow-accent" />
-    <!-- Pixel-grid noise overlay for home-page texture parity -->
+    <!-- Subtle noise texture overlay -->
     <div class="noise-overlay" aria-hidden="true" />
 
     <!-- Home Button: Positioned absolutely over everything so it doesn't affect layout flow -->
@@ -324,71 +320,24 @@ onBeforeUnmount(() => {
   inset: 0;
   width: 100vw;
   height: 100vh;
-  /*
-   * Three-layer background matching home page DNA:
-   * 1. Hot magenta bloom (left 20%) — mirrors home PixelMatrix #AE3B8B glow
-   * 2. Deep crimson wash (top-left) — mirrors home #341514 pixel base
-   * 3. Base: near-black (#030102) = home page deepest black
-   */
-  background:
-    radial-gradient(ellipse 55% 80% at 8% 55%, rgba(174, 59, 139, 0.22) 0%, transparent 65%),
-    radial-gradient(ellipse 45% 55% at 22% 15%, rgba(255, 10, 80, 0.14) 0%, transparent 60%),
-    radial-gradient(ellipse 35% 45% at 40% 85%, rgba(174, 59, 139, 0.09) 0%, transparent 60%),
-    linear-gradient(160deg, #1f080f 0%, #0d0207 50%, #030102 100%);
+  /* Architectural Obsidian Dark Mode — Zero AI-slop glowing pink radial blobs */
+  background: linear-gradient(160deg, #111215 0%, #090a0d 50%, #040507 100%);
   color: #FAFAFA;
   overflow: hidden;
   z-index: 10;
   display: flex;
 }
 
-/* Pixel-noise grain overlay (same texture feel as home page canvas) */
+/* Subtle noise texture overlay */
 .noise-overlay {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 256px 256px;
-}
-
-/* Ambient Background Glows */
-.ambient-glow {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* Primary large glow — #AE3B8B magenta, left-center (mirrors home) */
-.glow-primary {
-  top: 15%;
-  left: -8%;
-  width: 600px;
-  height: 700px;
-  background: radial-gradient(circle, rgba(174, 59, 139, 0.20) 0%, transparent 70%);
-  filter: blur(120px);
-}
-
-/* Secondary warm pink — hot pink splash mid-left */
-.glow-secondary {
-  bottom: 10%;
-  left: 5%;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(255, 42, 95, 0.13) 0%, transparent 70%);
-  filter: blur(100px);
-}
-
-/* Accent subtle blush — top-left for depth */
-.glow-accent {
-  top: -5%;
-  left: 20%;
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle, rgba(245, 184, 209, 0.08) 0%, transparent 70%);
-  filter: blur(80px);
 }
 
 /* Home Button: Floats over the entire screen at top-right corner */
@@ -403,23 +352,23 @@ onBeforeUnmount(() => {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: #ffffff;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
 }
 
 .btn-home-icon:hover {
-  background: rgba(255, 255, 255, 0.22);
-  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
   transform: scale(1.08);
-  box-shadow: 0 0 24px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.2);
 }
 
-/* Main Stage Container — takes full viewport, no flex-direction:column offset from action bar */
+/* Main Stage Container */
 .stage-container {
   width: 100%;
   height: 100%;
@@ -430,7 +379,7 @@ onBeforeUnmount(() => {
   z-index: 10;
 }
 
-/* Left Side Content Area — pink-and-black themed, full viewport height */
+/* Left Side Content Area */
 .left-content-column {
   width: 48vw;
   height: 100vh;
@@ -443,19 +392,14 @@ onBeforeUnmount(() => {
   animation: content-immediate-fade 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.05s;
 }
 
-/* ============================================================
-   ENTRANCE ANIMATION SEGMENTS — title and divider rule
-   ============================================================ */
+/* Entrance animation */
 @keyframes content-immediate-fade {
   0%   { opacity: 0; transform: translateY(28px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Seg 1: Title (0.05s delay, 0.80s dur) — fastest, sets the stage */
 .anim-seg-1 { opacity: 0; animation: content-immediate-fade 0.80s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.05s; }
-/* Seg 2: Divider (0.25s delay, 0.55s dur, snappy) */
 .anim-seg-2 { opacity: 0; animation: content-immediate-fade 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.25s; }
-/* Seg 3: Minimal Accordion Container */
 .anim-seg-3 { opacity: 0; animation: content-immediate-fade 0.70s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.35s; }
 
 .content-header-block {
@@ -483,7 +427,7 @@ onBeforeUnmount(() => {
 }
 
 .accordion-item.open {
-  border-color: rgba(174, 59, 139, 0.5);
+  border-color: rgba(255, 255, 255, 0.22);
 }
 
 .accordion-header {
@@ -493,7 +437,7 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.65);
   font-size: 0.875rem;
   letter-spacing: 0.12em;
   padding: 8px 0;
@@ -506,7 +450,8 @@ onBeforeUnmount(() => {
 }
 
 .accordion-item.open .accordion-header {
-  color: #AE3B8B;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .header-left {
@@ -517,7 +462,7 @@ onBeforeUnmount(() => {
 
 .index-num {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.3);
   letter-spacing: 0.1em;
 }
 
@@ -528,13 +473,13 @@ onBeforeUnmount(() => {
 .expand-icon {
   display: flex;
   align-items: center;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.35);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease;
 }
 
 .expand-icon.rotated {
   transform: rotate(45deg);
-  color: #AE3B8B;
+  color: #ffffff;
 }
 
 .accordion-content {
@@ -565,23 +510,23 @@ onBeforeUnmount(() => {
 
 .tech-chip {
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.8);
   letter-spacing: 0.04em;
   transition: color 0.2s ease;
 }
 
 .tech-chip:hover {
   color: #ffffff;
-  text-shadow: 0 0 12px rgba(174, 59, 139, 0.6);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
 }
 
 .dot-separator {
   margin-left: 8px;
-  color: rgba(174, 59, 139, 0.6);
+  color: rgba(255, 255, 255, 0.2);
 }
 
 /* ============================================================
-   TECH STACK TITLE — Solid pure white (#ffffff) with highest contrast
+   TECH STACK TITLE
    ============================================================ */
 .tech-title {
   display: flex;
@@ -603,9 +548,6 @@ onBeforeUnmount(() => {
   color: #AE3B8B;
 }
 
-/*
- * Accent divider — #AE3B8B to match STACK, 2 segment sizes for visual depth
- */
 .divider-line {
   display: flex;
   align-items: center;
@@ -620,7 +562,6 @@ onBeforeUnmount(() => {
   height: 3px;
   background: #AE3B8B;
   border-radius: 2px;
-  box-shadow: 0 0 14px rgba(174, 59, 139, 0.7);
 }
 
 .divider-line::after {
@@ -628,23 +569,22 @@ onBeforeUnmount(() => {
   display: block;
   width: 12px;
   height: 3px;
-  background: rgba(174, 59, 139, 0.45);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 2px;
 }
 
-
-
-/* Full-Screen Right Slanted Sheet — truly covers top:0 to bottom:0, GPU hardware accelerated */
+/* Full-Screen Right Slanted Sheet — GPU hardware accelerated architectural dark sheet */
 .fullscreen-slanted-sheet {
-  position: fixed;       /* fixed so it ignores all parent flex/padding constraints */
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   width: 60vw;
   height: 100vh;
   z-index: 20;
-  background: linear-gradient(155deg, rgba(255, 42, 95, 0.28) 0%, rgba(28, 4, 12, 0.97) 38%, rgba(10, 2, 5, 1) 100%);
-  box-shadow: -20px 0 40px rgba(255, 42, 95, 0.35);
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.05) 0%, rgba(18, 19, 23, 0.98) 40%, rgba(6, 7, 9, 1) 100%);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: -20px 0 50px rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -652,7 +592,6 @@ onBeforeUnmount(() => {
   will-change: clip-path, opacity;
   transform: translateZ(0);
   contain: layout style;
-  /* Entrance animation slides across full screen every time page is visited */
   animation: slanted-fullscreen-reveal 1.1s cubic-bezier(0.19, 1, 0.22, 1) forwards 0.15s;
 }
 
@@ -673,9 +612,9 @@ onBeforeUnmount(() => {
   position: relative;
   border-radius: 20px;
   overflow: hidden;
-  background: #120408;
-  border: 1px solid rgba(255, 42, 95, 0.25);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 42, 95, 0.2);
+  background: #090a0d;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
 }
 
 .mosaic-canvas {
@@ -690,8 +629,8 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(10, 3, 6, 0.9);
-  color: #3ca6ff;
+  background: rgba(6, 7, 9, 0.95);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 0.75rem;
   letter-spacing: 0.15em;
 }

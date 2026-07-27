@@ -44,6 +44,9 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 body {
@@ -51,10 +54,16 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   position: relative;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 #___nuxt {
   min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 img,
@@ -84,23 +93,3 @@ a {
   text-decoration: none;
 }
 
-/* Official Lenis Smooth Scroll CSS Rules */
-html.lenis, html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
-}

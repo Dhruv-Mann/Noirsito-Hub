@@ -18,18 +18,7 @@
     <div class="stage-container">
       <!-- Left Side: Main Content Column (Animates immediately on page load) -->
       <div class="left-content-column">
-        <!-- Top Section: Header Brand -->
-        <header class="content-header font-mono">
-          <div class="logo-wrapper">
-            <span class="logo-dot" />
-            <div>
-              <p class="logo-title">DHRUV MANN</p>
-              <p class="logo-slogan">aka Noirsito • OS Architecture</p>
-            </div>
-          </div>
-        </header>
-
-        <!-- Main Section: TECH STACK Title, Primary Accent Line, Subtitle, CTA -->
+        <!-- Main Section: TECH STACK Title & Primary Accent Line -->
         <main class="content-main">
           <!-- Segment 1: Title block — completes at 0.8s -->
           <h1 class="tech-title font-display anim-seg-1">
@@ -39,60 +28,9 @@
             <span class="word-stack">STACK</span>
           </h1>
 
-          <!-- Segment 2: Accent rule — completes at 1.0s (different rate) -->
+          <!-- Segment 2: Accent rule — completes at 1.0s -->
           <div class="divider-line anim-seg-2" />
-
-          <!-- Segment 3: Subtitle — completes at 1.2s -->
-          <p class="tech-subtitle anim-seg-3">
-            First-principles problem solving, high-throughput backend architecture,
-            and desktop-grade 60fps web graphics.
-          </p>
-
-          <!-- Segment 4: CTA — completes at 1.4s (last, feels alive) -->
-          <a
-            href="https://github.com/Dhruv-Mann/Noir-Hub"
-            target="_blank"
-            rel="noopener"
-            class="cta-btn font-mono anim-seg-4"
-          >
-            <span class="cta-btn-scroll">
-              <span class="cta-btn-text cta-btn-default">
-                EXPLORE FULL REPOSITORY
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </span>
-              <span class="cta-btn-text cta-btn-hover">
-                EXPLORE FULL REPOSITORY
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </span>
-            </span>
-          </a>
         </main>
-
-        <!-- Bottom Section: Footer info tags styled like home page 'aka-tag' chips -->
-        <!-- Segment 5: Footer — staggered reveal, different rate (1.6s) -->
-        <footer class="content-footer font-mono anim-seg-5">
-          <div class="info-grid">
-            <span class="info-tag">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/><line x1="2" x2="22" y1="12" y2="12"/>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"/>
-              </svg>
-              dhruvmann.dev
-            </span>
-            <span class="info-tag">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-              </svg>
-              AI &amp; ML Systems
-            </span>
-            <span class="info-tag">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
-              </svg>
-              New Delhi, IN
-            </span>
-          </div>
-        </footer>
       </div>
 
       <!-- Right Side: Full-Screen Slanted Pink Sheet (Reveals across 100vh after 0.5s delay) -->
@@ -404,7 +342,7 @@ onBeforeUnmount(() => {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 64px 48px 48px 64px;
   z-index: 15;
   opacity: 0;
@@ -412,8 +350,7 @@ onBeforeUnmount(() => {
 }
 
 /* ============================================================
-   ENTRANCE ANIMATION SEGMENTS — each at a different rate so the
-   left side feels alive and layered, not a single monotonous fade
+   ENTRANCE ANIMATION SEGMENTS — title and divider rule
    ============================================================ */
 @keyframes content-immediate-fade {
   0%   { opacity: 0; transform: translateY(28px); }
@@ -424,50 +361,6 @@ onBeforeUnmount(() => {
 .anim-seg-1 { opacity: 0; animation: content-immediate-fade 0.80s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.05s; }
 /* Seg 2: Divider (0.25s delay, 0.55s dur, snappy) */
 .anim-seg-2 { opacity: 0; animation: content-immediate-fade 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.25s; }
-/* Seg 3: Subtitle (0.40s delay, 0.90s dur, slower/heavier) */
-.anim-seg-3 { opacity: 0; animation: content-immediate-fade 0.90s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.40s; }
-/* Seg 4: CTA button (0.60s delay, 0.70s dur) */
-.anim-seg-4 { opacity: 0; animation: content-immediate-fade 0.70s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.60s; }
-/* Seg 5: Footer chips (0.80s delay, 1.0s dur, last and slowest — trails in softly) */
-.anim-seg-5 { opacity: 0; animation: content-immediate-fade 1.00s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.80s; }
-
-.content-header {
-  margin-bottom: 24px;
-}
-
-.logo-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-/* Pulsing dot matches home page #FF2A5F brand accent */
-.logo-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: #AE3B8B;
-  box-shadow: 0 0 10px #AE3B8B, 0 0 20px rgba(174, 59, 139, 0.4);
-  animation: dot-pulse 3s ease-in-out infinite;
-}
-
-@keyframes dot-pulse {
-  0%, 100% { box-shadow: 0 0 10px #AE3B8B, 0 0 20px rgba(174, 59, 139, 0.4); }
-  50%       { box-shadow: 0 0 18px #AE3B8B, 0 0 40px rgba(174, 59, 139, 0.7); }
-}
-
-.logo-title {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.08em;
-}
-
-.logo-slogan {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.55);
-  letter-spacing: 0.1em;
-}
 
 .content-main {
   display: flex;
@@ -557,134 +450,7 @@ onBeforeUnmount(() => {
   border-radius: 2px;
 }
 
-.tech-subtitle {
-  font-size: clamp(0.9375rem, 1.2vw, 1.05rem);
-  color: rgba(255, 255, 255, 0.68);
-  line-height: 1.65;
-  text-wrap: pretty;
-}
 
-/* ============================================================
-   CTA BUTTON — mirrors home page btn-hub (pink bg → black on hover)
-   with vertical inner-scroll animation
-   ============================================================ */
-.cta-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  height: 46px;
-  padding: 0 28px;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  border-radius: 6px;
-  background-color: #AE3B8B;
-  color: #ffffff;
-  border: 1px solid #AE3B8B;
-  text-decoration: none;
-  white-space: nowrap;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(174, 59, 139, 0.4);
-  transition:
-    background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  align-self: flex-start;
-}
-
-.cta-btn-scroll {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  justify-content: center;
-}
-
-.cta-btn-text {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  height: 100%;
-  white-space: nowrap;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.cta-btn-default {
-  transform: translateY(0%);
-}
-
-.cta-btn-hover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transform: translateY(100%);
-}
-
-/* Hover: black bg + inner text scrolls up (identical to btn-hub on home page) */
-.cta-btn:hover {
-  background-color: #000000;
-  border-color: #000000;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
-}
-
-.cta-btn:hover .cta-btn-default {
-  transform: translateY(-100%);
-}
-
-.cta-btn:hover .cta-btn-hover {
-  transform: translateY(0%);
-}
-
-/* ============================================================
-   FOOTER TAGS — styled like home page 'aka-tag' pill chips
-   ============================================================ */
-.content-footer {
-  margin-top: 32px;
-  width: 100%;
-}
-
-.info-grid {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-/* Each info tag is a pill chip — mirrors home page .aka-tag */
-.info-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #E17888;
-  background-color: rgba(174, 59, 139, 0.15);
-  border: 1px solid rgba(174, 59, 139, 0.38);
-  padding: 5px 12px;
-  border-radius: 999px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
-  transition:
-    color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-    background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.info-tag:hover {
-  color: #ffffff;
-  background-color: #AE3B8B;
-  border-color: #AE3B8B;
-  box-shadow: 0 4px 20px rgba(174, 59, 139, 0.55);
-  transform: translateY(-2px) scale(1.03);
-}
 
 /* Full-Screen Right Slanted Sheet — truly covers top:0 to bottom:0, GPU hardware accelerated */
 .fullscreen-slanted-sheet {

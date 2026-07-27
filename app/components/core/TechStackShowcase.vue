@@ -581,7 +581,7 @@ onBeforeUnmount(() => {
 }
 
 /* ============================================================
-   TECH STACK TITLE — mirrors home page first-name/last-name DNA
+   TECH STACK TITLE — Solid pure white (#ffffff) with highest contrast
    ============================================================ */
 .tech-title {
   display: flex;
@@ -590,46 +590,17 @@ onBeforeUnmount(() => {
   font-weight: 900;
   line-height: 0.9;
   letter-spacing: -0.05em;
+  color: #ffffff;
 }
 
-/*
- * TECH: White-to-blush metallic shimmer — same gradient as home page 'Dhruv'
- * mirrors: #ffffff → #ffffff → #F5B8D1 → #AE3B8B
- */
 .word-tech {
   display: block;
-  background: linear-gradient(
-    135deg,
-    #ffffff 0%,
-    #ffffff 40%,
-    #F5B8D1 70%,
-    #AE3B8B 100%
-  );
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.5));
-  animation: metallic-shimmer 6s ease-in-out infinite alternate;
+  color: #ffffff;
 }
 
-@keyframes metallic-shimmer {
-  0%   { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
-
-/*
- * STACK: Bright magenta #AE3B8B — same as home page 'Mann'
- */
 .word-stack {
   display: block;
   color: #AE3B8B;
-  filter: drop-shadow(0 0 30px rgba(174, 59, 139, 0.45));
-  transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-
-.word-stack:hover {
-  color: #ffffff;
-  filter: drop-shadow(0 0 50px rgba(174, 59, 139, 0.9)) drop-shadow(0 0 80px rgba(174, 59, 139, 0.5));
 }
 
 /*

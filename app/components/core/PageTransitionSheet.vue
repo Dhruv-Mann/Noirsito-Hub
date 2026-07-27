@@ -84,8 +84,8 @@
 
     <!-- Secondary Exit Curtain Sheet Stage with Giant Blended 'TECH STACK' BG & Orchestra Curtain Split Reveal -->
     <div class="exit-curtain-sheet" :class="{ active: isExitSweeping, 'split-open': isCurtainSplit }">
-      <!-- Revealed Tech Stack Showcase (Rendered Underneath Curtains) -->
-      <TechStackShowcase v-if="isExitSweeping" @return-home="handleReturnHome" />
+      <!-- Revealed Tech Stack Showcase (Mounted when curtains split open so sliding animation plays every single visit) -->
+      <TechStackShowcase v-if="isCurtainSplit" :key="techStackKey" @return-home="handleReturnHome" />
 
       <!-- Stage Light Seam Flare -->
       <div class="curtain-light-seam" />
@@ -131,6 +131,7 @@ const isBloodHovered = ref(false)
 const isExitSweeping = ref(false)
 const isCurtainSplit = ref(false)
 const ribbonKey = ref(0)
+const techStackKey = ref(0)
 const dropletsCanvasRef = ref<HTMLCanvasElement | null>(null)
 const sliceCanvasRef = ref<HTMLCanvasElement | null>(null)
 const bloodWord1Ref = ref<HTMLElement | null>(null)
@@ -341,6 +342,7 @@ function handleWheel(e: WheelEvent) {
 // Rigid Ribbon Cut Center Click -> Opens Rigid Cinema Curtains to reveal Tech Stack!
 function handleRibbonCut() {
   if (isCurtainSplit.value) return
+  techStackKey.value++
   isCurtainSplit.value = true
 }
 

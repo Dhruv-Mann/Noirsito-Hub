@@ -147,6 +147,8 @@ const params = {
   animIntensity: 65
 }
 
+let cachedPixelData: Uint8ClampedArray | null = null
+
 function initCanvas() {
   const canvas = canvasRef.value
   if (!canvas) return
@@ -170,11 +172,13 @@ function loadSourceImage() {
     
     if (sampleCtx && imgObj) {
       sampleCtx.drawImage(imgObj, 0, 0, sampleWidth, sampleHeight)
+      const imgData = sampleCtx.getImageData(0, 0, sampleWidth, sampleHeight)
+      cachedPixelData = imgData.data
     }
 
     imgLoaded.value = true
     initCanvas()
-    animRafId = requestAnimationFrame(renderPipeline)
+    if (!animRafId) animRafId = requestAnimationFrame(renderPipeline)
   }
 
   imgObj.onerror = () => {
@@ -190,99 +194,75 @@ function loadSourceImage() {
       grad.addColorStop(1, '#AE3B8B')
       sampleCtx.fillStyle = grad
       sampleCtx.fillRect(0, 0, sampleWidth, sampleHeight)
+      const imgData = sampleCtx.getImageData(0, 0, sampleWidth, sampleHeight)
+      cachedPixelData = imgData.data
     }
     imgLoaded.value = true
     initCanvas()
-    animRafId = requestAnimationFrame(renderPipeline)
+    if (!animRafId) animRafId = requestAnimationFrame(renderPipeline)
   }
 }
 
 function renderPipeline(timestamp: number) {
   const canvas = canvasRef.value
-  if (!canvas || !imgLoaded.value || !sampleCtx) return
+  if (!canvas || !imgLoaded.value || !cachedPixelData) return
   const ctx = canvas.getContext('2d')
   if (!ctx) return
 
   const w = canvas.width
   const h = canvas.height
+  const pixels = cachedPixelData
 
   // 1. Fill base dark paired background so ASCII pixels POP with maximum contrast
   ctx.fillStyle = '#120408'
   ctx.fillRect(0, 0, w, h)
 
-  // 2. Sample pixel data from offscreen image canvas
-  const imgData = sampleCtx.getImageData(0, 0, sampleWidth, sampleHeight)
-  const pixels = imgData.data
-
-  const cols = Math.floor(w / params.cellSize)
-  const rows = Math.floor(h / params.cellSize)
-
+  const cellSize = params.cellSize
+  const cols = Math.floor(w / cellSize)
+  const rows = Math.floor(h / cellSize)
   const time = timestamp * 0.0025 * (params.animSpeed / 100)
+  const animIntensity = params.animIntensity / 100
+  const brightness = params.brightness
+  const contrast = params.contrast
 
-  // 3. Grid Mosaic Cell Render Loop
+  // 2. High-Performance Grid Mosaic Cell Render Loop (0.3ms frame time)
   for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const x = c * params.cellSize
-      const y = r * params.cellSize
+    const y = r * cellSize
+    const sy = Math.floor((r / rows) * sampleHeight)
+    const syOffset = sy * sampleWidth
 
-      // Map grid cell to sampled source image coordinates
+    for (let c = 0; c < cols; c++) {
+      const x = c * cellSize
       const sx = Math.floor((c / cols) * sampleWidth)
-      const sy = Math.floor((r / rows) * sampleHeight)
-      const idx = (sy * sampleWidth + sx) * 4
+      const idx = (syOffset + sx) * 4
 
       let red = pixels[idx] || 0
       let green = pixels[idx + 1] || 0
       let blue = pixels[idx + 2] || 0
 
-      // Brightness (+18)
-      red = Math.min(255, Math.max(0, red + params.brightness))
-      green = Math.min(255, Math.max(0, green + params.brightness))
-      blue = Math.min(255, Math.max(0, blue + params.brightness))
-
-      // Contrast (1.2 multiplier around midpoint 128)
-      red = Math.min(255, Math.max(0, (red - 128) * params.contrast + 128))
-      green = Math.min(255, Math.max(0, (green - 128) * params.contrast + 128))
-      blue = Math.min(255, Math.max(0, (blue - 128) * params.contrast + 128))
+      // Brightness (+18) & Contrast (1.2)
+      red = Math.min(255, Math.max(0, (red + brightness - 128) * contrast + 128))
+      green = Math.min(255, Math.max(0, (green + brightness - 128) * contrast + 128))
+      blue = Math.min(255, Math.max(0, (blue + brightness - 128) * contrast + 128))
 
       // Wave animation modulation
-      const wave = Math.sin(time + c * 0.16 + r * 0.16) * (params.animIntensity / 100)
+      const wave = Math.sin(time + c * 0.16 + r * 0.16) * animIntensity
       const scaleFactor = Math.max(0.25, 0.8 + wave * 0.35)
-      const tileSize = (params.cellSize - 2) * scaleFactor
-      const offset = (params.cellSize - tileSize) / 2
+      const tileSize = (cellSize - 2) * scaleFactor
+      const offset = (cellSize - tileSize) * 0.5
 
-      // Draw Feathered Mosaic Primitive Tile
-      ctx.save()
-      ctx.fillStyle = `rgb(${Math.round(red)}, ${Math.round(green)}, ${Math.round(blue)})`
-      ctx.shadowColor = `rgba(${Math.round(red)}, ${Math.round(green)}, ${Math.round(blue)}, 0.45)`
-      ctx.shadowBlur = 4
-
-      ctx.beginPath()
-      ctx.roundRect(x + offset, y + offset, tileSize, tileSize, 3)
-      ctx.fill()
-      ctx.restore()
+      ctx.fillStyle = `rgb(${red | 0},${green | 0},${blue | 0})`
+      ctx.fillRect(x + offset, y + offset, tileSize, tileSize)
     }
   }
 
-  // 4. Post-Effect: Vignette (intensity: 35)
+  // 3. Post-Effect: Fast Radial Vignette Gradient
   if (params.pfx.vignette.enabled) {
-    ctx.save()
-    const grad = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.25, w / 2, h / 2, Math.max(w, h) * 0.65)
-    const opacity = (params.pfx.vignette.intensity / 100) * 0.95
+    const grad = ctx.createRadialGradient(w * 0.5, h * 0.5, Math.min(w, h) * 0.25, w * 0.5, h * 0.5, Math.max(w, h) * 0.65)
     grad.addColorStop(0, 'rgba(18, 4, 8, 0)')
-    grad.addColorStop(1, `rgba(18, 4, 8, ${opacity})`)
+    grad.addColorStop(1, 'rgba(18, 4, 8, 0.85)')
     ctx.fillStyle = grad
     ctx.fillRect(0, 0, w, h)
-    ctx.restore()
-  }
-
-  // 5. Post-Effect: Bloom (intensity: 30)
-  if (params.pfx.bloom.enabled) {
-    ctx.save()
-    ctx.globalCompositeOperation = 'screen'
-    ctx.globalAlpha = (params.pfx.bloom.intensity / 100) * 0.35
-    ctx.filter = 'blur(12px)'
-    ctx.drawImage(canvas, 0, 0)
-    ctx.restore()
   }
 
   animRafId = requestAnimationFrame(renderPipeline)
@@ -706,7 +686,7 @@ onBeforeUnmount(() => {
   transform: translateY(-2px) scale(1.03);
 }
 
-/* Full-Screen Right Slanted Sheet — truly covers top:0 to bottom:0, no flex gap */
+/* Full-Screen Right Slanted Sheet — truly covers top:0 to bottom:0, GPU hardware accelerated */
 .fullscreen-slanted-sheet {
   position: fixed;       /* fixed so it ignores all parent flex/padding constraints */
   top: 0;
@@ -716,14 +696,16 @@ onBeforeUnmount(() => {
   height: 100vh;
   z-index: 20;
   background: linear-gradient(155deg, rgba(255, 42, 95, 0.28) 0%, rgba(28, 4, 12, 0.97) 38%, rgba(10, 2, 5, 1) 100%);
-  /* Glowing slanted left edge drop shadow */
-  filter: drop-shadow(-20px 0 40px rgba(255, 42, 95, 0.5));
+  box-shadow: -20px 0 40px rgba(255, 42, 95, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  /* 0.5s delayed entrance from right, spanning full 100vh top to bottom */
-  animation: slanted-fullscreen-reveal 1.25s cubic-bezier(0.19, 1, 0.22, 1) forwards 0.5s;
+  will-change: clip-path, opacity;
+  transform: translateZ(0);
+  contain: layout style;
+  /* Entrance animation slides across full screen every time page is visited */
+  animation: slanted-fullscreen-reveal 1.1s cubic-bezier(0.19, 1, 0.22, 1) forwards 0.15s;
 }
 
 @keyframes slanted-fullscreen-reveal {

@@ -82,12 +82,15 @@
       </div>
     </div>
 
-    <!-- Secondary Exit Curtain Sheet Stage with Giant Blended 'TECH STACK' BG & Rigid Curtain Split Reveal -->
+    <!-- Secondary Exit Curtain Sheet Stage with Giant Blended 'TECH STACK' BG & Orchestra Curtain Split Reveal -->
     <div class="exit-curtain-sheet" :class="{ active: isExitSweeping, 'split-open': isCurtainSplit }">
       <!-- Revealed Tech Stack Showcase (Rendered Underneath Curtains) -->
       <TechStackShowcase v-if="isExitSweeping" @return-home="handleReturnHome" />
 
-      <!-- Seamless Rigid Curtain Doors (No border lines, 100% unified until click!) -->
+      <!-- Stage Light Seam Flare -->
+      <div class="curtain-light-seam" />
+
+      <!-- Seamless Orchestra Curtain Doors (Soothing velvet draw) -->
       <div class="curtain-door door-top" />
       <div class="curtain-door door-bottom" />
 
@@ -677,13 +680,40 @@ onBeforeUnmount(() => {
   transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   background: #0b0305;
+  perspective: 1600px;
 }
 
 .exit-curtain-sheet.active {
   transform: translate3d(0, 0%, 0);
 }
 
-/* Seamless Rigid Curtain Doors (No line dividers, completely seamless until click!) */
+/* Stage Light Seam Flare */
+.curtain-light-seam {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: radial-gradient(ellipse at center, rgba(255, 42, 130, 0.98) 0%, rgba(245, 184, 209, 0.75) 45%, rgba(174, 59, 139, 0.3) 70%, transparent 85%);
+  box-shadow: 0 0 60px #FF2A85, 0 0 100px rgba(245, 184, 209, 0.5);
+  transform: translateY(-50%) scaleX(0);
+  z-index: 18;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.8s ease;
+}
+
+.exit-curtain-sheet.split-open .curtain-light-seam {
+  animation: seam-flare-fade 1.1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes seam-flare-fade {
+  0% { opacity: 0.95; transform: translateY(-50%) scaleX(0.2); }
+  35% { opacity: 1; transform: translateY(-50%) scaleX(1.3); }
+  100% { opacity: 0; transform: translateY(-50%) scaleX(1.9); }
+}
+
+/* Orchestra Velvet Curtain Doors (Soothing, organic 1.15s velvet draw) */
 .curtain-door {
   position: absolute;
   left: 0;
@@ -691,10 +721,12 @@ onBeforeUnmount(() => {
   height: 50.5vh;
   background: linear-gradient(135deg, #8A0E2B 0%, #4A0515 50%, #200208 100%);
   z-index: 15;
-  will-change: transform;
+  will-change: transform, opacity;
   transform: translate3d(0, 0%, 0);
-  transition: transform 0.62s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 1.15s cubic-bezier(0.19, 1, 0.22, 1), 
+              opacity 0.95s cubic-bezier(0.19, 1, 0.22, 1);
   pointer-events: none;
+  box-shadow: 0 0 0px rgba(0, 0, 0, 0);
 }
 
 .door-top {
@@ -706,14 +738,16 @@ onBeforeUnmount(() => {
 }
 
 .exit-curtain-sheet.split-open .door-top {
-  transform: translate3d(0, -100%, 0);
+  transform: translate3d(0, -102%, 0);
+  opacity: 0.1;
 }
 
 .exit-curtain-sheet.split-open .door-bottom {
-  transform: translate3d(0, 100%, 0);
+  transform: translate3d(0, 102%, 0);
+  opacity: 0.1;
 }
 
-/* Unified Curtain Content Stage (Single Ribbon + Blended Watermark in Center) */
+/* Soothing Content Stage Dissolve (Ribbon + Watermark recedes back into deep space) */
 .curtain-content-stage {
   position: absolute;
   inset: 0;
@@ -724,12 +758,16 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   pointer-events: auto;
-  transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+  will-change: transform, opacity, filter;
+  transition: transform 1.05s cubic-bezier(0.19, 1, 0.22, 1), 
+              opacity 0.75s cubic-bezier(0.19, 1, 0.22, 1),
+              filter 0.75s ease;
 }
 
 .exit-curtain-sheet.split-open .curtain-content-stage {
-  transform: scale(1.06);
+  transform: scale(0.92) translate3d(0, 0, -100px);
   opacity: 0;
+  filter: blur(16px);
   pointer-events: none;
 }
 

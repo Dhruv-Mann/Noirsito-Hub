@@ -22,6 +22,7 @@ const handleSingleClick = () => {
 function handleHeadToHubClick(e: MouseEvent) {
   e.preventDefault()
   e.stopPropagation()
+  if (!isAssembled.value) return
   startPinkSweep()
 }
 
@@ -300,6 +301,7 @@ onUnmounted(() => {
   margin-left: 2.2ch;
   margin-top: var(--space-phi-sm);
   opacity: 0;
+  pointer-events: none;
   transform: translateY(24px);
   transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
@@ -307,6 +309,7 @@ onUnmounted(() => {
 
 .hero-text-block.Assembled .meta-block {
   opacity: 1;
+  pointer-events: auto;
   transform: translateY(0);
   transition-delay: 0.35s;
 }

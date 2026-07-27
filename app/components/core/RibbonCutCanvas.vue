@@ -1,13 +1,6 @@
 <template>
   <div class="ribbon-canvas-wrapper" :class="{ broken: isCut }">
     <canvas ref="canvasEl" width="1920" height="1080" class="ribbon-canvas" @click="handleCut" />
-    
-    <!-- Minimalist Bouncing Cursor Animation at Center Knot (Big Block Removed) -->
-    <div v-if="!isCut" class="bouncing-cursor-knot" @click="handleCut">
-      <svg viewBox="0 0 24 24" width="32" height="32" fill="#ffffff">
-        <path d="M13.64 21.97l-3.22-6.66-3.83 3.83V2.5l14.7 11.47-5.4 1.13 3.22 6.66-5.47 2.21z" />
-      </svg>
-    </div>
   </div>
 </template>
 

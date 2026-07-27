@@ -86,29 +86,11 @@
       </div>
     </div>
 
-    <!-- Secondary Exit Curtain Sheet Layer with Lissajous Ribbon Bow & Collision Physics -->
+    <!-- Secondary Exit Curtain Sheet Layer with Lissajous Ribbon Bow -->
     <div class="exit-curtain-sheet" :class="{ active: isExitSweeping }">
       <div v-if="isExitSweeping" class="curtain-stage">
-        
-        <!-- Top Half: 2D Collision Physics Floating Skill Badges -->
-        <FloatingSkillsPhysics />
-
         <!-- Center Lissajous Ribbon Bow Canvas & Scissor Knot -->
         <RibbonCutCanvas @ribbon-cut="handleRibbonCut" />
-
-        <!-- Bottom Half: Tech Stack Philosophy Section -->
-        <div class="bottom-philosophy-container font-body">
-          <h2 class="tech-stack-heading font-display">
-            <span>TECH STACK — </span>
-            <span class="highlight-text-red">You name it.</span>
-          </h2>
-          <p class="philosophy-para">
-            Tools and frameworks evolve rapidly, but architectural rigor, first-principles problem solving, 
-            and zero-compromise engineering remain timeless. From high-performance browser shaders to 
-            scalable distributed backend systems—if it can be conceptualized, it can be built with perfection.
-          </p>
-        </div>
-
       </div>
     </div>
 
@@ -127,7 +109,6 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import Lenis from 'lenis'
 import RibbonCutCanvas from './RibbonCutCanvas.vue'
-import FloatingSkillsPhysics from './FloatingSkillsPhysics.vue'
 import { usePageTransition } from '~/composables/usePageTransition'
 
 const router = useRouter()

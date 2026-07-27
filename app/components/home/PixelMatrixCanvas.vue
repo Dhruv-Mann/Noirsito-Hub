@@ -141,9 +141,21 @@ function handleResize() {
   initDeterministicGrid()
 }
 
+let isCursorInFooter = false
+
 function handleMouseMove(e: MouseEvent) {
   mouseX = e.clientX
   mouseY = e.clientY
+
+  if (typeof document !== 'undefined') {
+    const footerEl = document.querySelector('.home-footer')
+    if (footerEl) {
+      const rect = footerEl.getBoundingClientRect()
+      isCursorInFooter = e.clientY >= rect.top && e.clientY <= rect.bottom && e.clientX >= rect.left && e.clientX <= rect.right
+    } else {
+      isCursorInFooter = false
+    }
+  }
 }
 
 function handleCanvasClick(e: MouseEvent) {
@@ -327,7 +339,7 @@ function render(time: number) {
         const dist = Math.sqrt(dx * dx + dy * dy)
         let opacityMultiplier = 1
 
-        if (dist < 140) {
+        if (!isCursorInFooter && dist < 140) {
           opacityMultiplier = 1.3 - (dist / 140) * 0.3
         }
 

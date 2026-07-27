@@ -26,6 +26,15 @@ function handleHeadToHubClick(e: MouseEvent) {
 
 function handleMouseMove(e: MouseEvent) {
   if (typeof window === 'undefined') return
+  if (typeof document !== 'undefined') {
+    const footerEl = document.querySelector('.home-footer')
+    if (footerEl) {
+      const rect = footerEl.getBoundingClientRect()
+      if (e.clientY >= rect.top && e.clientY <= rect.bottom && e.clientX >= rect.left && e.clientX <= rect.right) {
+        return
+      }
+    }
+  }
   // Calculate cursor background percentage for ambient spotlight mesh
   mousePctX.value = Math.round((e.clientX / window.innerWidth) * 100)
   mousePctY.value = Math.round((e.clientY / window.innerHeight) * 100)

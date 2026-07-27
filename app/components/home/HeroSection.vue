@@ -10,8 +10,6 @@ import { usePageTransition } from '~/composables/usePageTransition'
 const { isStarted, isAssembled, triggerInitialization } = useSystemState()
 const { startPinkSweep } = usePageTransition()
 
-const tiltX = ref(0)
-const tiltY = ref(0)
 const mousePctX = ref(50)
 const mousePctY = ref(50)
 
@@ -28,13 +26,6 @@ function handleHeadToHubClick(e: MouseEvent) {
 
 function handleMouseMove(e: MouseEvent) {
   if (typeof window === 'undefined') return
-  const cx = window.innerWidth / 2
-  const cy = window.innerHeight / 2
-  
-  // 3D perspective rotational tilt (-4.5deg to +4.5deg)
-  tiltX.value = -((e.clientY - cy) / cy) * 4.5
-  tiltY.value = ((e.clientX - cx) / cx) * 4.5
-
   // Calculate cursor background percentage for ambient spotlight mesh
   mousePctX.value = Math.round((e.clientX / window.innerWidth) * 100)
   mousePctY.value = Math.round((e.clientY / window.innerHeight) * 100)
@@ -81,7 +72,6 @@ onUnmounted(() => {
         id="hero-text-block" 
         class="hero-text-block" 
         :class="{ Assembled: isAssembled }"
-        :style="{ transform: isAssembled ? `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)` : undefined }"
       >
         <!-- Stacked Name Heading with Metallic Shimmer Reveal & Animated Fractal Tree -->
         <h1 class="main-name-heading font-display">

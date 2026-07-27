@@ -47,8 +47,6 @@
             fontWeight: kineticWeight1,
             letterSpacing: `${kineticSpacing1}em`
           }"
-          @mouseenter="onBloodEnter"
-          @mouseleave="onBloodLeave"
         >
           {{ displayBlood1 }}
         </span>
@@ -78,8 +76,6 @@
             fontWeight: kineticWeight2,
             letterSpacing: `${kineticSpacing2}em`
           }"
-          @mouseenter="onBloodEnter"
-          @mouseleave="onBloodLeave"
         >
           {{ displayBlood2 }}
         </span>
@@ -182,18 +178,7 @@ let accumScroll = 0
 const maxScroll = 980
 let lenis: Lenis | null = null
 
-// Debounced blood-hover to prevent micro-second black flash on fast mouse moves
-let bloodLeaveTimer: ReturnType<typeof setTimeout> | null = null
-function onBloodEnter() {
-  if (bloodLeaveTimer) { clearTimeout(bloodLeaveTimer); bloodLeaveTimer = null }
-  isBloodHovered.value = true
-}
-function onBloodLeave() {
-  bloodLeaveTimer = setTimeout(() => {
-    isBloodHovered.value = false
-    bloodLeaveTimer = null
-  }, 120)
-}
+
 
 // OPTION 2: RAYCAST ASCII MATRIX SCRAMBLE & IMPLOSION COMPUTEDS
 const asciiChars = '$#*%?@01XZΔΩΞΨØ█░▒'
@@ -247,6 +232,21 @@ const offsetTR = computed(() => ({ x: 300, y: -200 }))
 const offsetBL = computed(() => ({ x: -300, y: 200 }))
 const offsetBR = computed(() => ({ x: 300, y: 200 }))
 
+function updateBloodHover(mx: number, my: number) {
+  const r1 = bloodWord1Ref.value?.getBoundingClientRect()
+  const r2 = bloodWord2Ref.value?.getBoundingClientRect()
+  const pad = 24
+
+  const inWord1 = r1 && (mx >= r1.left - pad && mx <= r1.right + pad && my >= r1.top - pad && my <= r1.bottom + pad)
+  const inWord2 = r2 && (mx >= r2.left - pad && mx <= r2.right + pad && my >= r2.top - pad && my <= r2.bottom + pad)
+
+  if (inWord1 || inWord2) {
+    isBloodHovered.value = true
+  } else {
+    isBloodHovered.value = false
+  }
+}
+
 function handleMouseMove(e: MouseEvent) {
   const { innerWidth, innerHeight } = window
   const mouseX = e.clientX
@@ -257,6 +257,7 @@ function handleMouseMove(e: MouseEvent) {
 
   updateKineticFont(mouseX, mouseY, bloodWord1Ref.value, kineticWeight1, kineticSpacing1, kineticScale1)
   updateKineticFont(mouseX, mouseY, bloodWord2Ref.value, kineticWeight2, kineticSpacing2, kineticScale2)
+  updateBloodHover(mouseX, mouseY)
 
   const dx = mouseX - lastMouseX
   const dy = mouseY - lastMouseY

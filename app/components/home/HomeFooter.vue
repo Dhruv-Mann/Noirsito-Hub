@@ -5,13 +5,77 @@
 
     <!-- Main Footer Container -->
     <div class="container footer-container">
-      <!-- Top Grid Section -->
+      <!-- 4-Column Top Grid Section -->
       <div class="footer-grid">
-        <!-- Col 1: Brand & Philosophy -->
+        <!-- Column 1: Connects (GitHub, Email, LinkedIn, Twitter/X) -->
+        <div class="footer-col font-mono">
+          <ul class="footer-links">
+            <li>
+              <a href="https://github.com/Dhruv-Mann" target="_blank" rel="noopener" class="footer-link-btn">
+                <span class="cute-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                  </svg>
+                </span>
+                <span class="slash-prefix">/</span> GITHUB
+              </a>
+            </li>
+            <li>
+              <a href="mailto:dhruvmann.dev@gmail.com" class="footer-link-btn">
+                <span class="cute-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="3"/>
+                    <path d="M22 6l-10 7L2 6"/>
+                  </svg>
+                </span>
+                <span class="slash-prefix">/</span> EMAIL
+              </a>
+            </li>
+            <li>
+              <a href="https://linkedin.com/in/dhruv-mann" target="_blank" rel="noopener" class="footer-link-btn">
+                <span class="cute-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                    <rect x="2" y="9" width="4" height="12"/>
+                    <circle cx="4" cy="4" r="2"/>
+                  </svg>
+                </span>
+                <span class="slash-prefix">/</span> LINKEDIN
+              </a>
+            </li>
+            <li>
+              <a href="https://x.com" target="_blank" rel="noopener" class="footer-link-btn">
+                <span class="cute-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+                  </svg>
+                </span>
+                <span class="slash-prefix">/</span> TWITTER
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Column 2: Navigation Links -->
+        <div class="footer-col font-mono">
+          <ul class="footer-links">
+            <li>
+              <button class="footer-link-btn" @click="scrollToTop">
+                <span class="slash-prefix">/</span> HOME
+              </button>
+            </li>
+            <li>
+              <button class="footer-link-btn" @click="triggerPinkSweep">
+                <span class="slash-prefix">/</span> TECH STACK
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Brand & Bio -->
         <div class="footer-col brand-col">
           <div class="brand-header">
             <span class="brand-title font-display">DHRUV MANN</span>
-            <span class="brand-tag font-mono">aka Noirsito</span>
           </div>
           
           <p class="brand-description font-mono">
@@ -25,58 +89,22 @@
           </div>
         </div>
 
-        <!-- Col 2: Navigation Links -->
+        <!-- Column 4: Architecture & Extended Links -->
         <div class="footer-col font-mono">
-          <h4 class="col-heading">NAVIGATION</h4>
           <ul class="footer-links">
             <li>
-              <button class="footer-link-btn" @click="scrollToTop">
-                <span class="link-index">[01]</span> TOP OF PAGE
-              </button>
+              <span class="footer-link-btn slot-item">
+                <span class="slash-prefix">/</span> ARCHITECTURE DOCS
+              </span>
             </li>
             <li>
-              <button class="footer-link-btn" @click="triggerPinkSweep">
-                <span class="link-index">[02]</span> TECH STACK SHOWCASE
-              </button>
+              <span class="footer-link-btn slot-item">
+                <span class="slash-prefix">/</span> SYSTEM BENCHMARKS
+              </span>
             </li>
             <li>
-              <a href="https://github.com/Dhruv-Mann/Noirsito-Hub" target="_blank" rel="noopener" class="footer-link-btn">
-                <span class="link-index">[03]</span> DIGITAL HUB REPOSITORY
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Col 3: Direct Connect & Socials -->
-        <div class="footer-col font-mono">
-          <h4 class="col-heading">CONNECT</h4>
-          <ul class="footer-links">
-            <li>
-              <a href="https://github.com/Dhruv-Mann" target="_blank" rel="noopener" class="footer-link-btn">
-                <span class="link-icon">
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                  </svg>
-                </span>
-                GITHUB / @Dhruv-Mann
-              </a>
-            </li>
-            <li>
-              <a href="mailto:dhruvmann.dev@gmail.com" class="footer-link-btn">
-                <span class="link-icon">
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
-                  </svg>
-                </span>
-                EMAIL / DHRUVMANN.DEV@GMAIL.COM
-              </a>
-            </li>
-            <li>
-              <span class="location-text">
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
-                </svg>
-                NEW DELHI, INDIA (UTC+05:30)
+              <span class="footer-link-btn slot-item">
+                <span class="slash-prefix">/</span> EXPERIMENTAL LAB
               </span>
             </li>
           </ul>
@@ -152,16 +180,23 @@ function triggerPinkSweep() {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1.2fr;
-  gap: 48px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
   padding-bottom: 64px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+}
+
+@media (max-width: 640px) {
   .footer-grid {
     grid-template-columns: 1fr;
-    gap: 36px;
+    gap: 22px;
   }
 }
 
@@ -173,9 +208,7 @@ function triggerPinkSweep() {
 
 .brand-header {
   display: flex;
-  align-items: baseline;
-  gap: 12px;
-  flex-wrap: wrap;
+  align-items: center;
 }
 
 .brand-title {
@@ -185,25 +218,18 @@ function triggerPinkSweep() {
   color: #ffffff;
 }
 
-.brand-tag {
-  font-size: 0.78rem;
-  color: #AE3B8B;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
 .brand-description {
-  font-size: 0.84rem;
+  font-size: 0.8125rem;
   color: rgba(255, 255, 255, 0.6);
   line-height: 1.65;
-  max-width: 460px;
+  max-width: 320px;
 }
 
 .status-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.7rem;
+  font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.75);
@@ -212,7 +238,7 @@ function triggerPinkSweep() {
   padding: 6px 14px;
   border-radius: 999px;
   align-self: flex-start;
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 .status-dot {
@@ -229,14 +255,6 @@ function triggerPinkSweep() {
   50% { opacity: 0.4; transform: scale(0.85); }
 }
 
-.col-heading {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  color: rgba(255, 255, 255, 0.4);
-  margin-bottom: 20px;
-}
-
 .footer-links {
   list-style: none;
   padding: 0;
@@ -244,6 +262,7 @@ function triggerPinkSweep() {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  padding-top: 4px;
 }
 
 .footer-link-btn {
@@ -266,23 +285,32 @@ function triggerPinkSweep() {
   transform: translateX(4px);
 }
 
-.link-index {
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.35);
-}
-
-.link-icon {
+.cute-icon {
   display: inline-flex;
   align-items: center;
   color: #AE3B8B;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.location-text {
-  font-size: 0.78rem;
+.footer-link-btn:hover .cute-icon {
+  color: #ffffff;
+  transform: scale(1.15);
+}
+
+.slot-item {
   color: rgba(255, 255, 255, 0.45);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  cursor: default;
+}
+
+.slot-item:hover {
+  transform: none;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.slash-prefix {
+  font-weight: 700;
+  color: #AE3B8B;
+  margin-right: 2px;
 }
 
 .footer-bottom {

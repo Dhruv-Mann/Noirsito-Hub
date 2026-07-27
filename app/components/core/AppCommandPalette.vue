@@ -164,8 +164,8 @@ onUnmounted(() => {
 <style scoped>
 .cmd-k-trigger {
   position: fixed;
-  bottom: 24px;
-  left: 24px;
+  top: 24px;
+  left: 40px;
   z-index: 100;
   display: flex;
   align-items: center;

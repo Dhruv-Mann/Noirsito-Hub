@@ -1,8 +1,11 @@
 <template>
   <div class="tech-stack-showcase font-body select-none">
-    <!-- Ambient Background Lighting Glows -->
-    <div class="ambient-glow glow-pink" />
-    <div class="ambient-glow glow-cyan" />
+    <!-- Layered ambient glows matching home page pink-black canvas feel -->
+    <div class="ambient-glow glow-primary" />
+    <div class="ambient-glow glow-secondary" />
+    <div class="ambient-glow glow-accent" />
+    <!-- Pixel-grid noise overlay for home-page texture parity -->
+    <div class="noise-overlay" aria-hidden="true" />
 
     <!-- Home Button: Positioned absolutely over everything so it doesn't affect layout flow -->
     <button class="btn-home-icon" aria-label="Return to Home" @click="$emit('returnHome')">
@@ -28,63 +31,66 @@
 
         <!-- Main Section: TECH STACK Title, Primary Accent Line, Subtitle, CTA -->
         <main class="content-main">
-          <h1 class="tech-title font-display">
+          <!-- Segment 1: Title block — completes at 0.8s -->
+          <h1 class="tech-title font-display anim-seg-1">
+            <!-- TECH: white-to-blush metallic shimmer, mirrors home page 'Dhruv' -->
             <span class="word-tech">TECH</span>
-            <span class="word-stack gradient-pink">STACK</span>
+            <!-- STACK: bright magenta #AE3B8B, mirrors home page 'Mann' -->
+            <span class="word-stack">STACK</span>
           </h1>
 
-          <div class="divider-line" />
+          <!-- Segment 2: Accent rule — completes at 1.0s (different rate) -->
+          <div class="divider-line anim-seg-2" />
 
-          <p class="tech-subtitle">
-            First-principles problem solving, high-throughput backend architecture, 
+          <!-- Segment 3: Subtitle — completes at 1.2s -->
+          <p class="tech-subtitle anim-seg-3">
+            First-principles problem solving, high-throughput backend architecture,
             and desktop-grade 60fps web graphics.
           </p>
 
-          <a 
-            href="https://github.com/Dhruv-Mann/Noir-Hub" 
-            target="_blank" 
-            rel="noopener" 
-            class="cta-link font-mono"
+          <!-- Segment 4: CTA — completes at 1.4s (last, feels alive) -->
+          <a
+            href="https://github.com/Dhruv-Mann/Noir-Hub"
+            target="_blank"
+            rel="noopener"
+            class="cta-btn font-mono anim-seg-4"
           >
-            <span>EXPLORE FULL REPOSITORY</span>
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
+            <span class="cta-btn-scroll">
+              <span class="cta-btn-text cta-btn-default">
+                EXPLORE FULL REPOSITORY
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+              <span class="cta-btn-text cta-btn-hover">
+                EXPLORE FULL REPOSITORY
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+            </span>
           </a>
         </main>
 
-        <!-- Bottom Section: Footer Contact/System Info Grid -->
-        <footer class="content-footer font-mono">
+        <!-- Bottom Section: Footer info tags styled like home page 'aka-tag' chips -->
+        <!-- Segment 5: Footer — staggered reveal, different rate (1.6s) -->
+        <footer class="content-footer font-mono anim-seg-5">
           <div class="info-grid">
-            <div class="info-item">
-              <div class="info-icon">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="2" x2="22" y1="12" y2="12"/>
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"/>
-                </svg>
-              </div>
-              <span>dhruvmann.dev</span>
-            </div>
-
-            <div class="info-item">
-              <div class="info-icon">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                </svg>
-              </div>
-              <span>AI & ML Systems</span>
-            </div>
-
-            <div class="info-item">
-              <div class="info-icon">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-                  <circle cx="12" cy="10" r="3"/>
-                </svg>
-              </div>
-              <span>New Delhi, IN</span>
-            </div>
+            <span class="info-tag">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="2" x2="22" y1="12" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"/>
+              </svg>
+              dhruvmann.dev
+            </span>
+            <span class="info-tag">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+              AI &amp; ML Systems
+            </span>
+            <span class="info-tag">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+              </svg>
+              New Delhi, IN
+            </span>
           </div>
         </footer>
       </div>
@@ -298,44 +304,79 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+/* ============================================================
+   ROOT: Matches home page pixel canvas base (#341514) + deep black
+   ============================================================ */
 .tech-stack-showcase {
   position: absolute;
   inset: 0;
   width: 100vw;
   height: 100vh;
-  /* Pink-and-black left-side palette: deep crimson-black base with magenta ink bloom */
+  /*
+   * Three-layer background matching home page DNA:
+   * 1. Hot magenta bloom (left 20%) — mirrors home PixelMatrix #AE3B8B glow
+   * 2. Deep crimson wash (top-left) — mirrors home #341514 pixel base
+   * 3. Base: near-black (#030102) = home page deepest black
+   */
   background:
-    radial-gradient(ellipse 60% 70% at 15% 50%, rgba(255, 10, 80, 0.18) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 50% at 30% 20%, rgba(174, 0, 60, 0.12) 0%, transparent 60%),
-    linear-gradient(165deg, #1a0511 0%, #0d0208 55%, #030102 100%);
+    radial-gradient(ellipse 55% 80% at 8% 55%, rgba(174, 59, 139, 0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 55% at 22% 15%, rgba(255, 10, 80, 0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 35% 45% at 40% 85%, rgba(174, 59, 139, 0.09) 0%, transparent 60%),
+    linear-gradient(160deg, #1f080f 0%, #0d0207 50%, #030102 100%);
   color: #FAFAFA;
   overflow: hidden;
   z-index: 10;
   display: flex;
 }
 
+/* Pixel-noise grain overlay (same texture feel as home page canvas) */
+.noise-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
 /* Ambient Background Glows */
 .ambient-glow {
   position: absolute;
   border-radius: 50%;
-  filter: blur(140px);
   pointer-events: none;
+  z-index: 2;
 }
 
-.glow-pink {
-  top: 20%;
-  left: 10%;
-  width: 550px;
-  height: 550px;
-  background: radial-gradient(circle, rgba(255, 42, 95, 0.16) 0%, transparent 70%);
+/* Primary large glow — #AE3B8B magenta, left-center (mirrors home) */
+.glow-primary {
+  top: 15%;
+  left: -8%;
+  width: 600px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(174, 59, 139, 0.20) 0%, transparent 70%);
+  filter: blur(120px);
 }
 
-.glow-cyan {
-  bottom: 20%;
-  left: 30%;
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(100, 210, 255, 0.08) 0%, transparent 70%);
+/* Secondary warm pink — hot pink splash mid-left */
+.glow-secondary {
+  bottom: 10%;
+  left: 5%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255, 42, 95, 0.13) 0%, transparent 70%);
+  filter: blur(100px);
+}
+
+/* Accent subtle blush — top-left for depth */
+.glow-accent {
+  top: -5%;
+  left: 20%;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(245, 184, 209, 0.08) 0%, transparent 70%);
+  filter: blur(80px);
 }
 
 /* Home Button: Floats over the entire screen at top-right corner */
@@ -390,16 +431,25 @@ onBeforeUnmount(() => {
   animation: content-immediate-fade 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.05s;
 }
 
+/* ============================================================
+   ENTRANCE ANIMATION SEGMENTS — each at a different rate so the
+   left side feels alive and layered, not a single monotonous fade
+   ============================================================ */
 @keyframes content-immediate-fade {
-  0% {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  0%   { opacity: 0; transform: translateY(28px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
+
+/* Seg 1: Title (0.05s delay, 0.80s dur) — fastest, sets the stage */
+.anim-seg-1 { opacity: 0; animation: content-immediate-fade 0.80s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.05s; }
+/* Seg 2: Divider (0.25s delay, 0.55s dur, snappy) */
+.anim-seg-2 { opacity: 0; animation: content-immediate-fade 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.25s; }
+/* Seg 3: Subtitle (0.40s delay, 0.90s dur, slower/heavier) */
+.anim-seg-3 { opacity: 0; animation: content-immediate-fade 0.90s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.40s; }
+/* Seg 4: CTA button (0.60s delay, 0.70s dur) */
+.anim-seg-4 { opacity: 0; animation: content-immediate-fade 0.70s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.60s; }
+/* Seg 5: Footer chips (0.80s delay, 1.0s dur, last and slowest — trails in softly) */
+.anim-seg-5 { opacity: 0; animation: content-immediate-fade 1.00s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.80s; }
 
 .content-header {
   margin-bottom: 24px;
@@ -411,12 +461,19 @@ onBeforeUnmount(() => {
   gap: 12px;
 }
 
+/* Pulsing dot matches home page #FF2A5F brand accent */
 .logo-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: #FF2A5F;
-  box-shadow: 0 0 12px #FF2A5F;
+  background-color: #AE3B8B;
+  box-shadow: 0 0 10px #AE3B8B, 0 0 20px rgba(174, 59, 139, 0.4);
+  animation: dot-pulse 3s ease-in-out infinite;
+}
+
+@keyframes dot-pulse {
+  0%, 100% { box-shadow: 0 0 10px #AE3B8B, 0 0 20px rgba(174, 59, 139, 0.4); }
+  50%       { box-shadow: 0 0 18px #AE3B8B, 0 0 40px rgba(174, 59, 139, 0.7); }
 }
 
 .logo-title {
@@ -435,72 +492,177 @@ onBeforeUnmount(() => {
 .content-main {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
   max-width: 520px;
 }
 
+/* ============================================================
+   TECH STACK TITLE — mirrors home page first-name/last-name DNA
+   ============================================================ */
 .tech-title {
   display: flex;
   flex-direction: column;
   font-size: clamp(3.8rem, 8vw, 7.2rem);
   font-weight: 900;
-  line-height: 0.92;
+  line-height: 0.9;
   letter-spacing: -0.05em;
-  color: #ffffff;
 }
 
+/*
+ * TECH: White-to-blush metallic shimmer — same gradient as home page 'Dhruv'
+ * mirrors: #ffffff → #ffffff → #F5B8D1 → #AE3B8B
+ */
 .word-tech {
   display: block;
-  color: #FAFAFA;
-  text-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
-}
-
-.word-stack {
-  display: block;
-}
-
-.gradient-pink {
-  background: linear-gradient(135deg, #FF2A5F 0%, #F5B8D1 45%, #64D2FF 100%);
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #ffffff 40%,
+    #F5B8D1 70%,
+    #AE3B8B 100%
+  );
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 45px rgba(255, 42, 95, 0.45));
+  filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.5));
+  animation: metallic-shimmer 6s ease-in-out infinite alternate;
 }
 
-/* Primary Accent Line */
+@keyframes metallic-shimmer {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/*
+ * STACK: Bright magenta #AE3B8B — same as home page 'Mann'
+ */
+.word-stack {
+  display: block;
+  color: #AE3B8B;
+  filter: drop-shadow(0 0 30px rgba(174, 59, 139, 0.45));
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.word-stack:hover {
+  color: #ffffff;
+  filter: drop-shadow(0 0 50px rgba(174, 59, 139, 0.9)) drop-shadow(0 0 80px rgba(174, 59, 139, 0.5));
+}
+
+/*
+ * Accent divider — #AE3B8B to match STACK, 2 segment sizes for visual depth
+ */
 .divider-line {
-  width: 80px;
-  height: 4px;
-  background: #FF2A5F;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 4px 0;
+}
+
+.divider-line::before {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 3px;
+  background: #AE3B8B;
   border-radius: 2px;
-  box-shadow: 0 0 16px rgba(255, 42, 95, 0.6);
-  margin: 12px 0 8px 0;
+  box-shadow: 0 0 14px rgba(174, 59, 139, 0.7);
+}
+
+.divider-line::after {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 3px;
+  background: rgba(174, 59, 139, 0.45);
+  border-radius: 2px;
 }
 
 .tech-subtitle {
-  font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
-  color: rgba(255, 255, 255, 0.72);
-  line-height: 1.6;
+  font-size: clamp(0.9375rem, 1.2vw, 1.05rem);
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.65;
+  text-wrap: pretty;
 }
 
-.cta-link {
+/* ============================================================
+   CTA BUTTON — mirrors home page btn-hub (pink bg → black on hover)
+   with vertical inner-scroll animation
+   ============================================================ */
+.cta-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 46px;
+  padding: 0 28px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  border-radius: 6px;
+  background-color: #AE3B8B;
+  color: #ffffff;
+  border: 1px solid #AE3B8B;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(174, 59, 139, 0.4);
+  transition:
+    background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  align-self: flex-start;
+}
+
+.cta-btn-scroll {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+}
+
+.cta-btn-text {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  color: #FF2A5F;
-  margin-top: 8px;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  height: 100%;
+  white-space: nowrap;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.cta-link:hover {
-  color: #ffffff;
-  transform: translateX(4px);
-  filter: drop-shadow(0 0 12px #FF2A5F);
+.cta-btn-default {
+  transform: translateY(0%);
 }
 
-/* Bottom Footer Grid */
+.cta-btn-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateY(100%);
+}
+
+/* Hover: black bg + inner text scrolls up (identical to btn-hub on home page) */
+.cta-btn:hover {
+  background-color: #000000;
+  border-color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
+}
+
+.cta-btn:hover .cta-btn-default {
+  transform: translateY(-100%);
+}
+
+.cta-btn:hover .cta-btn-hover {
+  transform: translateY(0%);
+}
+
+/* ============================================================
+   FOOTER TAGS — styled like home page 'aka-tag' pill chips
+   ============================================================ */
 .content-footer {
   margin-top: 32px;
   width: 100%;
@@ -509,22 +671,39 @@ onBeforeUnmount(() => {
 .info-grid {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 10px;
   flex-wrap: wrap;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
 }
 
-.info-item {
-  display: flex;
+/* Each info tag is a pill chip — mirrors home page .aka-tag */
+.info-tag {
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #E17888;
+  background-color: rgba(174, 59, 139, 0.15);
+  border: 1px solid rgba(174, 59, 139, 0.38);
+  padding: 5px 12px;
+  border-radius: 999px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  transition:
+    color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.info-icon {
-  color: #FF2A5F;
-  display: flex;
-  align-items: center;
+.info-tag:hover {
+  color: #ffffff;
+  background-color: #AE3B8B;
+  border-color: #AE3B8B;
+  box-shadow: 0 4px 20px rgba(174, 59, 139, 0.55);
+  transform: translateY(-2px) scale(1.03);
 }
 
 /* Full-Screen Right Slanted Sheet — truly covers top:0 to bottom:0, no flex gap */

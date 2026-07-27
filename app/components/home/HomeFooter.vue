@@ -1,13 +1,23 @@
 <template>
-  <footer class="home-footer font-body select-none">
+  <footer
+    class="home-footer font-body select-none"
+    :class="{ 'footer-hovered': isHovered }"
+    @mouseenter="isHovered = true"
+    @mouseleave="isHovered = false"
+  >
+    <!-- Background Reveal Layer (Dithered asset seamlessly blended on right side) -->
+    <div class="reveal-bg-layer" aria-hidden="true">
+      <img src="/ditherit.png" alt="" class="reveal-bg-img" />
+    </div>
+
     <!-- Subtle noise texture overlay for background parity -->
     <div class="noise-overlay" aria-hidden="true" />
 
     <!-- Main Footer Container -->
     <div class="container footer-container">
-      <!-- 4-Column Top Grid Section -->
+      <!-- 4-Column Slashed Grid Section -->
       <div class="footer-grid">
-        <!-- Column 1: Connects (GitHub, Email, LinkedIn, Twitter/X) -->
+        <!-- Column 1: Connects -->
         <div class="footer-col font-mono">
           <ul class="footer-links">
             <li>
@@ -56,7 +66,7 @@
           </ul>
         </div>
 
-        <!-- Column 2: Navigation Links -->
+        <!-- Column 2: Navigation -->
         <div class="footer-col font-mono">
           <ul class="footer-links">
             <li>
@@ -69,42 +79,51 @@
                 <span class="slash-prefix">/</span> TECH STACK
               </button>
             </li>
+            <li>
+              <a href="https://github.com/Dhruv-Mann/Noirsito-Hub" target="_blank" rel="noopener" class="footer-link-btn">
+                <span class="slash-prefix">/</span> DIGITAL HUB
+              </a>
+            </li>
           </ul>
         </div>
 
-        <!-- Column 3: Brand & Bio -->
-        <div class="footer-col brand-col">
-          <div class="brand-header">
-            <span class="brand-title font-display">DHRUV MANN</span>
-          </div>
-          
-          <p class="brand-description font-mono">
-            Systems Architect &amp; AI Engineer building high-throughput backend infrastructure,
-            desktop tools, and 60fps web applications.
-          </p>
-
-          <div class="status-badge font-mono">
-            <span class="status-dot" />
-            <span>AVAILABLE FOR SELECT ROLES &amp; PROJECTS</span>
-          </div>
-        </div>
-
-        <!-- Column 4: Architecture & Extended Links -->
+        <!-- Column 3: Demo Column 3 -->
         <div class="footer-col font-mono">
           <ul class="footer-links">
             <li>
               <span class="footer-link-btn slot-item">
-                <span class="slash-prefix">/</span> ARCHITECTURE DOCS
+                <span class="slash-prefix">/</span> DEMO 1
               </span>
             </li>
             <li>
               <span class="footer-link-btn slot-item">
-                <span class="slash-prefix">/</span> SYSTEM BENCHMARKS
+                <span class="slash-prefix">/</span> DEMO 2
               </span>
             </li>
             <li>
               <span class="footer-link-btn slot-item">
-                <span class="slash-prefix">/</span> EXPERIMENTAL LAB
+                <span class="slash-prefix">/</span> DEMO 3
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Demo Column 4 -->
+        <div class="footer-col font-mono">
+          <ul class="footer-links">
+            <li>
+              <span class="footer-link-btn slot-item">
+                <span class="slash-prefix">/</span> DEMO 4
+              </span>
+            </li>
+            <li>
+              <span class="footer-link-btn slot-item">
+                <span class="slash-prefix">/</span> DEMO 5
+              </span>
+            </li>
+            <li>
+              <span class="footer-link-btn slot-item">
+                <span class="slash-prefix">/</span> DEMO 6
               </span>
             </li>
           </ul>
@@ -116,24 +135,18 @@
         <div class="bottom-left">
           <span>© 2026 DHRUV MANN • ALL RIGHTS RESERVED</span>
         </div>
-
-        <div class="bottom-right">
-          <button class="back-to-top-btn" aria-label="Scroll back to top" @click="scrollToTop">
-            <span>BACK TO TOP</span>
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 15l-6-6-6 6"/>
-            </svg>
-          </button>
-        </div>
       </div>
     </div>
   </footer>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { usePageTransition } from '~/composables/usePageTransition'
 
 const { startPinkSweep } = usePageTransition()
+
+const isHovered = ref(false)
 
 function scrollToTop() {
   if (typeof window !== 'undefined') {
@@ -149,16 +162,55 @@ function triggerPinkSweep() {
 <style scoped>
 .home-footer {
   position: relative;
-  min-height: 45vh;
+  min-height: 40vh;
   width: 100%;
   max-width: 100%;
-  background: linear-gradient(160deg, #111215 0%, #090a0d 60%, #040507 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  /* Matched exactly to the dithered PNG background colour so pixels blend invisibly */
+  background: #050507;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   color: #FAFAFA;
   padding: 80px 0 40px 0;
   overflow: hidden;
   overflow-x: hidden;
   z-index: 20;
+}
+
+/* Background Reveal Layer — Dithered 1-bit asset, no glow, no transform, pure fade */
+.reveal-bg-layer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 55%;
+  max-width: 640px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 0;
+}
+
+.home-footer.footer-hovered .reveal-bg-layer {
+  opacity: 1;
+}
+
+.reveal-bg-img {
+  max-width: 100%;
+  max-height: 90%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: right center;
+  /* screen blend: only bright pixels (the dithered dots) show, pure black disappears */
+  mix-blend-mode: screen;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  /* no drop-shadow — zero glow */
+  filter: none;
 }
 
 /* Subtle noise overlay */
@@ -180,79 +232,24 @@ function triggerPinkSweep() {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 28px;
+  grid-template-columns: repeat(4, max-content);
+  gap: 48px;
   padding-bottom: 64px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
   .footer-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+    grid-template-columns: repeat(2, max-content);
+    gap: 32px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 500px) {
   .footer-grid {
     grid-template-columns: 1fr;
-    gap: 22px;
+    gap: 24px;
   }
-}
-
-.brand-col {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.brand-header {
-  display: flex;
-  align-items: center;
-}
-
-.brand-title {
-  font-size: 2.2rem;
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  color: #ffffff;
-}
-
-.brand-description {
-  font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.6);
-  line-height: 1.65;
-  max-width: 320px;
-}
-
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.75);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 6px 14px;
-  border-radius: 999px;
-  align-self: flex-start;
-  margin-top: 4px;
-}
-
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 10px #22c55e;
-  animation: pulse-green 2s ease-in-out infinite;
-}
-
-@keyframes pulse-green {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.85); }
 }
 
 .footer-links {
@@ -262,7 +259,6 @@ function triggerPinkSweep() {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding-top: 4px;
 }
 
 .footer-link-btn {
@@ -321,26 +317,5 @@ function triggerPinkSweep() {
   font-size: 0.72rem;
   color: rgba(255, 255, 255, 0.4);
   letter-spacing: 0.08em;
-}
-
-.back-to-top-btn {
-  background: transparent;
-  border: none;
-  padding: 0;
-  color: rgba(255, 255, 255, 0.6);
-  font-family: inherit;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.back-to-top-btn:hover {
-  color: #ffffff;
-  transform: translateY(-2px);
 }
 </style>

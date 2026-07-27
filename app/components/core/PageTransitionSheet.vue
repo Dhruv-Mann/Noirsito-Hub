@@ -671,14 +671,15 @@ onBeforeUnmount(() => {
   height: 100%;
   z-index: 100;
   pointer-events: auto;
-  transform: translateY(100%);
-  transition: transform 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, 100%, 0);
+  will-change: transform;
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   background: #0b0305;
 }
 
 .exit-curtain-sheet.active {
-  transform: translateY(0%);
+  transform: translate3d(0, 0%, 0);
 }
 
 /* Seamless Rigid Curtain Doors (No line dividers, completely seamless until click!) */
@@ -689,7 +690,9 @@ onBeforeUnmount(() => {
   height: 50.5vh;
   background: linear-gradient(135deg, #8A0E2B 0%, #4A0515 50%, #200208 100%);
   z-index: 15;
-  transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  transform: translate3d(0, 0%, 0);
+  transition: transform 0.62s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
 
@@ -702,11 +705,11 @@ onBeforeUnmount(() => {
 }
 
 .exit-curtain-sheet.split-open .door-top {
-  transform: translateY(-100%);
+  transform: translate3d(0, -100%, 0);
 }
 
 .exit-curtain-sheet.split-open .door-bottom {
-  transform: translateY(100%);
+  transform: translate3d(0, 100%, 0);
 }
 
 /* Unified Curtain Content Stage (Single Ribbon + Blended Watermark in Center) */

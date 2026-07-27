@@ -80,17 +80,17 @@ function render() {
   if (!ctx) return
 
   ctx.clearRect(0, 0, width, height)
-  time += 0.009
+  time += 0.0108
 
   const cy = height / 2
   const cx = width / 2
 
   if (isCut.value) {
-    breakProgress += 0.035
+    breakProgress += 0.042
   }
 
   const splitOffset = breakProgress * (width * 0.48)
-  const delta = time * 0.75
+  const delta = time * 0.90
 
   // Monochromatic Colourless Wireframe Gradient (Matching LissajousOrbit.vue)
   const grad = ctx.createLinearGradient(0, cy - 180, width, cy + 180)

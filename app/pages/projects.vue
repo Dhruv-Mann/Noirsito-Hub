@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import ProjectsShowcase from '~/components/core/ProjectsShowcase.vue'
-import HomeFooter from '~/components/home/HomeFooter.vue'
 
 useSeoMeta({
   title: 'Projects & Systems • Dhruv Mann',
@@ -11,7 +10,6 @@ useSeoMeta({
 <template>
   <div class="page-projects">
     <ProjectsShowcase />
-    <HomeFooter />
   </div>
 </template>
 

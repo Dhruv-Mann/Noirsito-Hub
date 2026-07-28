@@ -98,11 +98,6 @@ const filteredProjects = computed(() => {
 
     <!-- Main Content Container -->
     <div class="projects-container">
-      <!-- Segment 1: Header Index Badge -->
-      <div class="header-badge font-mono anim-seg-1">
-        <span class="badge-num">[ 01 ]</span>
-        <span class="badge-text">// ARCHITECTURAL CASE STUDIES</span>
-      </div>
 
       <!-- Segment 2: Main Title & Crimson Rule -->
       <header class="section-header anim-seg-2">

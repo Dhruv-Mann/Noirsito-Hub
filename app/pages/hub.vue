@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import TechStackShowcase from '~/components/core/TechStackShowcase.vue'
-import HomeFooter from '~/components/home/HomeFooter.vue'
 
 useSeoMeta({
   title: 'Dhruv Mann • Hub OS & System Architecture',
@@ -11,7 +10,6 @@ useSeoMeta({
 <template>
   <div class="page-hub">
     <TechStackShowcase />
-    <HomeFooter />
   </div>
 </template>
 

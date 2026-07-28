@@ -206,11 +206,24 @@ function handleKeyDown(e: KeyboardEvent) {
   }
 }
 
+watch(isOpen, (newVal) => {
+  if (typeof document !== 'undefined') {
+    if (newVal) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+  }
+})
+
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown)
 })
 
 onUnmounted(() => {
+  if (typeof document !== 'undefined') {
+    document.body.style.overflow = ''
+  }
   window.removeEventListener('keydown', handleKeyDown)
 })
 </script>

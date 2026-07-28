@@ -13,7 +13,16 @@ const { startPinkSweep } = usePageTransition()
 const mousePctX = ref(50)
 const mousePctY = ref(50)
 
-const handleSingleClick = () => {
+const handleSingleClick = (e?: MouseEvent) => {
+  if (e && typeof document !== 'undefined') {
+    const footerEl = document.querySelector('.home-footer')
+    if (footerEl) {
+      const rect = footerEl.getBoundingClientRect()
+      if (e.clientY >= rect.top && e.clientY <= rect.bottom && e.clientX >= rect.left && e.clientX <= rect.right) {
+        return
+      }
+    }
+  }
   triggerInitialization()
 }
 

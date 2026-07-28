@@ -223,7 +223,7 @@ onUnmounted(() => {
                   class="action-item"
                   :class="{ selected: flatFilteredActions[selectedIndex]?.id === action.id }"
                   @click="action.handler(); isOpen = false;"
-                  @mouseenter="selectedIndex = flatFilteredActions.findIndex(item => item.id === action.id)"
+                  @mousemove="selectedIndex = flatFilteredActions.findIndex(item => item.id === action.id)"
                 >
                   <div class="action-left">
                     <span class="action-icon" aria-hidden="true">
@@ -432,7 +432,6 @@ onUnmounted(() => {
   transition: all 0.15s ease;
 }
 
-.action-item:hover,
 .action-item.selected {
   background: rgba(174, 59, 139, 0.15);
   border-left-color: #AE3B8B;

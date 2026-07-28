@@ -8,7 +8,7 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
-const { startPinkSweep } = usePageTransition()
+const { resetPinkSweep } = usePageTransition()
 
 const isHovered = ref(false)
 
@@ -19,16 +19,20 @@ const currentTitle = computed(() => {
 })
 
 function navigateToHome() {
+  if (props.activeTab === 'home') return
+  resetPinkSweep()
   router.push('/')
 }
 
 function navigateToTechStack() {
   if (props.activeTab === 'tech-stack') return
-  startPinkSweep()
+  resetPinkSweep()
+  router.push('/hub')
 }
 
 function navigateToProjects() {
   if (props.activeTab === 'projects') return
+  resetPinkSweep()
   router.push('/projects')
 }
 

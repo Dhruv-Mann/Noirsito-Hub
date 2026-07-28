@@ -276,7 +276,6 @@ function triggerPinkSweep() {
   grid-template-columns: repeat(4, max-content);
   gap: 48px;
   padding-bottom: 64px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 @media (max-width: 900px) {

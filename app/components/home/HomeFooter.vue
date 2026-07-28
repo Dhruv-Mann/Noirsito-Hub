@@ -186,8 +186,8 @@ function triggerPinkSweep() {
   top: 0;
   right: 0;
   bottom: 0;
-  width: 55%;
-  max-width: 640px;
+  width: 65%;
+  max-width: 720px;
   height: 100%;
   z-index: 2;
   pointer-events: none;
@@ -197,6 +197,42 @@ function triggerPinkSweep() {
   align-items: center;
   justify-content: flex-end;
   padding-right: 0;
+  /* Mask: fade completely to transparent on the left edge (where it meets the footer content),
+     fade on top and bottom so the PNG has no hard visible boundary against the background */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.4) 18%,
+    rgba(0, 0, 0, 0.85) 38%,
+    black 60%,
+    black 80%,
+    transparent 100%
+  ),
+  linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.4) 18%,
+    rgba(0, 0, 0, 0.85) 38%,
+    black 60%,
+    black 80%,
+    transparent 100%
+  ),
+  linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+  mask-composite: intersect;
 }
 
 .home-footer.footer-hovered .reveal-bg-layer {
@@ -205,17 +241,17 @@ function triggerPinkSweep() {
 
 .reveal-bg-img {
   max-width: 100%;
-  max-height: 90%;
+  max-height: 100%;
   width: auto;
   height: auto;
   object-fit: contain;
   object-position: right center;
-  /* screen blend: only bright pixels (the dithered dots) show, pure black disappears */
+  /* screen blend: only bright dithered pixels show, pure black disappears completely */
   mix-blend-mode: screen;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-  /* no drop-shadow — zero glow */
-  filter: none;
+  /* Bump contrast slightly to make dithered dots pop against the dark bg */
+  filter: contrast(1.15) brightness(1.05);
 }
 
 /* Subtle noise overlay */

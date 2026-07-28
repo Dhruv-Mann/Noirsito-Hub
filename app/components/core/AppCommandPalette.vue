@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useSystemState } from '~/composables/useSystemState'
 import { usePageTransition } from '~/composables/usePageTransition'
+
+const route = useRoute()
+const isHomePage = computed(() => route.path === '/')
 
 const { isStarted } = useSystemState()
 const { startPinkSweep } = usePageTransition()
@@ -231,8 +235,9 @@ onUnmounted(() => {
 
 <template>
   <div v-if="isStarted">
-    <!-- Floating Ctrl+K Dynamic Island Trigger Pill -->
+    <!-- Floating Ctrl+K Dynamic Island Trigger Pill (only rendered on Home page) -->
     <button
+      v-if="isHomePage"
       class="cmd-k-trigger font-mono select-none"
       :class="{ expanded: isTriggerHovered }"
       @mouseenter="isTriggerHovered = true"

@@ -80,6 +80,11 @@
               </button>
             </li>
             <li>
+              <NuxtLink to="/projects" class="footer-link-btn">
+                <span class="slash-prefix">/</span> PROJECTS
+              </NuxtLink>
+            </li>
+            <li>
               <a href="https://github.com/Dhruv-Mann/Noirsito-Hub" target="_blank" rel="noopener" class="footer-link-btn">
                 <span class="slash-prefix">/</span> DIGITAL HUB
               </a>

@@ -1,14 +1,14 @@
+<script setup lang="ts">
+import DynamicIslandNav from './DynamicIslandNav.vue'
+</script>
+
 <template>
   <div class="tech-stack-showcase font-body select-none">
+    <!-- Dynamic Island Navigation Header -->
+    <DynamicIslandNav active-tab="tech-stack" />
+
     <!-- Subtle noise texture overlay -->
     <div class="noise-overlay" aria-hidden="true" />
-
-    <!-- Home Button: Positioned absolutely over everything so it doesn't affect layout flow -->
-    <button class="btn-home-icon" aria-label="Return to Home" @click="$emit('returnHome')">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-      </svg>
-    </button>
 
     <!-- Main Stage: Full-viewport flex row - left content + right full-screen slanted sheet -->
     <div class="stage-container">

@@ -13,6 +13,8 @@ interface Project {
   techStack: string[]
   githubUrl: string
   demoUrl?: string
+  telemetryBadge?: string
+  layoutClass?: string
 }
 
 const activeCategory = ref<'ALL' | 'AI / ML' | 'FULL STACK' | 'SYSTEMS & C++'>('ALL')
@@ -29,7 +31,9 @@ const projects: Project[] = [
     highlights: ['60fps canvas particle physics', 'Zero VDOM reactivity thrashing', 'Integrated Ctrl+K Command Palette'],
     techStack: ['Nuxt 4', 'Vue 3', 'TypeScript', 'Canvas WebGL', 'Hono'],
     githubUrl: 'https://github.com/Dhruv-Mann/Noirsito-Hub',
-    demoUrl: 'https://github.com/Dhruv-Mann/Noirsito-Hub'
+    demoUrl: 'https://github.com/Dhruv-Mann/Noirsito-Hub',
+    telemetryBadge: '60 FPS CANVAS ENGINE',
+    layoutClass: 'card-hero-span'
   },
   {
     id: 'eve-framework',
@@ -40,7 +44,9 @@ const projects: Project[] = [
     description: 'A durable, multi-agent AI framework for building autonomous background subagents with tool calling, scheduled cron timers, sandbox execution, and eval benchmarks.',
     highlights: ['Durable subagent delegation tree', 'Real-time tool execution & sandbox', 'Autonomous cron scheduling'],
     techStack: ['TypeScript', 'Node.js', 'Bun', 'PyTorch', 'Vector DB'],
-    githubUrl: 'https://github.com/Dhruv-Mann'
+    githubUrl: 'https://github.com/Dhruv-Mann',
+    telemetryBadge: 'AUTONOMOUS SUBAGENTS',
+    layoutClass: 'card-tall-span'
   },
   {
     id: 'simd-vector-engine',
@@ -51,7 +57,9 @@ const projects: Project[] = [
     description: 'Ultra-fast vector embeddings search engine utilizing C++20 AVX2/AVX-512 SIMD vectorization with zero-copy Python bindings for LLM RAG pipelines.',
     highlights: ['Sub-millisecond ANN retrieval speed', 'AVX-512 SIMD vector math optimization', 'Zero-copy PyBind11 bindings'],
     techStack: ['C++20', 'SIMD', 'Python', 'PyTorch', 'CMake'],
-    githubUrl: 'https://github.com/Dhruv-Mann'
+    githubUrl: 'https://github.com/Dhruv-Mann',
+    telemetryBadge: '0.42ms ANN RETRIEVAL',
+    layoutClass: 'card-wide-span'
   },
   {
     id: 'better-auth-saas',
@@ -62,7 +70,9 @@ const projects: Project[] = [
     description: 'Enterprise-grade SaaS engine featuring multi-tenant authentication, Appwrite document storage, Dodo Payments metered credit ledger, and Nitro API backend.',
     highlights: ['Multi-tenant OAuth & session management', 'Credit-based meter deduction', 'Type-safe H3 / Nitro API layer'],
     techStack: ['Nuxt 4', 'Better-Auth', 'Appwrite', 'PostgreSQL', 'Dodo Payments'],
-    githubUrl: 'https://github.com/Dhruv-Mann'
+    githubUrl: 'https://github.com/Dhruv-Mann',
+    telemetryBadge: 'ENTERPRISE SAAS LEDGER',
+    layoutClass: 'card-full-span'
   }
 ]
 
@@ -98,8 +108,7 @@ const filteredProjects = computed(() => {
 
     <!-- Main Content Container -->
     <div class="projects-container">
-
-      <!-- Segment 2: Main Title & Crimson Rule -->
+      <!-- Section Header Title & Rule -->
       <header class="section-header anim-seg-2">
         <h1 class="projects-title font-display">
           <span class="word-blush">ENGINEERING</span>
@@ -108,7 +117,7 @@ const filteredProjects = computed(() => {
         <div class="crimson-divider-line" />
       </header>
 
-      <!-- Segment 3: Category Filter Pills -->
+      <!-- Category Filter Pills -->
       <div class="category-filters font-mono anim-seg-3">
         <button
           v-for="cat in ['ALL', 'AI / ML', 'FULL STACK', 'SYSTEMS & C++']"
@@ -122,17 +131,25 @@ const filteredProjects = computed(() => {
         </button>
       </div>
 
-      <!-- Segment 4: Projects Grid -->
-      <div class="projects-grid anim-seg-4">
+      <!-- Asymmetric Bento Grid Layout -->
+      <div class="bento-projects-grid anim-seg-4">
         <article
           v-for="(proj, index) in filteredProjects"
           :key="proj.id"
           class="project-card"
-          :class="{ 'card-hovered': hoveredCardId === proj.id }"
-          :style="{ animationDelay: `${0.1 + index * 0.08}s` }"
+          :class="[
+            proj.layoutClass,
+            { 'card-hovered': hoveredCardId === proj.id }
+          ]"
+          :style="{ animationDelay: `${0.08 + index * 0.07}s` }"
           @mouseenter="hoveredCardId = proj.id"
           @mouseleave="hoveredCardId = null"
         >
+          <!-- Top Chamfer Corner Detail -->
+          <div class="card-chamfer-corner font-mono" v-if="proj.telemetryBadge">
+            <span>{{ proj.telemetryBadge }}</span>
+          </div>
+
           <!-- Top Card Meta Bar -->
           <div class="card-header font-mono">
             <span class="status-badge" :class="proj.status.toLowerCase().replace(' ', '-')">
@@ -141,60 +158,63 @@ const filteredProjects = computed(() => {
             <span class="category-badge">[ {{ proj.category }} ]</span>
           </div>
 
-          <!-- Project Title & Subtitle -->
-          <div class="card-title-block">
-            <h2 class="project-card-title font-display">{{ proj.title }}</h2>
-            <p class="project-card-sub font-mono">{{ proj.subtitle }}</p>
+          <!-- Main Content Layout (Flex Column or Split Grid for Hero) -->
+          <div class="card-body-content">
+            <div class="card-title-block">
+              <h2 class="project-card-title font-display">{{ proj.title }}</h2>
+              <p class="project-card-sub font-mono">{{ proj.subtitle }}</p>
+            </div>
+
+            <!-- Description -->
+            <p class="project-card-desc">{{ proj.description }}</p>
+
+            <!-- Key Specifications Box -->
+            <div class="card-highlights anim-seg-5">
+              <span class="highlights-label font-mono">// KEY SPECIFICATIONS</span>
+              <ul class="highlights-list font-mono">
+                <li v-for="(h, idx) in proj.highlights" :key="idx">
+                  <span class="bullet">›</span> {{ h }}
+                </li>
+              </ul>
+            </div>
           </div>
 
-          <!-- Description -->
-          <p class="project-card-desc">{{ proj.description }}</p>
+          <!-- Bottom Footer: Tech Stack Pills + Action Links -->
+          <div class="card-footer-block">
+            <div class="card-stack-pills font-mono">
+              <span v-for="tech in proj.techStack" :key="tech" class="stack-pill">
+                {{ tech }}
+              </span>
+            </div>
 
-          <!-- Segment 5: Engineering Highlights Box -->
-          <div class="card-highlights anim-seg-5">
-            <span class="highlights-label font-mono">// KEY SPECIFICATIONS</span>
-            <ul class="highlights-list font-mono">
-              <li v-for="(h, idx) in proj.highlights" :key="idx">
-                <span class="bullet">›</span> {{ h }}
-              </li>
-            </ul>
-          </div>
+            <div class="card-actions font-mono">
+              <a
+                :href="proj.githubUrl"
+                target="_blank"
+                rel="noopener"
+                class="action-btn primary-btn"
+              >
+                <span>GITHUB REPO</span>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M7 17L17 7M17 7H7M17 7V17" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
 
-          <!-- Tech Stack Badges -->
-          <div class="card-stack-pills font-mono">
-            <span v-for="tech in proj.techStack" :key="tech" class="stack-pill">
-              {{ tech }}
-            </span>
-          </div>
-
-          <!-- Card Actions / Links -->
-          <div class="card-actions font-mono">
-            <a
-              :href="proj.githubUrl"
-              target="_blank"
-              rel="noopener"
-              class="action-btn primary-btn"
-            >
-              <span>GITHUB REPO</span>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2">
-                <path d="M7 17L17 7M17 7H7M17 7V17" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-
-            <a
-              v-if="proj.demoUrl"
-              :href="proj.demoUrl"
-              target="_blank"
-              rel="noopener"
-              class="action-btn secondary-btn"
-            >
-              <span>LIVE SYSTEM</span>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                <polyline points="15 3 21 3 21 9"/>
-                <line x1="10" y1="14" x2="21" y2="3"/>
-              </svg>
-            </a>
+              <a
+                v-if="proj.demoUrl"
+                :href="proj.demoUrl"
+                target="_blank"
+                rel="noopener"
+                class="action-btn secondary-btn"
+              >
+                <span>LIVE SYSTEM</span>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+              </a>
+            </div>
           </div>
         </article>
       </div>
@@ -203,7 +223,7 @@ const filteredProjects = computed(() => {
 </template>
 
 <style scoped>
-/* Redesigned Palette & Interactive Takeover:
+/* Redesigned Asymmetric Bento Layout:
    #2A0C1B - Base Deep Plum Background
    #FFE0EB - Crisp Blush Pink Text
    #BE2C55 - Vivid Crimson Takeover & Accent
@@ -267,31 +287,11 @@ const filteredProjects = computed(() => {
 .projects-container {
   position: relative;
   z-index: 10;
-  max-width: 1100px;
+  max-width: 1180px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 36px;
-}
-
-/* Header Badge */
-.header-badge {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  color: #BE2C55;
-  font-weight: 700;
-  transition: color 0.3s ease;
-}
-
-.projects-showcase.crimson-active .header-badge {
-  color: #FFE0EB;
-}
-
-.badge-num {
-  color: #FFE0EB;
 }
 
 /* Section Header & Titles */
@@ -388,32 +388,71 @@ const filteredProjects = computed(() => {
   color: #FFE0EB;
 }
 
-/* Projects Grid & Cards */
-.projects-grid {
+/* 12-Column Asymmetric Bento Grid */
+.bento-projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
 }
 
-@media (max-width: 640px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
+/* Bento Card Span Proportions & Layout Variance */
+.card-hero-span {
+  grid-column: span 8;
+}
+
+.card-tall-span {
+  grid-column: span 4;
+  grid-row: span 2;
+}
+
+.card-wide-span {
+  grid-column: span 8;
+}
+
+.card-full-span {
+  grid-column: span 12;
+}
+
+@media (max-width: 1024px) {
+  .card-hero-span,
+  .card-tall-span,
+  .card-wide-span,
+  .card-full-span {
+    grid-column: span 12;
+    grid-row: auto;
   }
 }
 
 .project-card {
   background: rgba(30, 7, 19, 0.5);
   border: 1px solid rgba(190, 44, 85, 0.4);
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 32px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  justify-content: space-between;
+  gap: 24px;
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(4px);
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* Chamfer Top Badge */
+.card-chamfer-corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(190, 44, 85, 0.25);
+  border-bottom: 1px solid rgba(190, 44, 85, 0.4);
+  border-left: 1px solid rgba(190, 44, 85, 0.4);
+  border-bottom-left-radius: 8px;
+  padding: 4px 12px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #FFE0EB;
 }
 
 .projects-showcase.crimson-active .project-card {
@@ -437,6 +476,7 @@ const filteredProjects = computed(() => {
   font-size: 0.72rem;
   letter-spacing: 0.1em;
   font-weight: 700;
+  padding-right: 110px; /* space for top right chamfer badge */
 }
 
 .status-badge {
@@ -464,6 +504,12 @@ const filteredProjects = computed(() => {
   color: rgba(255, 224, 235, 0.6);
 }
 
+.card-body-content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
 .card-title-block {
   display: flex;
   flex-direction: column;
@@ -471,7 +517,7 @@ const filteredProjects = computed(() => {
 }
 
 .project-card-title {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: #FFE0EB;
   line-height: 1.2;
@@ -541,6 +587,12 @@ const filteredProjects = computed(() => {
   color: #FFE0EB;
 }
 
+.card-footer-block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 /* Tech Stack Badges */
 .card-stack-pills {
   display: flex;
@@ -569,7 +621,6 @@ const filteredProjects = computed(() => {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 8px;
 }
 
 .action-btn {

@@ -549,15 +549,30 @@ onBeforeUnmount(() => {
   border-top: 3px solid #AE3B8B;
   box-shadow: 0 -20px 90px rgba(0, 0, 0, 0.95), inset 0 0 140px rgba(174, 59, 139, 0.3);
   pointer-events: none;
-  transform: translateY(100%);
+  transform: translateY(120%);
+  opacity: 0;
+  visibility: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  will-change: transform, background;
-  transition: background 0.42s cubic-bezier(0.16, 1, 0.3, 1), 
+  will-change: transform, background, opacity;
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.3s ease,
+              visibility 0.3s ease,
+              background 0.42s cubic-bezier(0.16, 1, 0.3, 1), 
               border-color 0.42s ease, 
               box-shadow 0.42s ease;
+}
+
+.pink-sweep-sheet.halfway,
+.pink-sweep-sheet.recoil,
+.pink-sweep-sheet.full,
+.pink-sweep-sheet.uncover,
+.pink-sweep-sheet.sweeping,
+.pink-sweep-sheet.exit {
+  opacity: 1;
+  visibility: visible;
 }
 
 .pink-sweep-sheet.full,

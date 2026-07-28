@@ -1,21 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, watch, onBeforeUnmount } from 'vue'
+import { ref, computed } from 'vue'
 import DynamicIslandNav from './DynamicIslandNav.vue'
-
-interface SproutNode {
-  journey: {
-    origin: string
-    milestone: string
-  }
-  architecture: {
-    pattern: string
-    stack: string[]
-  }
-  telemetry: {
-    throughput: string
-    latency: string
-  }
-}
 
 interface Project {
   id: string
@@ -30,15 +15,10 @@ interface Project {
   demoUrl?: string
   telemetryBadge?: string
   layoutClass?: string
-  sprouts: SproutNode
 }
 
 const activeCategory = ref<'ALL' | 'AI / ML' | 'FULL STACK' | 'SYSTEMS & C++'>('ALL')
 const hoveredCardId = ref<string | null>(null)
-const selectedProjectId = ref<string | null>(null)
-
-const lissajousCanvasRef = ref<HTMLCanvasElement | null>(null)
-let lissajousRafId: number | null = null
 
 const projects: Project[] = [
   {
@@ -53,21 +33,7 @@ const projects: Project[] = [
     githubUrl: 'https://github.com/Dhruv-Mann/filemind',
     demoUrl: 'https://github.com/Dhruv-Mann/filemind',
     telemetryBadge: 'AI FILE INTELLIGENCE',
-    layoutClass: 'card-hero-span',
-    sprouts: {
-      journey: {
-        origin: 'Engineered to solve local document search fragmentation without exposing sensitive local data to cloud APIs.',
-        milestone: 'Local indexing at 1,200 docs/sec with sub-ms retrieval.'
-      },
-      architecture: {
-        pattern: 'Local Embedding Pipeline + HNSW Vector Index',
-        stack: ['Python 3.11', 'PyTorch', 'Rust Vector Core', 'Electron UI']
-      },
-      telemetry: {
-        throughput: '1,200 docs/sec indexing',
-        latency: '0.38ms vector query'
-      }
-    }
+    layoutClass: 'card-hero-span'
   },
   {
     id: 'eve-framework',
@@ -80,21 +46,7 @@ const projects: Project[] = [
     techStack: ['TypeScript', 'Node.js', 'Bun', 'PyTorch', 'Vector DB'],
     githubUrl: 'https://github.com/Dhruv-Mann',
     telemetryBadge: 'AUTONOMOUS SUBAGENTS',
-    layoutClass: 'card-tall-span',
-    sprouts: {
-      journey: {
-        origin: 'Built to provide durable state recovery for complex background subagent workflows.',
-        milestone: 'Zero state loss across worker process crashes.'
-      },
-      architecture: {
-        pattern: 'Subagent Event DAG + Sandboxed Execution',
-        stack: ['TypeScript', 'Node.js', 'Bun Runtime', 'Docker Sandbox']
-      },
-      telemetry: {
-        throughput: '50+ concurrent subagents',
-        latency: '< 15ms RPC dispatch'
-      }
-    }
+    layoutClass: 'card-tall-span'
   },
   {
     id: 'simd-vector-engine',
@@ -107,21 +59,7 @@ const projects: Project[] = [
     techStack: ['C++20', 'SIMD', 'Python', 'PyTorch', 'CMake'],
     githubUrl: 'https://github.com/Dhruv-Mann',
     telemetryBadge: '0.42ms ANN RETRIEVAL',
-    layoutClass: 'card-wide-span',
-    sprouts: {
-      journey: {
-        origin: 'Developed to eliminate Python GIL bottlenecks during large-scale vector similarity searches.',
-        milestone: 'AVX-512 SIMD vectorization throughput boost.'
-      },
-      architecture: {
-        pattern: 'AVX-512 Vectorized Distance + HNSW Graph',
-        stack: ['C++20', 'AVX-512 Intrinsics', 'PyBind11', 'CMake']
-      },
-      telemetry: {
-        throughput: '100k+ vector queries/sec',
-        latency: '0.42ms ANN retrieval'
-      }
-    }
+    layoutClass: 'card-wide-span'
   },
   {
     id: 'better-auth-saas',
@@ -134,149 +72,13 @@ const projects: Project[] = [
     techStack: ['Nuxt 4', 'Better-Auth', 'Appwrite', 'PostgreSQL', 'Dodo Payments'],
     githubUrl: 'https://github.com/Dhruv-Mann',
     telemetryBadge: 'ENTERPRISE SAAS LEDGER',
-    layoutClass: 'card-full-span',
-    sprouts: {
-      journey: {
-        origin: 'Created as a bulletproof full-stack blueprint for multi-tenant auth and credit-based usage billing.',
-        milestone: 'Type-safe Nitro API with instant webhook validation.'
-      },
-      architecture: {
-        pattern: 'Multi-Tenant Auth Adapter + Nitro H3 API',
-        stack: ['Nuxt 4', 'Better-Auth', 'PostgreSQL', 'Dodo Payments']
-      },
-      telemetry: {
-        throughput: '10k+ API req/sec',
-        latency: '12ms auth session check'
-      }
-    }
+    layoutClass: 'card-full-span'
   }
 ]
 
 const filteredProjects = computed(() => {
   if (activeCategory.value === 'ALL') return projects
   return projects.filter(p => p.category === activeCategory.value)
-})
-
-const selectedProject = computed(() => {
-  return projects.find(p => p.id === selectedProjectId.value) || null
-})
-
-function selectProject(id: string) {
-  selectedProjectId.value = id
-}
-
-function closeProjectModal() {
-  selectedProjectId.value = null
-  if (lissajousRafId) {
-    cancelAnimationFrame(lissajousRafId)
-    lissajousRafId = null
-  }
-}
-
-// Lissajous Parametric Connector Beam Animation Pipeline
-function startLissajousConnectorAnimation() {
-  if (lissajousRafId) cancelAnimationFrame(lissajousRafId)
-
-  let time = 0
-
-  function renderFrame() {
-    const canvas = lissajousCanvasRef.value
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    const w = (canvas.width = window.innerWidth)
-    const h = (canvas.height = window.innerHeight)
-
-    ctx.clearRect(0, 0, w, h)
-    time += 0.03
-
-    const centerCardEl = document.querySelector('.clicked-central-card')
-    const node1El = document.querySelector('.sprout-node-1')
-    const node2El = document.querySelector('.sprout-node-2')
-    const node3El = document.querySelector('.sprout-node-3')
-
-    if (centerCardEl && node1El && node2El && node3El) {
-      const cBox = centerCardEl.getBoundingClientRect()
-      const n1Box = node1El.getBoundingClientRect()
-      const n2Box = node2El.getBoundingClientRect()
-      const n3Box = node3El.getBoundingClientRect()
-
-      const cPt = { x: cBox.left + cBox.width / 2, y: cBox.top + cBox.height / 2 }
-      const n1Pt = { x: n1Box.left + n1Box.width / 2, y: n1Box.top + n1Box.height / 2 }
-      const n2Pt = { x: n2Box.left + n2Box.width / 2, y: n2Box.top + n2Box.height / 2 }
-      const n3Pt = { x: n3Box.left + n3Box.width / 2, y: n3Box.top + n3Box.height / 2 }
-
-      const pairs = [
-        [cPt, n1Pt],
-        [cPt, n2Pt],
-        [cPt, n3Pt],
-        [n1Pt, n2Pt],
-        [n2Pt, n3Pt],
-        [n3Pt, n1Pt]
-      ]
-
-      pairs.forEach(([p1, p2], idx) => {
-        drawLissajousBeam(ctx, p1.x, p1.y, p2.x, p2.y, time + idx * 0.8)
-      })
-    }
-
-    lissajousRafId = requestAnimationFrame(renderFrame)
-  }
-
-  lissajousRafId = requestAnimationFrame(renderFrame)
-}
-
-function drawLissajousBeam(ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number, t: number) {
-  const steps = 60
-  const dx = x2 - x1
-  const dy = y2 - y1
-  const angle = Math.atan2(dy, dx)
-  const perpX = -Math.sin(angle)
-  const perpY = Math.cos(angle)
-
-  ctx.beginPath()
-
-  for (let i = 0; i <= steps; i++) {
-    const s = i / steps
-    const bx = x1 + dx * s
-    const by = y1 + dy * s
-
-    // Lissajous harmonic envelope equation: A * sin(freq * s + phase) * cos(...)
-    const amp = Math.sin(s * Math.PI) * 22
-    const lissajousOffset = Math.sin(s * 3.5 * Math.PI + t * 1.8) * Math.cos(s * 2.2 * Math.PI + t * 0.9) * amp
-
-    const px = bx + perpX * lissajousOffset
-    const py = by + perpY * lissajousOffset
-
-    if (i === 0) ctx.moveTo(px, py)
-    else ctx.lineTo(px, py)
-  }
-
-  ctx.strokeStyle = 'rgba(255, 224, 235, 0.85)'
-  ctx.lineWidth = 2.2
-  ctx.shadowColor = '#BE2C55'
-  ctx.shadowBlur = 14
-  ctx.stroke()
-}
-
-watch(selectedProjectId, (newVal) => {
-  if (newVal) {
-    setTimeout(() => {
-      startLissajousConnectorAnimation()
-    }, 50)
-  } else {
-    if (lissajousRafId) {
-      cancelAnimationFrame(lissajousRafId)
-      lissajousRafId = null
-    }
-  }
-})
-
-onBeforeUnmount(() => {
-  if (lissajousRafId) {
-    cancelAnimationFrame(lissajousRafId)
-  }
 })
 </script>
 
@@ -305,7 +107,7 @@ onBeforeUnmount(() => {
     />
 
     <!-- Main Content Container (Original Apple 12-Column Bento Layout) -->
-    <div class="projects-container" :class="{ 'grid-dimmed': selectedProjectId !== null }">
+    <div class="projects-container">
       <!-- Section Header Title & Rule -->
       <header class="section-header anim-seg-2">
         <h1 class="projects-title font-display">
@@ -338,13 +140,12 @@ onBeforeUnmount(() => {
           :class="[
             proj.layoutClass,
             {
-              'card-hovered': hoveredCardId === proj.id && selectedProjectId === null
+              'card-hovered': hoveredCardId === proj.id
             }
           ]"
           :style="{ animationDelay: `${0.08 + index * 0.07}s` }"
           @mouseenter="hoveredCardId = proj.id"
           @mouseleave="hoveredCardId = null"
-          @click="selectProject(proj.id)"
         >
           <!-- Top Chamfer Corner Detail -->
           <div class="card-chamfer-corner font-mono" v-if="proj.telemetryBadge">
@@ -367,10 +168,24 @@ onBeforeUnmount(() => {
             </div>
 
             <p class="project-card-desc">{{ proj.description }}</p>
+          </div>
 
-            <div class="click-prompt-badge font-mono">
-              <span>[ CLICK TO OPEN LISSAJOUS ARCHITECTURE ENGINE ]</span>
-            </div>
+          <!-- Direct Action Links Bar -->
+          <div class="card-actions-row font-mono">
+            <a :href="proj.githubUrl" target="_blank" rel="noopener" class="card-action-btn primary-action">
+              <span>GITHUB REPO</span>
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M7 17L17 7M17 7H7M17 7V17" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a v-if="proj.demoUrl" :href="proj.demoUrl" target="_blank" rel="noopener" class="card-action-btn secondary-action">
+              <span>LIVE SYSTEM</span>
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </a>
           </div>
 
           <!-- Footer Tech Stack Pills -->
@@ -384,97 +199,6 @@ onBeforeUnmount(() => {
         </article>
       </div>
     </div>
-
-    <!-- ON CLICK: CENTERED PROJECT STAGE & LISSAJOUS CONNECTED NODE NETWORK OVERLAY -->
-    <Transition name="fade-modal">
-      <div v-if="selectedProject" class="lissajous-modal-overlay" @click.self="closeProjectModal">
-        <!-- 60FPS Parametric Lissajous Laser Connector Canvas -->
-        <canvas ref="lissajousCanvasRef" class="lissajous-canvas-layer" />
-
-        <!-- Floating Close Action Header Button -->
-        <button class="close-modal-btn font-mono" @click="closeProjectModal">
-          <span>[ ✕ CLOSE ARCHITECTURE ENGINE ]</span>
-        </button>
-
-        <!-- Centered Clicked Project Card Stage -->
-        <div class="central-card-wrapper">
-          <article class="clicked-central-card font-body select-none">
-            <!-- Chamfer Badge -->
-            <div class="card-chamfer-corner font-mono" v-if="selectedProject.telemetryBadge">
-              <span>{{ selectedProject.telemetryBadge }}</span>
-            </div>
-
-            <!-- Top Header Status -->
-            <div class="card-header font-mono">
-              <span class="status-badge" :class="selectedProject.status.toLowerCase().replace(' ', '-')">
-                ● {{ selectedProject.status }}
-              </span>
-              <span class="category-badge">[ {{ selectedProject.category }} ]</span>
-            </div>
-
-            <!-- Title & Subtitle -->
-            <div class="card-title-block">
-              <h2 class="project-card-title font-display">{{ selectedProject.title }}</h2>
-              <p class="project-card-sub font-mono">{{ selectedProject.subtitle }}</p>
-            </div>
-
-            <!-- Description -->
-            <p class="project-card-desc">{{ selectedProject.description }}</p>
-
-            <!-- Tech Stack Pills -->
-            <div class="card-stack-pills font-mono">
-              <span v-for="t in selectedProject.techStack" :key="t" class="stack-pill">
-                {{ t }}
-              </span>
-            </div>
-
-            <!-- Actions -->
-            <div class="card-actions font-mono">
-              <a :href="selectedProject.githubUrl" target="_blank" rel="noopener" class="action-btn primary-btn">
-                <span>GITHUB REPO</span>
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2">
-                  <path d="M7 17L17 7M17 7H7M17 7V17" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-              <a v-if="selectedProject.demoUrl" :href="selectedProject.demoUrl" target="_blank" rel="noopener" class="action-btn secondary-btn">
-                <span>LIVE SYSTEM</span>
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                  <polyline points="15 3 21 3 21 9"/>
-                  <line x1="10" y1="14" x2="21" y2="3"/>
-                </svg>
-              </a>
-            </div>
-          </article>
-
-          <!-- SPROUTING SATELLITE NODES CONNECTED BY LISSAJOUS HARMONIC BEAMS -->
-          <!-- Node 01: Top-Right (Origin & Journey) -->
-          <div class="sprout-satellite-node sprout-node-1 font-mono">
-            <div class="sprout-badge">// 01 • DEVELOPMENT ORIGIN & JOURNEY</div>
-            <p class="sprout-text">{{ selectedProject.sprouts.journey.origin }}</p>
-            <div class="sprout-tag">› {{ selectedProject.sprouts.journey.milestone }}</div>
-          </div>
-
-          <!-- Node 02: Bottom-Right (System Architecture) -->
-          <div class="sprout-satellite-node sprout-node-2 font-mono">
-            <div class="sprout-badge">// 02 • SYSTEM ARCHITECTURE</div>
-            <div class="sprout-pattern">{{ selectedProject.sprouts.architecture.pattern }}</div>
-            <div class="sprout-chips">
-              <span v-for="st in selectedProject.sprouts.architecture.stack" :key="st" class="sprout-chip">
-                {{ st }}
-              </span>
-            </div>
-          </div>
-
-          <!-- Node 03: Bottom-Left (Live Telemetry Benchmarks) -->
-          <div class="sprout-satellite-node sprout-node-3 font-mono">
-            <div class="sprout-badge">// 03 • LIVE TELEMETRY BENCHMARKS</div>
-            <div class="sprout-stat">⚡ {{ selectedProject.sprouts.telemetry.throughput }}</div>
-            <div class="sprout-stat">⏱ {{ selectedProject.sprouts.telemetry.latency }}</div>
-          </div>
-        </div>
-      </div>
-    </Transition>
   </div>
 </template>
 
@@ -696,7 +420,6 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   gap: 24px;
   position: relative;
-  cursor: pointer;
   backdrop-filter: blur(4px);
   transition: all 0.35s ease;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
@@ -709,17 +432,51 @@ onBeforeUnmount(() => {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(255, 224, 235, 0.35);
 }
 
-.click-prompt-badge {
-  font-size: 0.6875rem;
-  color: #BE2C55;
-  letter-spacing: 0.08em;
-  font-weight: 700;
-  margin-top: 6px;
-  transition: color 0.3s ease;
+.card-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  z-index: 5;
 }
 
-.projects-showcase.crimson-active .click-prompt-badge {
+.card-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.card-action-btn.primary-action {
+  background: #BE2C55;
+  color: #ffffff;
+  border: 1px solid #BE2C55;
+}
+
+.card-action-btn.primary-action:hover {
+  background: #e03b68;
+  box-shadow: 0 4px 16px rgba(190, 44, 85, 0.45);
+  transform: translateY(-2px);
+}
+
+.card-action-btn.secondary-action {
+  background: rgba(255, 224, 235, 0.08);
   color: #FFE0EB;
+  border: 1px solid rgba(255, 224, 235, 0.2);
+}
+
+.card-action-btn.secondary-action:hover {
+  background: rgba(255, 224, 235, 0.18);
+  border-color: #BE2C55;
+  color: #ffffff;
+  transform: translateY(-2px);
 }
 
 /* Chamfer Top Badge */

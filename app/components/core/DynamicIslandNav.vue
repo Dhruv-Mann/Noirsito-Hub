@@ -93,7 +93,7 @@ function triggerCmdPalette() {
           @click="triggerCmdPalette"
         >
           <span class="btn-prefix">04</span>
-          <span class="btn-label">CMD K</span>
+          <span class="btn-label">COMMANDS</span>
         </button>
       </div>
     </Transition>

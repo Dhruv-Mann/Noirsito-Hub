@@ -1,5 +1,6 @@
 # Agents & Local Workspaces
 .agents/
+AGENTS.md
 
 # Nuxt & Build Output
 .output/

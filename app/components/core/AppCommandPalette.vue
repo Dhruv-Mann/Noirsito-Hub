@@ -7,6 +7,7 @@ const { isStarted } = useSystemState()
 const { startPinkSweep } = usePageTransition()
 
 const isOpen = ref(false)
+const isTriggerHovered = ref(false)
 const searchQuery = ref('')
 const selectedIndex = ref(0)
 const copiedMessage = ref('')
@@ -230,10 +231,19 @@ onUnmounted(() => {
 
 <template>
   <div v-if="isStarted">
-    <!-- Floating Ctrl+K Trigger Badge -->
-    <button class="cmd-k-trigger font-mono" @click="isOpen = true">
-      <span>Ctrl+K</span>
-      <span class="cmd-k-label">Command Palette</span>
+    <!-- Floating Ctrl+K Dynamic Island Trigger Pill -->
+    <button
+      class="cmd-k-trigger font-mono select-none"
+      :class="{ expanded: isTriggerHovered }"
+      @mouseenter="isTriggerHovered = true"
+      @mouseleave="isTriggerHovered = false"
+      @click="isOpen = true"
+    >
+      <span class="cmd-pulse-dot" />
+      <span class="cmd-mnemonic font-mono">CTRL+K</span>
+      <Transition name="fade-fast">
+        <span v-if="isTriggerHovered" class="cmd-k-label font-mono">COMMAND PALETTE</span>
+      </Transition>
     </button>
 
     <!-- Command Palette Modal -->
@@ -359,33 +369,80 @@ onUnmounted(() => {
 .cmd-k-trigger {
   position: fixed;
   top: 24px;
-  left: 40px;
-  z-index: 100;
-  display: flex;
+  left: 32px;
+  z-index: 900;
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-phi-sm);
-  background: rgba(45, 17, 16, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(174, 59, 139, 0.4);
-  color: #E17888;
-  padding: 6px 14px;
-  border-radius: var(--radius-full);
-  font-size: 0.8125rem;
+  gap: 8px;
+  background: #1E0713;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(190, 44, 85, 0.4);
+  color: #FFE0EB;
+  height: 42px;
+  width: 104px;
+  padding: 0 14px;
+  border-radius: 28px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  transition: all var(--duration-fast) var(--ease-out);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(190, 44, 85, 0.2);
+  transition: width 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.25),
+              background 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
-.cmd-k-trigger:hover {
-  background: rgba(75, 27, 26, 0.95);
-  border-color: #AE3B8B;
-  color: #ffffff;
-  transform: translateY(-1px);
+.cmd-k-trigger.expanded {
+  width: 220px;
+  border-color: #BE2C55;
+  background: rgba(30, 7, 19, 0.95);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(190, 44, 85, 0.4);
+}
+
+.cmd-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #BE2C55;
+  box-shadow: 0 0 10px #BE2C55;
+  animation: pulse-glow 2s infinite ease-in-out;
+  flex-shrink: 0;
+}
+
+.cmd-mnemonic {
+  color: #FFE0EB;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.cmd-k-label {
+  color: rgba(255, 224, 235, 0.75);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  margin-left: 2px;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.fade-fast-enter-active,
+.fade-fast-leave-active {
+  transition: opacity 0.15s ease;
+}
+
+.fade-fast-enter-from,
+.fade-fast-leave-to {
+  opacity: 0;
 }
 
 @media (max-width: 640px) {
-  .cmd-k-label {
-    display: none;
+  .cmd-k-trigger.expanded {
+    width: 170px;
   }
 }
 

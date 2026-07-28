@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import DynamicIslandNav from './DynamicIslandNav.vue'
-</script>
-
 <template>
   <div class="tech-stack-showcase font-body select-none">
     <!-- Dynamic Island Navigation Header -->
@@ -90,6 +86,7 @@ import DynamicIslandNav from './DynamicIslandNav.vue'
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import DynamicIslandNav from './DynamicIslandNav.vue'
 
 defineEmits<{
   (e: 'returnHome'): void
@@ -386,7 +383,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 64px 48px 48px 64px;
+  padding: 96px 48px 48px 64px;
   z-index: 15;
   opacity: 0;
   animation: content-immediate-fade 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.05s;

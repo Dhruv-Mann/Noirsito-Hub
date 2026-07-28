@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue'
 import { useSystemState } from '~/composables/useSystemState'
 import { usePageTransition } from '~/composables/usePageTransition'
 
@@ -147,6 +147,23 @@ function handleCopy(text: string) {
   showToast('Email copied to clipboard!')
 }
 
+function scrollToSelected() {
+  nextTick(() => {
+    if (typeof document === 'undefined') return
+    const selectedEl = document.querySelector('.action-item.selected') as HTMLElement | null
+    if (selectedEl) {
+      selectedEl.scrollIntoView({
+        block: 'nearest',
+        behavior: 'smooth'
+      })
+    }
+  })
+}
+
+watch(selectedIndex, () => {
+  scrollToSelected()
+})
+
 function handleKeyDown(e: KeyboardEvent) {
   if (!isStarted.value) return
 
@@ -156,6 +173,7 @@ function handleKeyDown(e: KeyboardEvent) {
     if (isOpen.value) {
       searchQuery.value = ''
       selectedIndex.value = 0
+      scrollToSelected()
     }
     return
   }
@@ -168,10 +186,16 @@ function handleKeyDown(e: KeyboardEvent) {
     isOpen.value = false
   } else if (e.key === 'ArrowDown') {
     e.preventDefault()
-    if (total > 0) selectedIndex.value = (selectedIndex.value + 1) % total
+    if (total > 0) {
+      selectedIndex.value = (selectedIndex.value + 1) % total
+      scrollToSelected()
+    }
   } else if (e.key === 'ArrowUp') {
     e.preventDefault()
-    if (total > 0) selectedIndex.value = (selectedIndex.value - 1 + total) % total
+    if (total > 0) {
+      selectedIndex.value = (selectedIndex.value - 1 + total) % total
+      scrollToSelected()
+    }
   } else if (e.key === 'Enter') {
     e.preventDefault()
     const selected = flatFilteredActions.value[selectedIndex.value]
@@ -412,6 +436,27 @@ onUnmounted(() => {
   max-height: 380px;
   overflow-y: auto;
   padding: 8px 10px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(174, 59, 139, 0.35) rgba(0, 0, 0, 0.2);
+}
+
+.palette-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.palette-body::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.palette-body::-webkit-scrollbar-thumb {
+  background: rgba(174, 59, 139, 0.35);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.palette-body::-webkit-scrollbar-thumb:hover {
+  background: #AE3B8B;
 }
 
 .category-group {

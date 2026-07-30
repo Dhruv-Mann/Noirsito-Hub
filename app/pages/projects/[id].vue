@@ -75,6 +75,7 @@ const projectsData: Record<string, ProjectDetail> = {
     category: 'FULL STACK',
     description: 'Sentinel Vision embeds invisible tracking telemetry into resume links. Job seekers gain real-time analytics on viewer identity, city/country location, device platform, and exact engagement duration without collecting raw PII or relying on invasive third-party ad scripts.',
     architectureText: 'Built with Next.js 16 App Router, React 19, and Supabase PostgreSQL with Row-Level Security (RLS). Features IP anonymization (masked host octets), DNT/GPC opt-out detection, dynamic 1-7 month link expiration, and 1-click link termination.',
+    image: '/Sentinel-Vision.png',
     githubUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision',
     demoUrl: 'https://sentinel-vision-five.vercel.app/',
     docsUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision#readme',

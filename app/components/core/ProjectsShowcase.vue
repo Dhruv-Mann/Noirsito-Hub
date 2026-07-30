@@ -52,7 +52,7 @@ const projects: Project[] = [
     githubUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision',
     demoUrl: 'https://sentinel-vision-five.vercel.app/',
     telemetryBadge: 'RESUME INTELLIGENCE',
-    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop'
+    image: '/Sentinel-Vision.png'
   },
   {
     id: 'eve-framework',

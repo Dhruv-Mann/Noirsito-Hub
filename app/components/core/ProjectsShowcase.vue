@@ -30,7 +30,7 @@ const isDragging = ref(false)
 const projects: Project[] = [
   {
     id: 'filemind',
-    title: 'FileMind AI',
+    title: 'Filemind',
     subtitle: 'Autonomous Local File Intelligence & Context Engine',
     status: 'PRODUCTION',
     category: 'AI / ML',

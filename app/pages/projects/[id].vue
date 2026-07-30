@@ -88,61 +88,23 @@ const projectsData: Record<string, ProjectDetail> = {
       { label: 'LINK KILL SWITCH', value: 'Instant One-Click Link Revocation' }
     ]
   },
-  'eve-framework': {
-    id: 'eve-framework',
-    title: 'Eve AI Framework',
-    subtitle: 'Durable Agent Pipelines',
-    tagline: 'A durable, multi-agent AI framework built for constructing autonomous background subagent trees, real-time tool calling, scheduled cron jobs, and isolated sandboxes.',
-    badge: 'AUTONOMOUS SUBAGENTS',
-    status: 'OPEN SOURCE',
-    category: 'AI / ML',
-    description: 'Eve provides an enterprise-grade agentic runtime supporting stateful parent-child subagent delegation, background schedule triggers, and zero-leak execution telemetry.',
-    architectureText: 'Utilizing a persistent event bus and background worker queues, Eve handles multi-step AI reasoning loops with automatic retry state recovery and deterministic bench evals.',
-    githubUrl: 'https://github.com/Dhruv-Mann',
-    techStack: ['TypeScript', 'Node.js', 'Bun', 'Docker', 'PyTorch'],
-    telemetry: [
-      { label: 'DELEGATION TREE', value: 'Hierarchical Parent-Child Subagents' },
-      { label: 'RUNTIME', value: 'Bun / Node.js Stateful Workers' },
-      { label: 'SCHEDULING', value: 'One-Shot Timer & Recurring Cron' },
-      { label: 'SANDBOXING', value: 'Isolated Container Execution' }
-    ]
-  },
-  'simd-vector-engine': {
-    id: 'simd-vector-engine',
-    title: 'SIMD Vector Engine',
-    subtitle: 'C++20 AVX-512 ANN Retrieval',
-    tagline: 'Ultra-fast vector embeddings search engine utilizing C++20 AVX2/AVX-512 SIMD vectorization with zero-copy Python bindings for high-throughput LLM RAG pipelines.',
-    badge: '0.42ms ANN RETRIEVAL',
-    status: 'RESEARCH',
-    category: 'SYSTEMS & C++',
-    description: 'Designed for high-throughput vector retrieval, this engine executes hardware-accelerated cosine distance and dot-product calculations directly over SIMD registers.',
-    architectureText: 'Combines HNSW graph indexing with custom memory-aligned AVX-512 intrinsic kernels, achieving sub-millisecond nearest neighbor lookups over 10M+ vector datasets.',
-    githubUrl: 'https://github.com/Dhruv-Mann',
-    techStack: ['C++20', 'AVX-512 SIMD', 'Python', 'PyBind11', 'CMake'],
-    telemetry: [
-      { label: 'SIMD VECTOR MATH', value: 'AVX2 / AVX-512 Hardware Acceleration' },
-      { label: 'BINDINGS', value: 'Zero-Copy PyBind11 C++ Interface' },
-      { label: 'GRAPH INDEXING', value: 'Lock-Free Multi-Threaded HNSW' },
-      { label: 'QUERY LATENCY', value: '0.42ms @ 10M Vectors' }
-    ]
-  },
-  'better-auth-saas': {
-    id: 'better-auth-saas',
-    title: 'Better-Auth SaaS Engine',
-    subtitle: 'Multi-Tenant Auth & Billing',
-    tagline: 'Enterprise-grade SaaS architecture featuring multi-tenant OAuth, Appwrite document storage, Dodo Payments credit ledger, and Nitro API backend.',
-    badge: 'ENTERPRISE SAAS LEDGER',
-    status: 'PRODUCTION',
+  'project-three': {
+    id: 'project-three',
+    title: 'Project 03',
+    subtitle: 'Upcoming System',
+    tagline: 'Final flagship project showcase system in active development. Architecture specs and live deployment coming soon.',
+    badge: 'FLAGSHIP SYSTEM',
+    status: 'IN DEVELOPMENT',
     category: 'FULL STACK',
-    description: 'A modern, modular SaaS stack equipped with OAuth session management, credit entitlement balances, meeting usage meters, and serverless Nitro routes.',
-    architectureText: 'Built on Nuxt 4 and Nitro API layers with PostgreSQL database adapters, providing bulletproof type-safety, automatic session renewal, and metered subscription hooks.',
+    description: 'This is the reserved slot for your third and final featured project.',
+    architectureText: 'Full system architecture documentation and interactive telemetry will be populated upon release.',
     githubUrl: 'https://github.com/Dhruv-Mann',
-    techStack: ['Nuxt 4', 'Better-Auth', 'Appwrite', 'PostgreSQL', 'Dodo Payments'],
+    techStack: ['TypeScript', 'Nuxt 4', 'Nitro', 'PostgreSQL'],
     telemetry: [
-      { label: 'AUTH LAYER', value: 'Better-Auth Multi-Tenant Sessions' },
-      { label: 'BILLING LEDGER', value: 'Dodo Payments Credit & Usage Meter' },
-      { label: 'DATABASE', value: 'Appwrite + PostgreSQL Relational' },
-      { label: 'API LAYER', value: 'Nuxt 4 / Nitro H3 Type-Safe Handler' }
+      { label: 'STATUS', value: 'In Active Development' },
+      { label: 'ARCHITECTURE', value: 'Full-Stack Modern Web SaaS' },
+      { label: 'DEPLOYMENT', value: 'Vercel Edge Platform' },
+      { label: 'REPOSITORY', value: 'Dhruv-Mann GitHub' }
     ]
   }
 }

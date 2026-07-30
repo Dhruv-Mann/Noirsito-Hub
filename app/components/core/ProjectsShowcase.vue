@@ -55,40 +55,16 @@ const projects: Project[] = [
     image: '/Sentinel-Vision.png'
   },
   {
-    id: 'eve-framework',
-    title: 'Eve AI Framework',
-    subtitle: 'Durable Agent Orchestration & Subagent Pipelines',
-    status: 'OPEN SOURCE',
-    category: 'AI / ML',
-    description: 'Durable multi-agent AI framework for building background subagents with tool calling, cron timers, and sandboxing.',
-    techStack: ['TypeScript', 'Node.js', 'Bun', 'PyTorch', 'Docker'],
-    githubUrl: 'https://github.com/Dhruv-Mann',
-    telemetryBadge: 'AUTONOMOUS SUBAGENTS',
-    image: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=800&auto=format&fit=crop'
-  },
-  {
-    id: 'simd-vector-engine',
-    title: 'SIMD Vector Engine',
-    subtitle: 'C++20 AVX-512 Embeddings ANN Retrieval Engine',
-    status: 'RESEARCH',
-    category: 'SYSTEMS & C++',
-    description: 'Ultra-fast vector embeddings search engine utilizing C++20 AVX2/AVX-512 SIMD vectorization with zero-copy Python bindings.',
-    techStack: ['C++20', 'SIMD', 'Python', 'PyTorch', 'CMake'],
-    githubUrl: 'https://github.com/Dhruv-Mann',
-    telemetryBadge: '0.42ms ANN RETRIEVAL',
-    image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop'
-  },
-  {
-    id: 'better-auth-saas',
-    title: 'Better-Auth SaaS Engine',
-    subtitle: 'Multi-Tenant Auth & Dodo Payments Credit Billing',
-    status: 'PRODUCTION',
+    id: 'project-three',
+    title: 'Project 03',
+    subtitle: 'Upcoming Featured System',
+    status: 'IN DEVELOPMENT',
     category: 'FULL STACK',
-    description: 'SaaS foundation with multi-tenant auth, Appwrite document storage, Dodo Payments metered credit ledger, and Nitro API.',
-    techStack: ['Nuxt 4', 'Better-Auth', 'Appwrite', 'PostgreSQL', 'Dodo Payments'],
+    description: 'Final flagship project showcase system in development. Details and live deployment coming soon.',
+    techStack: ['TypeScript', 'Nuxt 4', 'Nitro', 'PostgreSQL'],
     githubUrl: 'https://github.com/Dhruv-Mann',
-    telemetryBadge: 'ENTERPRISE SAAS LEDGER',
-    image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=800&auto=format&fit=crop'
+    telemetryBadge: 'FLAGSHIP SYSTEM',
+    image: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=800&auto=format&fit=crop'
   }
 ]
 

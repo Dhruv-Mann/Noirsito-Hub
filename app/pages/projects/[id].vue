@@ -1,10 +1,26 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, onMounted, onUnmounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import DynamicIslandNav from '~/components/core/DynamicIslandNav.vue'
 
 const route = useRoute()
+const router = useRouter()
 const projectId = computed(() => (route.params.id as string) || 'filemind')
+
+// Listen for ESC key to navigate back to /projects
+function handleKeyDown(e: KeyboardEvent) {
+  if (e.key === 'Escape') {
+    router.push('/projects')
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown)
+})
 
 interface ProjectDetail {
   id: string
@@ -16,7 +32,6 @@ interface ProjectDetail {
   category: string
   description: string
   architectureText: string
-  image: string
   githubUrl: string
   demoUrl?: string
   windowsUrl?: string
@@ -37,7 +52,6 @@ const projectsData: Record<string, ProjectDetail> = {
     category: 'AI / ML',
     description: 'FileMind is engineered from the ground up for total privacy and zero-leak file context indexing. Operating directly on your local storage, it combines embedded vector embeddings with Ollama local inference to organize unstructured desktop data without transmitting a single byte to remote servers.',
     architectureText: 'Powered by an asynchronous SQLite + Vector DB pipeline, FileMind creates instant local embeddings for your documents, code files, and downloads. Every automated file relocation is tracked in a local transaction log, allowing instant 1-click reversals.',
-    image: '/filemind.png',
     githubUrl: 'https://github.com/Dhruv-Mann/filemind',
     demoUrl: 'https://github.com/Dhruv-Mann/filemind',
     windowsUrl: 'https://github.com/Dhruv-Mann/filemind/releases',
@@ -61,7 +75,6 @@ const projectsData: Record<string, ProjectDetail> = {
     category: 'AI / ML',
     description: 'Eve provides an enterprise-grade agentic runtime supporting stateful parent-child subagent delegation, background schedule triggers, and zero-leak execution telemetry.',
     architectureText: 'Utilizing a persistent event bus and background worker queues, Eve handles multi-step AI reasoning loops with automatic retry state recovery and deterministic bench evals.',
-    image: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=800&auto=format&fit=crop',
     githubUrl: 'https://github.com/Dhruv-Mann',
     techStack: ['TypeScript', 'Node.js', 'Bun', 'Docker', 'PyTorch'],
     telemetry: [
@@ -81,7 +94,6 @@ const projectsData: Record<string, ProjectDetail> = {
     category: 'SYSTEMS & C++',
     description: 'Designed for high-throughput vector retrieval, this engine executes hardware-accelerated cosine distance and dot-product calculations directly over SIMD registers.',
     architectureText: 'Combines HNSW graph indexing with custom memory-aligned AVX-512 intrinsic kernels, achieving sub-millisecond nearest neighbor lookups over 10M+ vector datasets.',
-    image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop',
     githubUrl: 'https://github.com/Dhruv-Mann',
     techStack: ['C++20', 'AVX-512 SIMD', 'Python', 'PyBind11', 'CMake'],
     telemetry: [
@@ -101,7 +113,6 @@ const projectsData: Record<string, ProjectDetail> = {
     category: 'FULL STACK',
     description: 'A modern, modular SaaS stack equipped with OAuth session management, credit entitlement balances, meeting usage meters, and serverless Nitro routes.',
     architectureText: 'Built on Nuxt 4 and Nitro API layers with PostgreSQL database adapters, providing bulletproof type-safety, automatic session renewal, and metered subscription hooks.',
-    image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=800&auto=format&fit=crop',
     githubUrl: 'https://github.com/Dhruv-Mann',
     techStack: ['Nuxt 4', 'Better-Auth', 'Appwrite', 'PostgreSQL', 'Dodo Payments'],
     telemetry: [
@@ -118,47 +129,48 @@ const project = computed<ProjectDetail>(() => {
 })
 
 useSeoMeta({
-  title: computed(() => `${project.value.title} • Dhruv Mann Documentation`),
+  title: computed(() => `${project.value.title} • Dhruv Mann`),
   description: computed(() => project.value.tagline)
 })
 </script>
 
 <template>
-  <div class="docs-detail-page font-body select-none">
+  <div class="project-showcase-page font-body select-none">
     <!-- Dynamic Island Navigation Header -->
     <DynamicIslandNav active-tab="projects" />
 
-    <!-- Ambient Subtle Lavender Background Glow -->
-    <div class="docs-background-tint" aria-hidden="true" />
+    <!-- Solid Deep Background -->
+    <div class="showcase-bg-layer" aria-hidden="true" />
 
-    <main class="docs-container">
-      <!-- Back Link & Breadcrumb Bar -->
-      <header class="docs-nav-bar font-mono">
-        <NuxtLink to="/projects" class="docs-back-link">
+    <main class="showcase-container">
+      <!-- Top Navigation & Esc Hint Row -->
+      <header class="showcase-nav-bar font-mono">
+        <NuxtLink to="/projects" class="showcase-back-link">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2">
             <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <span>DOCS / PROJECTS</span>
+          <span>BACK TO PROJECTS</span>
+          <span class="esc-hint font-mono">[ESC]</span>
         </NuxtLink>
-        <span class="docs-badge-tag">{{ project.badge }}</span>
+        <span class="showcase-badge-tag">{{ project.badge }}</span>
       </header>
 
-      <!-- DOCUMENTATION TITLE & ABSTRACT HEADER (Inverted Light Theme, No Cards) -->
-      <article class="docs-article">
-        <header class="docs-header">
-          <h1 class="docs-main-title font-display">{{ project.title }}</h1>
-          <h2 class="docs-subtitle font-display">{{ project.subtitle }}</h2>
+      <!-- EXECUTIVE HERO HEADER (No Glass, No Neon) -->
+      <article class="showcase-article">
+        <header class="showcase-header">
+          <h1 class="showcase-main-title font-display">{{ project.title }}</h1>
+          <h2 class="showcase-subtitle font-display">{{ project.subtitle }}</h2>
 
-          <p class="docs-abstract font-body">{{ project.tagline }}</p>
+          <p class="showcase-abstract font-body">{{ project.tagline }}</p>
 
-          <!-- Documentation Action Link Pills -->
-          <div class="docs-actions-bar font-mono">
+          <!-- Solid Interactive Action Buttons (No Glass, No Glow) -->
+          <div class="showcase-actions-bar font-mono">
             <a
               v-if="project.windowsUrl"
               :href="project.windowsUrl"
               target="_blank"
               rel="noopener"
-              class="docs-pill-btn primary-pill"
+              class="solid-btn primary-btn"
             >
               <span>Download .exe (Windows)</span>
               <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
@@ -171,7 +183,7 @@ useSeoMeta({
               :href="project.macUrl"
               target="_blank"
               rel="noopener"
-              class="docs-pill-btn secondary-pill"
+              class="solid-btn secondary-btn"
             >
               <span>Download .dmg (macOS)</span>
             </a>
@@ -180,69 +192,67 @@ useSeoMeta({
               :href="project.githubUrl"
               target="_blank"
               rel="noopener"
-              class="docs-pill-btn outline-pill"
+              class="solid-btn outline-btn"
             >
-              <span>Source Repository</span>
+              <span>GitHub Repo</span>
             </a>
           </div>
         </header>
 
-        <hr class="docs-divider" />
+        <hr class="solid-divider" />
 
         <!-- SECTION 01: OVERVIEW & LOCAL PRIVACY (Prose Style) -->
-        <section class="docs-section">
-          <div class="docs-section-num font-mono">01. OVERVIEW & PRIVACY MODEL</div>
-          <h3 class="docs-section-title font-display">Zero-Leak Local Storage Architecture</h3>
-          <div class="docs-prose font-body">
+        <section class="showcase-section">
+          <div class="section-tag-num font-mono">01 // OVERVIEW & LOCAL PRIVACY</div>
+          <h3 class="section-title-heading font-display">Zero-Leak Local Storage Engine</h3>
+          <div class="prose-content font-body">
             <p>{{ project.description }}</p>
           </div>
         </section>
 
-        <hr class="docs-divider" />
+        <hr class="solid-divider" />
 
         <!-- SECTION 02: SYSTEM ARCHITECTURE & UNDO PIPELINE -->
-        <section class="docs-section">
-          <div class="docs-section-num font-mono">02. TRANSACTIONAL UNDO LOGS</div>
-          <h3 class="docs-section-title font-display">Asynchronous SQLite Vector Pipeline</h3>
-          <div class="docs-prose font-body">
+        <section class="showcase-section">
+          <div class="section-tag-num font-mono">02 // TRANSACTIONAL UNDO LOGS</div>
+          <h3 class="section-title-heading font-display">Asynchronous SQLite Vector Pipeline</h3>
+          <div class="prose-content font-body">
             <p>{{ project.architectureText }}</p>
           </div>
         </section>
 
-        <hr class="docs-divider" />
+        <hr class="solid-divider" />
 
-        <!-- SECTION 03: TECHNICAL SPECS TABLE (Pure Docs Table, No Cards) -->
-        <section class="docs-section">
-          <div class="docs-section-num font-mono">03. SYSTEM TELEMETRY & SPECIFICATIONS</div>
-          <h3 class="docs-section-title font-display">Technical Specifications</h3>
+        <!-- SECTION 03: MINIMAL SPECS GRID (Catchy Minimal UI Components, No Glass) -->
+        <section class="showcase-section">
+          <div class="section-tag-num font-mono">03 // SYSTEM SPECIFICATIONS</div>
+          <h3 class="section-title-heading font-display">Technical Telemetry</h3>
           
-          <table class="docs-specs-table font-mono">
-            <tbody>
-              <tr v-for="t in project.telemetry" :key="t.label">
-                <td class="spec-label">{{ t.label }}</td>
-                <td class="spec-value">{{ t.value }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="telemetry-specs-grid font-mono">
+            <div v-for="t in project.telemetry" :key="t.label" class="telemetry-tile">
+              <span class="tile-label">{{ t.label }}</span>
+              <span class="tile-value">{{ t.value }}</span>
+            </div>
+          </div>
         </section>
 
-        <hr class="docs-divider" />
+        <hr class="solid-divider" />
 
         <!-- SECTION 04: TECH STACK & FOOTER -->
-        <section class="docs-section docs-footer-section">
-          <div class="docs-stack-row font-mono">
-            <span class="docs-stack-label">TECH STACK:</span>
-            <div class="docs-stack-tags">
-              <span v-for="t in project.techStack" :key="t" class="docs-stack-tag">{{ t }}</span>
+        <section class="showcase-section showcase-footer-section">
+          <div class="stack-tags-row font-mono">
+            <span class="stack-title-label">TECH STACK:</span>
+            <div class="stack-pills">
+              <span v-for="t in project.techStack" :key="t" class="stack-pill-tag">{{ t }}</span>
             </div>
           </div>
 
-          <footer class="docs-page-footer font-mono">
-            <span>Engineering Documentation • Dhruv Mann</span>
-            <div class="docs-footer-links">
+          <footer class="showcase-page-footer font-mono">
+            <span>Engineering Showcase • Dhruv Mann</span>
+            <div class="footer-nav-links">
               <a :href="project.githubUrl" target="_blank" rel="noopener">GitHub</a>
               <a v-if="project.docsUrl" :href="project.docsUrl" target="_blank" rel="noopener">Docs</a>
-              <NuxtLink to="/projects">Projects Showcase</NuxtLink>
+              <NuxtLink to="/projects">Projects</NuxtLink>
             </div>
           </footer>
         </section>
@@ -264,33 +274,34 @@ useSeoMeta({
   font-family: 'Archivo', system-ui, -apple-system, sans-serif !important;
 }
 
-/* Inverted Color Palette:
-   Base Background: #D3DFFF (Soft Powder Ice Blue)
-   Primary Headings & Text: #0B0812 (Deep Night Velvet Violet)
-   Subtitles & Accents: #4A2548 (Thistle Dark Violet)
+/* OLED Palette (No Glass, No Neon, No Blurs):
+   Base Background: #08040B (Solid Deep Midnight OLED)
+   Primary Title: #FAAA48 (Vivid Amber)
+   Secondary Title & Labels: #D8BFD8 (Solid Thistle Violet)
+   Prose & Text: #FFDDAC (Warm Soft Cream)
+   Surface Tiles: #120713 (Solid Dark Matte)
 */
 
-.docs-detail-page {
+.project-showcase-page {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: #D3DFFF;
-  color: #0B0812;
+  background: #08040B;
+  color: #FFDDAC;
   padding-top: 100px;
   padding-bottom: 80px;
   overflow-x: hidden;
 }
 
-.docs-background-tint {
+.showcase-bg-layer {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(216, 191, 216, 0.4) 0%, transparent 65%),
-              radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.6) 0%, transparent 50%);
+  background: #08040B;
   pointer-events: none;
   z-index: 1;
 }
 
-.docs-container {
+.showcase-container {
   position: relative;
   z-index: 10;
   width: 100%;
@@ -300,7 +311,7 @@ useSeoMeta({
 }
 
 /* Nav Bar */
-.docs-nav-bar {
+.showcase-nav-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -309,67 +320,72 @@ useSeoMeta({
   margin-bottom: 2.5rem;
 }
 
-.docs-back-link {
+.showcase-back-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #4A2548;
+  color: #FAAA48;
   text-decoration: none;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.docs-back-link:hover {
-  color: #0B0812;
+.showcase-back-link:hover {
+  color: #FFDDAC;
   transform: translateX(-3px);
 }
 
-.docs-badge-tag {
-  background: rgba(74, 37, 72, 0.1);
-  border: 1px solid rgba(74, 37, 72, 0.3);
-  color: #4A2548;
+.esc-hint {
+  font-size: 0.65rem;
+  color: rgba(255, 221, 172, 0.45);
+  margin-left: 4px;
+}
+
+.showcase-badge-tag {
+  background: #150817;
+  border: 1px solid #FAAA48;
+  color: #FFDDAC;
   padding: 4px 12px;
   border-radius: 4px;
   letter-spacing: 0.08em;
 }
 
 /* Article Structure */
-.docs-article {
+.showcase-article {
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
 }
 
-.docs-header {
+.showcase-header {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.docs-main-title {
+.showcase-main-title {
   font-size: clamp(2.8rem, 5vw, 4.2rem);
-  color: #0B0812;
+  color: #FAAA48;
   margin: 0;
   line-height: 1.05;
   letter-spacing: 0.01em;
-  text-shadow: 0 4px 20px rgba(11, 8, 18, 0.1);
 }
 
-.docs-subtitle {
+.showcase-subtitle {
   font-size: clamp(1.6rem, 3vw, 2.2rem);
-  color: #4A2548;
+  color: #D8BFD8;
   margin: 0;
   letter-spacing: 0em;
 }
 
-.docs-abstract {
-  font-size: 1.15rem;
-  line-height: 1.7;
-  color: rgba(11, 8, 18, 0.88);
-  margin: 0.5rem 0 0 0;
+.showcase-abstract {
+  font-size: 1.12rem;
+  line-height: 1.65;
+  color: rgba(255, 221, 172, 0.9);
+  margin: 0.4rem 0 0 0;
 }
 
-/* Action Pills */
-.docs-actions-bar {
+/* Action Buttons (Solid Matte, Zero Glass, Zero Glow) */
+.showcase-actions-bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -377,182 +393,190 @@ useSeoMeta({
   margin-top: 1rem;
 }
 
-.docs-pill-btn {
+.solid-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 20px;
+  padding: 11px 22px;
   border-radius: 6px;
   font-size: 0.8rem;
   font-weight: 700;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.docs-pill-btn.primary-pill {
-  background: #0B0812;
-  color: #D3DFFF;
-  border: 1px solid #0B0812;
+.solid-btn.primary-btn {
+  background: #FAAA48;
+  color: #08040B;
+  border: 1px solid #FAAA48;
 }
 
-.docs-pill-btn.primary-pill:hover {
-  background: #1D142E;
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 18px rgba(11, 8, 18, 0.25);
-}
-
-.docs-pill-btn.secondary-pill {
-  background: rgba(74, 37, 72, 0.12);
-  border: 1px solid #4A2548;
-  color: #4A2548;
-}
-
-.docs-pill-btn.secondary-pill:hover {
-  background: rgba(74, 37, 72, 0.2);
-  color: #0B0812;
+.solid-btn.primary-btn:hover {
+  background: #FFDDAC;
+  border-color: #FFDDAC;
   transform: translateY(-2px);
 }
 
-.docs-pill-btn.outline-pill {
+.solid-btn.secondary-btn {
+  background: #180A1A;
+  border: 1px solid #D8BFD8;
+  color: #D8BFD8;
+}
+
+.solid-btn.secondary-btn:hover {
+  background: #240E27;
+  color: #FFDDAC;
+  transform: translateY(-2px);
+}
+
+.solid-btn.outline-btn {
   background: transparent;
-  border: 1px solid rgba(11, 8, 18, 0.3);
-  color: #0B0812;
+  border: 1px solid rgba(255, 221, 172, 0.3);
+  color: #FFDDAC;
 }
 
-.docs-pill-btn.outline-pill:hover {
-  border-color: #0B0812;
-  background: rgba(11, 8, 18, 0.05);
+.solid-btn.outline-btn:hover {
+  border-color: #FAAA48;
+  color: #FAAA48;
 }
 
 /* Dividers */
-.docs-divider {
+.solid-divider {
   border: 0;
   height: 1px;
-  background: linear-gradient(90deg, rgba(11, 8, 18, 0.2), rgba(74, 37, 72, 0.05));
+  background: rgba(250, 170, 72, 0.2);
   margin: 0;
 }
 
 /* Sections */
-.docs-section {
+.showcase-section {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
 }
 
-.docs-section-num {
+.section-tag-num {
   font-size: 0.72rem;
   font-weight: 800;
-  color: #4A2548;
+  color: #FAAA48;
   letter-spacing: 0.14em;
 }
 
-.docs-section-title {
+.section-title-heading {
   font-size: 2rem;
-  color: #0B0812;
+  color: #FFDDAC;
   margin: 0;
 }
 
-.docs-prose {
+.prose-content {
   font-size: 1.05rem;
   line-height: 1.7;
-  color: rgba(11, 8, 18, 0.88);
-  border-left: 2px solid #4A2548;
+  color: rgba(255, 221, 172, 0.88);
+  border-left: 2px solid #FAAA48;
   padding-left: 1.4rem;
   margin-top: 0.4rem;
 }
 
-.docs-prose p {
+.prose-content p {
   margin: 0;
 }
 
-/* Pure Documentation Specs Table (No Cards!) */
-.docs-specs-table {
-  width: 100%;
-  border-collapse: collapse;
+/* Minimal Telemetry Tiles Grid (Solid Surfaces, Zero Glass) */
+.telemetry-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
   margin-top: 0.5rem;
-  font-size: 0.86rem;
 }
 
-.docs-specs-table td {
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(11, 8, 18, 0.14);
+.telemetry-tile {
+  background: #120713;
+  border: 1px solid rgba(250, 170, 72, 0.25);
+  border-radius: 8px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
-.docs-specs-table tr:last-child td {
-  border-bottom: none;
+.telemetry-tile:hover {
+  transform: translateY(-2px);
+  border-color: #FAAA48;
 }
 
-.spec-label {
-  color: #4A2548;
+.tile-label {
+  font-size: 0.65rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  width: 35%;
+  color: #D8BFD8;
+  letter-spacing: 0.1em;
 }
 
-.spec-value {
-  color: #0B0812;
-  font-weight: 600;
+.tile-value {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #FFDDAC;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Footer Section */
-.docs-footer-section {
+.showcase-footer-section {
   gap: 2rem;
   margin-top: 1rem;
 }
 
-.docs-stack-row {
+.stack-tags-row {
   display: flex;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
 }
 
-.docs-stack-label {
+.stack-title-label {
   font-size: 0.72rem;
   font-weight: 800;
-  color: #4A2548;
+  color: #D8BFD8;
 }
 
-.docs-stack-tags {
+.stack-pills {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.docs-stack-tag {
-  background: rgba(74, 37, 72, 0.1);
-  border: 1px solid rgba(74, 37, 72, 0.3);
-  color: #0B0812;
+.stack-pill-tag {
+  background: #180A1A;
+  border: 1px solid rgba(216, 191, 216, 0.35);
+  color: #FFDDAC;
   font-size: 0.72rem;
   font-weight: 600;
-  padding: 3px 10px;
+  padding: 4px 12px;
   border-radius: 4px;
 }
 
-.docs-page-footer {
+.showcase-page-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 0.72rem;
-  color: rgba(11, 8, 18, 0.6);
-  border-top: 1px solid rgba(11, 8, 18, 0.18);
+  color: rgba(255, 221, 172, 0.5);
+  border-top: 1px solid rgba(250, 170, 72, 0.18);
   padding-top: 20px;
 }
 
-.docs-footer-links {
+.footer-nav-links {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-.docs-footer-links a {
-  color: #4A2548;
+.footer-nav-links a {
+  color: #FAAA48;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.docs-footer-links a:hover {
-  color: #0B0812;
+.footer-nav-links a:hover {
+  color: #FFDDAC;
 }
 </style>

@@ -37,7 +37,7 @@ const projects: Project[] = [
     description: 'Local document intelligence engine that indexes, vectors, and analyzes unstructured files with zero external API leaks.',
     techStack: ['Python', 'TypeScript', 'PyTorch', 'Vector DB', 'Electron'],
     githubUrl: 'https://github.com/Dhruv-Mann/filemind',
-    demoUrl: 'https://github.com/Dhruv-Mann/filemind',
+    demoUrl: 'https://filemind.vercel.app/',
     telemetryBadge: 'AI FILE INTELLIGENCE',
     image: '/filemind.png'
   },

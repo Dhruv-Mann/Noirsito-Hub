@@ -38,7 +38,7 @@ const projects: Project[] = [
     githubUrl: 'https://github.com/Dhruv-Mann/filemind',
     demoUrl: 'https://github.com/Dhruv-Mann/filemind',
     telemetryBadge: 'AI FILE INTELLIGENCE',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop'
+    image: '/filemind.png'
   },
   {
     id: 'eve-framework',
@@ -87,10 +87,10 @@ function getCardStyle(index: number, total: number) {
   const offset = index - (total - 1) / 2
 
   if (!isFolderOpen.value) {
-    const stackY = hoverFolder.value ? offset * -12 - 45 : offset * -5
-    const stackX = hoverFolder.value ? offset * 36 : offset * 3
-    const stackRotate = hoverFolder.value ? offset * 8 : offset * 3.5
-    const baseScale = hoverFolder.value ? 1.0 : 0.80
+    const stackY = hoverFolder.value ? offset * -10 - 40 : offset * -5
+    const stackX = hoverFolder.value ? offset * 32 : offset * 3
+    const stackRotate = hoverFolder.value ? offset * 7 : offset * 3
+    const baseScale = hoverFolder.value ? 1.0 : 0.82
     const stackScale = baseScale - Math.abs(offset) * 0.03
 
     return {
@@ -100,16 +100,17 @@ function getCardStyle(index: number, total: number) {
     }
   } else {
     // Open Folder Spread Layout
-    const openY = -140 + (isDragging.value ? dragOffsetY.value * 0.5 : 0)
-    // Spaced evenly across stage
-    const spacing = total <= 3 ? 200 : 170
+    const isHovered = hoveredCardId.value === filteredProjects.value[index].id
+    const openY = (isHovered ? -160 : -140) + (isDragging.value ? dragOffsetY.value * 0.5 : 0)
+    // Spaced evenly across stage for 16:9 widescreen cards
+    const spacing = total <= 3 ? 240 : 205
     const openX = offset * spacing
-    const openRotate = offset * 2.5
-    const openScale = 1.04
+    const openRotate = isHovered ? 0 : offset * 2
+    const openScale = isHovered ? 1.45 : 1.02
 
     return {
       transform: `translate3d(${openX}px, ${openY}px, 0px) rotate(${openRotate}deg) scale(${openScale})`,
-      zIndex: hoveredCardId.value === filteredProjects.value[index].id ? 100 : index + 10,
+      zIndex: isHovered ? 300 : index + 10,
       opacity: 1
     }
   }
@@ -148,6 +149,12 @@ function toggleFolder() {
     hoverFolder.value = false
   } else {
     isFolderOpen.value = true
+  }
+}
+
+function openProjectLink(url: string) {
+  if (isFolderOpen.value && url) {
+    window.open(url, '_blank')
   }
 }
 </script>
@@ -221,12 +228,12 @@ function toggleFolder() {
             <div class="folder-back-body" />
           </div>
 
-          <!-- Project Photo / Card Stack Layer -->
+          <!-- Project Photo Stack Layer (Pure PNG Cards) -->
           <div class="folder-cards-stack-layer">
             <article
               v-for="(proj, i) in filteredProjects"
               :key="proj.id"
-              class="folder-project-card font-body"
+              class="folder-project-card"
               :class="{ 
                 'is-open-card': isFolderOpen,
                 'is-hovered-card': hoveredCardId === proj.id
@@ -235,63 +242,9 @@ function toggleFolder() {
               @mouseenter="hoveredCardId = proj.id"
               @mouseleave="hoveredCardId = null"
               @pointerdown="handlePointerDown"
+              @click="openProjectLink(proj.githubUrl)"
             >
-              <!-- Card Image Header -->
-              <div class="card-media-wrapper">
-                <img :src="proj.image" :alt="proj.title" class="card-preview-img" />
-                <div class="card-media-overlay" />
-                <span class="card-badge font-mono">{{ proj.telemetryBadge }}</span>
-              </div>
-
-              <!-- Card Content Body -->
-              <div class="card-content font-body">
-                <div class="card-top-meta font-mono">
-                  <span class="status-indicator">● {{ proj.status }}</span>
-                  <span class="cat-tag">[ {{ proj.category }} ]</span>
-                </div>
-
-                <h3 class="card-title font-display">{{ proj.title }}</h3>
-                <p class="card-subtitle font-mono">{{ proj.subtitle }}</p>
-                <p class="card-description">{{ proj.description }}</p>
-
-                <!-- Tech Stack Pills -->
-                <div class="card-tech-pills font-mono">
-                  <span v-for="t in proj.techStack" :key="t" class="tech-pill">
-                    {{ t }}
-                  </span>
-                </div>
-
-                <!-- Direct Action Buttons Bar -->
-                <div class="card-actions-row font-mono">
-                  <a
-                    :href="proj.githubUrl"
-                    target="_blank"
-                    rel="noopener"
-                    class="action-btn primary-action"
-                    @click.stop
-                  >
-                    <span>GITHUB REPO</span>
-                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2">
-                      <path d="M7 17L17 7M17 7H7M17 7V17" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </a>
-                  <a
-                    v-if="proj.demoUrl"
-                    :href="proj.demoUrl"
-                    target="_blank"
-                    rel="noopener"
-                    class="action-btn secondary-action"
-                    @click.stop
-                  >
-                    <span>LIVE SYSTEM</span>
-                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                      <polyline points="15 3 21 3 21 9"/>
-                      <line x1="10" y1="14" x2="21" y2="3"/>
-                    </svg>
-                  </a>
-                </div>
-              </div>
+              <img :src="proj.image" :alt="proj.title" class="card-full-photo" />
             </article>
           </div>
 
@@ -519,8 +472,8 @@ function toggleFolder() {
 .folder-back-wall {
   position: absolute;
   bottom: 0;
-  width: 380px;
-  height: 260px;
+  width: 410px;
+  height: 210px;
   z-index: 0;
   pointer-events: none;
   transform: scale(0.8);
@@ -584,15 +537,13 @@ function toggleFolder() {
 .folder-project-card {
   position: absolute;
   bottom: 0;
-  width: 250px;
-  height: 320px;
-  background: #1A0712;
-  border: 1px solid rgba(190, 44, 85, 0.4);
-  border-radius: 14px;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75);
+  width: 320px;
+  height: 180px;
+  background: #0d0408;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
   transform-origin: bottom center;
   transition: transform 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.25),
               opacity 0.3s ease,
@@ -606,172 +557,29 @@ function toggleFolder() {
 }
 
 .folder-project-card.is-hovered-card {
-  border-color: #FFE0EB;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 224, 235, 0.4);
+  border-color: #BE2C55;
+  box-shadow: 0 28px 75px rgba(0, 0, 0, 0.95), 0 0 45px rgba(190, 44, 85, 0.6);
+  background: #000000;
 }
 
-/* Card Media Header */
-.card-media-wrapper {
-  position: relative;
-  width: 100%;
-  height: 110px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.card-preview-img {
+.card-full-photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  pointer-events: none;
+  transition: transform 0.35s ease;
 }
 
-.folder-project-card:hover .card-preview-img {
-  transform: scale(1.08);
-}
-
-.card-media-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(26, 7, 18, 0.1) 0%, rgba(26, 7, 18, 0.95) 100%);
-}
-
-.card-badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(30, 7, 19, 0.85);
-  border: 1px solid #BE2C55;
-  color: #FFE0EB;
-  font-size: 0.58rem;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 4px;
-  letter-spacing: 0.05em;
-}
-
-/* Card Content */
-.card-content {
-  padding: 10px 12px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  justify-content: space-between;
-}
-
-.card-top-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.6rem;
-  font-weight: 700;
-  color: rgba(255, 224, 235, 0.7);
-  margin-bottom: 2px;
-}
-
-.status-indicator {
-  color: #BE2C55;
-}
-
-.cat-tag {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.card-title {
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: #FFE0EB;
-  margin: 0;
-  line-height: 1.15;
-}
-
-.card-subtitle {
-  font-size: 0.62rem;
-  color: rgba(255, 224, 235, 0.65);
-  margin: 2px 0 6px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.card-description {
-  font-size: 0.68rem;
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.3;
-  margin: 0 0 6px 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.card-tech-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-bottom: 8px;
-}
-
-.tech-pill {
-  background: rgba(190, 44, 85, 0.18);
-  border: 1px solid rgba(190, 44, 85, 0.4);
-  color: #FFE0EB;
-  font-size: 0.55rem;
-  padding: 1px 5px;
-  border-radius: 3px;
-  font-weight: 700;
-}
-
-/* Card Actions Row */
-.card-actions-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-}
-
-.action-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.action-btn.primary-action {
-  background: #BE2C55;
-  color: #ffffff;
-  border: 1px solid #BE2C55;
-}
-
-.action-btn.primary-action:hover {
-  background: #e03b68;
-  box-shadow: 0 4px 12px rgba(190, 44, 85, 0.4);
-}
-
-.action-btn.secondary-action {
-  background: rgba(255, 224, 235, 0.08);
-  color: #FFE0EB;
-  border: 1px solid rgba(255, 224, 235, 0.2);
-}
-
-.action-btn.secondary-action:hover {
-  background: rgba(255, 224, 235, 0.2);
-  color: #ffffff;
+.folder-project-card:hover .card-full-photo {
+  transform: scale(1.03);
 }
 
 /* Folder Front Flap Cover */
 .folder-front-flap {
   position: absolute;
   bottom: 0;
-  width: 360px;
-  height: 170px;
+  width: 390px;
+  height: 140px;
   z-index: 30;
   cursor: pointer;
   transform: scale(0.8);

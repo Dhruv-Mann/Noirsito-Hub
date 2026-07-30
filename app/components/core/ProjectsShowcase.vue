@@ -690,9 +690,9 @@ function openProjectLink(url: string) {
 .flap-body {
   width: 100%;
   height: 100%;
-  background: #160711;
-  border-radius: 18px;
-  border: 1.5px solid #BE2C55;
+  background: #0D0408;
+  border-radius: 16px;
+  border: 2px solid #2A0C1B;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.95);
   position: relative;
   overflow: hidden;
@@ -700,27 +700,26 @@ function openProjectLink(url: string) {
   align-items: center;
   justify-content: center;
   padding: 16px;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .folder-front-flap.flap-hovered .flap-body {
-  background: #1B0714;
-  border-color: #FF2B63;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.98), 0 0 35px rgba(255, 43, 99, 0.35);
+  background: #14050E;
+  border-color: #FFE0EB;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.98);
 }
 
 .flap-click-prompt {
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 900;
   color: #FFE0EB;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.15em;
   text-align: center;
-  transition: color 0.3s ease, text-shadow 0.3s ease;
+  transition: color 0.25s ease;
 }
 
 .folder-front-flap.flap-hovered .flap-click-prompt {
   color: #ffffff;
-  text-shadow: 0 0 16px rgba(255, 43, 99, 0.85);
 }
 
 /* Drag or Click Hint Badge */

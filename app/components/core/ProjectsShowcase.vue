@@ -243,7 +243,6 @@ function openProjectLink(url: string) {
               @mouseenter="hoveredCardId = proj.id"
               @mouseleave="hoveredCardId = null"
               @pointerdown="handlePointerDown"
-              @click="openProjectLink(proj.githubUrl)"
             >
               <img :src="proj.image" :alt="proj.title" class="card-full-photo" />
 
@@ -268,13 +267,13 @@ function openProjectLink(url: string) {
                 <div class="mini-island-divider" />
 
                 <!-- 3. Read -->
-                <button class="mini-island-btn" title="Read Project Details" @click.stop="activeReadProject = proj">
+                <NuxtLink :to="`/projects/${proj.id}`" class="mini-island-btn" title="Read Project Details" @click.stop>
                   <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
                     <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
                   </svg>
                   <span>Read</span>
-                </button>
+                </NuxtLink>
               </div>
             </article>
           </div>

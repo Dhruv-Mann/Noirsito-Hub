@@ -65,6 +65,28 @@ const projectsData: Record<string, ProjectDetail> = {
       { label: 'TRANSACTION LOG', value: 'Real-time Reversible Undo' }
     ]
   },
+  'sentinel-vision': {
+    id: 'sentinel-vision',
+    title: 'Sentinel Vision',
+    subtitle: 'Resume Intelligence Platform',
+    tagline: 'Turn your resume into a data source. Track who is opening your resume, location hotspots, device types, reading duration, and trigger instant kill-switch link revocation with GDPR/CCPA privacy compliance.',
+    badge: 'RESUME INTELLIGENCE',
+    status: 'PRODUCTION',
+    category: 'FULL STACK',
+    description: 'Sentinel Vision embeds invisible tracking telemetry into resume links. Job seekers gain real-time analytics on viewer identity, city/country location, device platform, and exact engagement duration without collecting raw PII or relying on invasive third-party ad scripts.',
+    architectureText: 'Built with Next.js 16 App Router, React 19, and Supabase PostgreSQL with Row-Level Security (RLS). Features IP anonymization (masked host octets), DNT/GPC opt-out detection, dynamic 1-7 month link expiration, and 1-click link termination.',
+    githubUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision',
+    demoUrl: 'https://sentinel-vision-five.vercel.app/',
+    docsUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision#readme',
+    techStack: ['Next.js 16', 'React 19', 'TypeScript 5', 'Supabase', 'PostgreSQL RLS', 'Tailwind CSS 4'],
+    telemetry: [
+      { label: 'GEO INTELLIGENCE', value: 'Real-Time Viewer City & Country' },
+      { label: 'PRIVACY & SECURITY', value: 'GDPR / CCPA Compliant + IP Masking' },
+      { label: 'ENGAGEMENT METRIC', value: 'Precise Time-On-Page Duration' },
+      { label: 'DATABASE & AUTH', value: 'Supabase PostgreSQL + RLS' },
+      { label: 'LINK KILL SWITCH', value: 'Instant One-Click Link Revocation' }
+    ]
+  },
   'eve-framework': {
     id: 'eve-framework',
     title: 'Eve AI Framework',

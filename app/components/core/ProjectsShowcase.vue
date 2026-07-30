@@ -42,6 +42,19 @@ const projects: Project[] = [
     image: '/filemind.png'
   },
   {
+    id: 'sentinel-vision',
+    title: 'Sentinel Vision',
+    subtitle: 'Resume Intelligence & Real-Time Tracking Platform',
+    status: 'PRODUCTION',
+    category: 'FULL STACK',
+    description: 'Turn resumes into data sources with real-time viewer geolocation, device telemetry, reading duration tracking, and instant kill switches.',
+    techStack: ['Next.js 16', 'React 19', 'TypeScript', 'Supabase', 'Tailwind CSS 4'],
+    githubUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision',
+    demoUrl: 'https://sentinel-vision-five.vercel.app/',
+    telemetryBadge: 'RESUME INTELLIGENCE',
+    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop'
+  },
+  {
     id: 'eve-framework',
     title: 'Eve AI Framework',
     subtitle: 'Durable Agent Orchestration & Subagent Pipelines',

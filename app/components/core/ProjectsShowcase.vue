@@ -87,10 +87,11 @@ function getCardStyle(index: number, total: number) {
   const offset = index - (total - 1) / 2
 
   if (!isFolderOpen.value) {
-    const stackY = hoverFolder.value ? offset * -12 - 45 : offset * -6
-    const stackX = hoverFolder.value ? offset * 36 : offset * 4
+    const stackY = hoverFolder.value ? offset * -12 - 45 : offset * -5
+    const stackX = hoverFolder.value ? offset * 36 : offset * 3
     const stackRotate = hoverFolder.value ? offset * 8 : offset * 3.5
-    const stackScale = 1 - Math.abs(offset) * 0.03
+    const baseScale = hoverFolder.value ? 1.0 : 0.80
+    const stackScale = baseScale - Math.abs(offset) * 0.03
 
     return {
       transform: `translate3d(${stackX}px, ${stackY}px, 0px) rotate(${stackRotate}deg) scale(${stackScale})`,
@@ -210,7 +211,7 @@ function toggleFolder() {
           <!-- Back Folder Wall Container -->
           <div
             class="folder-back-wall"
-            :class="{ 'open-hidden': isFolderOpen }"
+            :class="{ 'wall-hovered': hoverFolder && !isFolderOpen, 'open-hidden': isFolderOpen }"
           >
             <!-- Folder Top Tab Header -->
             <div class="folder-tab-top font-mono">
@@ -522,7 +523,13 @@ function toggleFolder() {
   height: 260px;
   z-index: 0;
   pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: scale(0.8);
+  transform-origin: bottom center;
+  transition: opacity 0.4s ease, transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+}
+
+.folder-back-wall.wall-hovered {
+  transform: scale(1);
 }
 
 .folder-back-wall.open-hidden {
@@ -767,18 +774,19 @@ function toggleFolder() {
   height: 170px;
   z-index: 30;
   cursor: pointer;
+  transform: scale(0.8);
   transform-origin: bottom center;
   transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.25),
               opacity 0.4s ease;
 }
 
 .folder-front-flap.flap-hovered {
-  transform: perspective(800px) rotateX(-25deg) translateY(10px);
+  transform: scale(1) perspective(800px) rotateX(-25deg) translateY(10px);
 }
 
 .folder-front-flap.flap-open {
   opacity: 0;
-  transform: perspective(800px) rotateX(-75deg) translateY(40px);
+  transform: scale(1) perspective(800px) rotateX(-75deg) translateY(40px);
   pointer-events: none;
 }
 

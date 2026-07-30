@@ -163,7 +163,7 @@ function openProjectLink(url: string) {
 <template>
   <div
     class="projects-showcase font-body select-none"
-    :class="{ 'crimson-active': hoverFolder || hoveredCardId !== null }"
+    :class="{ 'crimson-active': hoverFolder || hoveredCardId !== null || isFolderOpen }"
     @pointermove="handlePointerMove"
     @pointerup="handlePointerUp"
     @pointercancel="handlePointerUp"
@@ -465,16 +465,33 @@ function openProjectLink(url: string) {
 
 .word-blush {
   color: #FFE0EB;
+  transition: color 0.4s ease, text-shadow 0.4s ease;
 }
 
 .word-crimson {
   color: #BE2C55;
+  transition: color 0.4s ease, text-shadow 0.4s ease;
 }
 
 .crimson-divider-line {
   width: 120px;
   height: 2px;
   background: linear-gradient(90deg, transparent, #BE2C55, transparent);
+  transition: background 0.4s ease;
+}
+
+.projects-showcase.crimson-active .word-crimson {
+  color: #12040C;
+  text-shadow: 0 1px 2px rgba(255, 224, 235, 0.25);
+}
+
+.projects-showcase.crimson-active .word-blush {
+  color: #FFE0EB;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.projects-showcase.crimson-active .crimson-divider-line {
+  background: linear-gradient(90deg, transparent, #12040C, transparent);
 }
 
 /* Category Filter Pills */

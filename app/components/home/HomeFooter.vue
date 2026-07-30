@@ -84,53 +84,6 @@
                 <span class="slash-prefix">/</span> PROJECTS
               </NuxtLink>
             </li>
-            <li>
-              <a href="https://github.com/Dhruv-Mann/Noirsito-Hub" target="_blank" rel="noopener" class="footer-link-btn">
-                <span class="slash-prefix">/</span> DIGITAL HUB
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Column 3: Demo Column 3 -->
-        <div class="footer-col font-mono">
-          <ul class="footer-links">
-            <li>
-              <span class="footer-link-btn slot-item">
-                <span class="slash-prefix">/</span> DEMO 1
-              </span>
-            </li>
-            <li>
-              <span class="footer-link-btn slot-item">
-                <span class="slash-prefix">/</span> DEMO 2
-              </span>
-            </li>
-            <li>
-              <span class="footer-link-btn slot-item">
-                <span class="slash-prefix">/</span> DEMO 3
-              </span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Column 4: Demo Column 4 -->
-        <div class="footer-col font-mono">
-          <ul class="footer-links">
-            <li>
-              <span class="footer-link-btn slot-item">
-                <span class="slash-prefix">/</span> DEMO 4
-              </span>
-            </li>
-            <li>
-              <span class="footer-link-btn slot-item">
-                <span class="slash-prefix">/</span> DEMO 5
-              </span>
-            </li>
-            <li>
-              <span class="footer-link-btn slot-item">
-                <span class="slash-prefix">/</span> DEMO 6
-              </span>
-            </li>
           </ul>
         </div>
       </div>
@@ -273,7 +226,7 @@ function triggerPinkSweep() {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: repeat(4, max-content);
+  grid-template-columns: repeat(2, max-content);
   gap: 48px;
   padding-bottom: 64px;
 }

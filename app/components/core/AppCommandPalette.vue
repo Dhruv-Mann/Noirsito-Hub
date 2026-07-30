@@ -39,7 +39,9 @@ const actions: ActionItem[] = [
     category: 'NAVIGATION',
     icon: 'home',
     handler: () => {
-      if (typeof window !== 'undefined') {
+      if (route.path !== '/') {
+        router.push('/')
+      } else if (typeof window !== 'undefined') {
         window.scrollTo({ top: 0, behavior: 'smooth' })
       }
     }

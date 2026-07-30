@@ -93,7 +93,7 @@ const filteredProjects = computed(() => {
     <!-- Full Background Dithered Overlay -->
     <div
       class="dither-bg-layer"
-      :class="{ 'fade-out': selectedProjectId !== null || hoveredCardId !== null }"
+      :class="{ 'fade-out': hoveredCardId !== null }"
       aria-hidden="true"
     >
       <img src="/INTENSIFY_dithered.png" alt="" class="dither-img" />
@@ -102,7 +102,7 @@ const filteredProjects = computed(() => {
     <!-- #BE2C55 Crimson Background Takeover Overlay Layer -->
     <div
       class="crimson-bg-takeover"
-      :class="{ active: selectedProjectId !== null || hoveredCardId !== null }"
+      :class="{ active: hoveredCardId !== null }"
       aria-hidden="true"
     />
 

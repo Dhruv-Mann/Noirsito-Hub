@@ -16,7 +16,9 @@ export default defineNuxtConfig({
     families: {
       'Space+Grotesk': [400, 500, 600, 700],
       'Inter': [300, 400, 500, 600, 700],
-      'JetBrains+Mono': [400, 500]
+      'JetBrains+Mono': [400, 500],
+      'Abril+Fatface': [400],
+      'Archivo': [300, 400, 500, 600, 700, 800, 900]
     },
     display: 'swap',
     prefetch: true,

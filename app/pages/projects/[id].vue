@@ -118,52 +118,50 @@ const project = computed<ProjectDetail>(() => {
 })
 
 useSeoMeta({
-  title: computed(() => `${project.value.title} • Dhruv Mann`),
+  title: computed(() => `${project.value.title} • Dhruv Mann Documentation`),
   description: computed(() => project.value.tagline)
 })
 </script>
 
 <template>
-  <div class="project-detail-page font-body select-none">
+  <div class="docs-detail-page font-body select-none">
     <!-- Dynamic Island Navigation Header -->
     <DynamicIslandNav active-tab="projects" />
 
-    <!-- Deep Background Image & Dither Tint -->
-    <div class="background-tint" aria-hidden="true" />
+    <!-- Ambient Subtle Lavender Background Glow -->
+    <div class="docs-background-tint" aria-hidden="true" />
 
-    <main class="golden-stage-container">
-      <!-- Back Navigation Header -->
-      <nav class="back-nav-row font-mono">
-        <NuxtLink to="/projects" class="back-link">
+    <main class="docs-container">
+      <!-- Back Link & Breadcrumb Bar -->
+      <header class="docs-nav-bar font-mono">
+        <NuxtLink to="/projects" class="docs-back-link">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2">
             <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <span>BACK TO PROJECTS</span>
+          <span>DOCS / PROJECTS</span>
         </NuxtLink>
-        <span class="badge-tag">{{ project.badge }}</span>
-      </nav>
+        <span class="docs-badge-tag">{{ project.badge }}</span>
+      </header>
 
-      <!-- SECTION 01: HERO SECTION (Golden Ratio Proportions) -->
-      <section class="golden-hero-section">
-        <div class="hero-text-block">
-          <h1 class="hero-title font-display">
-            <span class="title-primary">{{ project.title }}</span>
-            <span class="title-secondary">{{ project.subtitle }}</span>
-          </h1>
+      <!-- DOCUMENTATION TITLE & ABSTRACT HEADER (Inverted Light Theme, No Cards) -->
+      <article class="docs-article">
+        <header class="docs-header">
+          <h1 class="docs-main-title font-display">{{ project.title }}</h1>
+          <h2 class="docs-subtitle font-display">{{ project.subtitle }}</h2>
 
-          <p class="hero-tagline font-body">{{ project.tagline }}</p>
+          <p class="docs-abstract font-body">{{ project.tagline }}</p>
 
-          <!-- Golden Action Buttons Row -->
-          <div class="hero-actions font-mono">
+          <!-- Documentation Action Link Pills -->
+          <div class="docs-actions-bar font-mono">
             <a
               v-if="project.windowsUrl"
               :href="project.windowsUrl"
               target="_blank"
               rel="noopener"
-              class="golden-btn primary-btn"
+              class="docs-pill-btn primary-pill"
             >
-              <span>Download for Windows (.exe)</span>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <span>Download .exe (Windows)</span>
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </a>
@@ -173,414 +171,388 @@ useSeoMeta({
               :href="project.macUrl"
               target="_blank"
               rel="noopener"
-              class="golden-btn secondary-btn"
+              class="docs-pill-btn secondary-pill"
             >
-              <span>Download for macOS (.dmg)</span>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+              <span>Download .dmg (macOS)</span>
             </a>
 
             <a
               :href="project.githubUrl"
               target="_blank"
               rel="noopener"
-              class="golden-btn outline-btn"
+              class="docs-pill-btn outline-pill"
             >
-              <span>GitHub Repo</span>
+              <span>Source Repository</span>
             </a>
           </div>
-        </div>
+        </header>
 
-        <!-- High-Resolution Widescreen Showcase Photo Frame -->
-        <div class="hero-image-frame">
-          <img :src="project.image" :alt="project.title" class="showcase-img" />
-        </div>
-      </section>
+        <hr class="docs-divider" />
 
-      <!-- SECTION 02: CORE ARCHITECTURE & PHILOSOPHY -->
-      <section class="golden-section">
-        <div class="section-label font-mono">01 / ARCHITECTURE & PRIVACY</div>
-        <h2 class="section-heading font-display">Zero-Leak Local Intelligence</h2>
-        <div class="architecture-grid">
-          <div class="arch-card">
-            <h3 class="arch-card-title font-mono">LOCAL VECTOR INDEXING</h3>
-            <p class="arch-card-body">{{ project.description }}</p>
+        <!-- SECTION 01: OVERVIEW & LOCAL PRIVACY (Prose Style) -->
+        <section class="docs-section">
+          <div class="docs-section-num font-mono">01. OVERVIEW & PRIVACY MODEL</div>
+          <h3 class="docs-section-title font-display">Zero-Leak Local Storage Architecture</h3>
+          <div class="docs-prose font-body">
+            <p>{{ project.description }}</p>
           </div>
-          <div class="arch-card">
-            <h3 class="arch-card-title font-mono">TRANSACTION UNDO LOGS</h3>
-            <p class="arch-card-body">{{ project.architectureText }}</p>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- SECTION 03: SYSTEM TELEMETRY & SPECS GRID -->
-      <section class="golden-section">
-        <div class="section-label font-mono">02 / TECHNICAL TELEMETRY</div>
-        <h2 class="section-heading font-display">System Specifications</h2>
-        
-        <div class="telemetry-grid font-mono">
-          <div v-for="t in project.telemetry" :key="t.label" class="telemetry-card">
-            <span class="telemetry-label">{{ t.label }}</span>
-            <span class="telemetry-value">{{ t.value }}</span>
-          </div>
-        </div>
-      </section>
+        <hr class="docs-divider" />
 
-      <!-- SECTION 04: TECH STACK & FOOTER LINKS -->
-      <section class="golden-section footer-section">
-        <div class="tech-stack-row font-mono">
-          <span class="stack-heading">TECH STACK:</span>
-          <div class="stack-pills">
-            <span v-for="t in project.techStack" :key="t" class="stack-pill">{{ t }}</span>
+        <!-- SECTION 02: SYSTEM ARCHITECTURE & UNDO PIPELINE -->
+        <section class="docs-section">
+          <div class="docs-section-num font-mono">02. TRANSACTIONAL UNDO LOGS</div>
+          <h3 class="docs-section-title font-display">Asynchronous SQLite Vector Pipeline</h3>
+          <div class="docs-prose font-body">
+            <p>{{ project.architectureText }}</p>
           </div>
-        </div>
+        </section>
 
-        <footer class="detail-footer font-mono">
-          <span>Built by Dhruv Mann</span>
-          <div class="footer-links">
-            <a :href="project.githubUrl" target="_blank" rel="noopener">GitHub</a>
-            <a v-if="project.docsUrl" :href="project.docsUrl" target="_blank" rel="noopener">Docs</a>
-            <NuxtLink to="/projects">Projects</NuxtLink>
+        <hr class="docs-divider" />
+
+        <!-- SECTION 03: TECHNICAL SPECS TABLE (Pure Docs Table, No Cards) -->
+        <section class="docs-section">
+          <div class="docs-section-num font-mono">03. SYSTEM TELEMETRY & SPECIFICATIONS</div>
+          <h3 class="docs-section-title font-display">Technical Specifications</h3>
+          
+          <table class="docs-specs-table font-mono">
+            <tbody>
+              <tr v-for="t in project.telemetry" :key="t.label">
+                <td class="spec-label">{{ t.label }}</td>
+                <td class="spec-value">{{ t.value }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <hr class="docs-divider" />
+
+        <!-- SECTION 04: TECH STACK & FOOTER -->
+        <section class="docs-section docs-footer-section">
+          <div class="docs-stack-row font-mono">
+            <span class="docs-stack-label">TECH STACK:</span>
+            <div class="docs-stack-tags">
+              <span v-for="t in project.techStack" :key="t" class="docs-stack-tag">{{ t }}</span>
+            </div>
           </div>
-          <span>Built for local privacy</span>
-        </footer>
-      </section>
+
+          <footer class="docs-page-footer font-mono">
+            <span>Engineering Documentation • Dhruv Mann</span>
+            <div class="docs-footer-links">
+              <a :href="project.githubUrl" target="_blank" rel="noopener">GitHub</a>
+              <a v-if="project.docsUrl" :href="project.docsUrl" target="_blank" rel="noopener">Docs</a>
+              <NuxtLink to="/projects">Projects Showcase</NuxtLink>
+            </div>
+          </footer>
+        </section>
+      </article>
     </main>
   </div>
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap');
 
-/* Golden Ratio Spacing System: phi = 1.618 */
-.project-detail-page {
+/* Typography Pairing: Abril Fatface + Archivo */
+.font-display {
+  font-family: 'Abril Fatface', Georgia, serif !important;
+  font-weight: 400 !important;
+}
+
+.font-body, .font-mono {
+  font-family: 'Archivo', system-ui, -apple-system, sans-serif !important;
+}
+
+/* Inverted Color Palette:
+   Base Background: #D3DFFF (Soft Powder Ice Blue)
+   Primary Headings & Text: #0B0812 (Deep Night Velvet Violet)
+   Subtitles & Accents: #4A2548 (Thistle Dark Violet)
+*/
+
+.docs-detail-page {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: #050507;
-  color: #FFE0EB;
+  background: #D3DFFF;
+  color: #0B0812;
   padding-top: 100px;
-  padding-bottom: 60px;
+  padding-bottom: 80px;
   overflow-x: hidden;
 }
 
-.background-tint {
+.docs-background-tint {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(190, 44, 85, 0.15) 0%, transparent 70%),
-              radial-gradient(circle at 80% 40%, rgba(42, 12, 27, 0.4) 0%, transparent 60%);
+  background: radial-gradient(circle at 50% 0%, rgba(216, 191, 216, 0.4) 0%, transparent 65%),
+              radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.6) 0%, transparent 50%);
   pointer-events: none;
   z-index: 1;
 }
 
-.golden-stage-container {
+.docs-container {
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 1180px;
+  max-width: 860px;
   margin: 0 auto;
   padding: 0 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 4.236rem; /* 68px (1.618^3 * 16px) */
 }
 
-/* Back Nav Row */
-.back-nav-row {
+/* Nav Bar */
+.docs-nav-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.786rem;
+  font-size: 0.76rem;
   font-weight: 700;
+  margin-bottom: 2.5rem;
 }
 
-.back-link {
+.docs-back-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: rgba(255, 224, 235, 0.7);
+  color: #4A2548;
   text-decoration: none;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.back-link:hover {
-  color: #ffffff;
+.docs-back-link:hover {
+  color: #0B0812;
   transform: translateX(-3px);
 }
 
-.badge-tag {
-  background: rgba(190, 44, 85, 0.2);
-  border: 1px solid #BE2C55;
-  color: #FFE0EB;
-  padding: 4px 10px;
-  border-radius: 6px;
+.docs-badge-tag {
+  background: rgba(74, 37, 72, 0.1);
+  border: 1px solid rgba(74, 37, 72, 0.3);
+  color: #4A2548;
+  padding: 4px 12px;
+  border-radius: 4px;
   letter-spacing: 0.08em;
 }
 
-/* SECTION 01: HERO SECTION */
-.golden-hero-section {
+/* Article Structure */
+.docs-article {
   display: flex;
   flex-direction: column;
-  gap: 2.618rem;
+  gap: 2.5rem;
 }
 
-.hero-text-block {
+.docs-header {
   display: flex;
   flex-direction: column;
-  gap: 1.618rem;
-  max-width: 900px;
+  gap: 1rem;
 }
 
-.hero-title {
+.docs-main-title {
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  color: #0B0812;
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
   line-height: 1.05;
+  letter-spacing: 0.01em;
+  text-shadow: 0 4px 20px rgba(11, 8, 18, 0.1);
 }
 
-.title-primary {
-  font-size: clamp(2.618rem, 5.5vw, 4.236rem);
-  font-weight: 900;
-  color: #ffffff;
-  letter-spacing: -0.02em;
-}
-
-.title-secondary {
-  font-size: clamp(1.618rem, 3.5vw, 2.618rem);
-  font-weight: 400;
-  color: rgba(255, 224, 235, 0.55);
-  letter-spacing: -0.01em;
-}
-
-.hero-tagline {
-  font-size: 1.15rem;
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.618;
+.docs-subtitle {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  color: #4A2548;
   margin: 0;
-  max-width: 800px;
+  letter-spacing: 0em;
 }
 
-/* Golden Action Buttons */
-.hero-actions {
+.docs-abstract {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: rgba(11, 8, 18, 0.88);
+  margin: 0.5rem 0 0 0;
+}
+
+/* Action Pills */
+.docs-actions-bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
-  margin-top: 8px;
+  margin-top: 1rem;
 }
 
-.golden-btn {
+.docs-pill-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 22px;
-  border-radius: 30px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-decoration: none;
-  transition: all 0.25s ease;
-}
-
-.golden-btn.primary-btn {
-  background: #ffffff;
-  color: #050507;
-  border: 1px solid #ffffff;
-  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
-}
-
-.golden-btn.primary-btn:hover {
-  background: #FFE0EB;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(255, 255, 255, 0.35);
-}
-
-.golden-btn.secondary-btn {
-  background: rgba(30, 7, 19, 0.8);
-  border: 1px solid rgba(255, 224, 235, 0.25);
-  color: #FFE0EB;
-}
-
-.golden-btn.secondary-btn:hover {
-  background: rgba(190, 44, 85, 0.3);
-  border-color: #BE2C55;
-  color: #ffffff;
-  transform: translateY(-2px);
-}
-
-.golden-btn.outline-btn {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.golden-btn.outline-btn:hover {
-  border-color: #ffffff;
-  color: #ffffff;
-}
-
-/* Showcase Image Frame */
-.hero-image-frame {
-  position: relative;
-  width: 100%;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid rgba(190, 44, 85, 0.35);
-  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.95), 0 0 40px rgba(190, 44, 85, 0.2);
-  background: #000000;
-}
-
-.showcase-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-}
-
-/* SECTION 02 & 03: GOLDEN SECTIONS */
-.golden-section {
-  display: flex;
-  flex-direction: column;
-  gap: 1.618rem;
-  padding-top: 1.618rem;
-  border-top: 1px solid rgba(255, 224, 235, 0.1);
-}
-
-.section-label {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: #BE2C55;
-  letter-spacing: 0.12em;
-}
-
-.section-heading {
-  font-size: 1.85rem;
-  font-weight: 900;
-  color: #FFE0EB;
-  margin: 0;
-  letter-spacing: -0.01em;
-}
-
-.architecture-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.618rem;
-}
-
-.arch-card {
-  background: linear-gradient(180deg, #160711 0%, #0d0408 100%);
-  border: 1px solid rgba(190, 44, 85, 0.3);
-  border-radius: 14px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.arch-card-title {
+  padding: 10px 20px;
+  border-radius: 6px;
   font-size: 0.8rem;
-  font-weight: 800;
-  color: #FFE0EB;
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.docs-pill-btn.primary-pill {
+  background: #0B0812;
+  color: #D3DFFF;
+  border: 1px solid #0B0812;
+}
+
+.docs-pill-btn.primary-pill:hover {
+  background: #1D142E;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 18px rgba(11, 8, 18, 0.25);
+}
+
+.docs-pill-btn.secondary-pill {
+  background: rgba(74, 37, 72, 0.12);
+  border: 1px solid #4A2548;
+  color: #4A2548;
+}
+
+.docs-pill-btn.secondary-pill:hover {
+  background: rgba(74, 37, 72, 0.2);
+  color: #0B0812;
+  transform: translateY(-2px);
+}
+
+.docs-pill-btn.outline-pill {
+  background: transparent;
+  border: 1px solid rgba(11, 8, 18, 0.3);
+  color: #0B0812;
+}
+
+.docs-pill-btn.outline-pill:hover {
+  border-color: #0B0812;
+  background: rgba(11, 8, 18, 0.05);
+}
+
+/* Dividers */
+.docs-divider {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(11, 8, 18, 0.2), rgba(74, 37, 72, 0.05));
   margin: 0;
 }
 
-.arch-card-body {
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.618;
-  margin: 0;
-}
-
-/* Telemetry Grid */
-.telemetry-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.618rem;
-}
-
-.telemetry-card {
-  background: rgba(26, 7, 18, 0.6);
-  border: 1px solid rgba(255, 224, 235, 0.15);
-  border-radius: 12px;
-  padding: 18px;
+/* Sections */
+.docs-section {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.8rem;
 }
 
-.telemetry-label {
-  font-size: 0.65rem;
+.docs-section-num {
+  font-size: 0.72rem;
   font-weight: 800;
-  color: rgba(255, 224, 235, 0.5);
-  letter-spacing: 0.1em;
+  color: #4A2548;
+  letter-spacing: 0.14em;
 }
 
-.telemetry-value {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #ffffff;
+.docs-section-title {
+  font-size: 2rem;
+  color: #0B0812;
+  margin: 0;
+}
+
+.docs-prose {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: rgba(11, 8, 18, 0.88);
+  border-left: 2px solid #4A2548;
+  padding-left: 1.4rem;
+  margin-top: 0.4rem;
+}
+
+.docs-prose p {
+  margin: 0;
+}
+
+/* Pure Documentation Specs Table (No Cards!) */
+.docs-specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: 0.86rem;
+}
+
+.docs-specs-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(11, 8, 18, 0.14);
+}
+
+.docs-specs-table tr:last-child td {
+  border-bottom: none;
+}
+
+.spec-label {
+  color: #4A2548;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  width: 35%;
+}
+
+.spec-value {
+  color: #0B0812;
+  font-weight: 600;
 }
 
 /* Footer Section */
-.footer-section {
-  gap: 2.618rem;
-  padding-bottom: 2rem;
+.docs-footer-section {
+  gap: 2rem;
+  margin-top: 1rem;
 }
 
-.tech-stack-row {
+.docs-stack-row {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
-.stack-heading {
+.docs-stack-label {
   font-size: 0.72rem;
   font-weight: 800;
-  color: rgba(255, 224, 235, 0.6);
+  color: #4A2548;
 }
 
-.stack-pills {
+.docs-stack-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.stack-pill {
-  background: rgba(190, 44, 85, 0.2);
-  border: 1px solid rgba(190, 44, 85, 0.4);
-  color: #FFE0EB;
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 6px;
+.docs-stack-tag {
+  background: rgba(74, 37, 72, 0.1);
+  border: 1px solid rgba(74, 37, 72, 0.3);
+  color: #0B0812;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 4px;
 }
 
-.detail-footer {
+.docs-page-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 0.72rem;
-  color: rgba(255, 224, 235, 0.5);
-  border-top: 1px solid rgba(255, 224, 235, 0.1);
-  padding-top: 24px;
+  color: rgba(11, 8, 18, 0.6);
+  border-top: 1px solid rgba(11, 8, 18, 0.18);
+  padding-top: 20px;
 }
 
-.footer-links {
+.docs-footer-links {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-.footer-links a {
-  color: rgba(255, 224, 235, 0.7);
+.docs-footer-links a {
+  color: #4A2548;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.footer-links a:hover {
-  color: #ffffff;
+.docs-footer-links a:hover {
+  color: #0B0812;
 }
 </style>

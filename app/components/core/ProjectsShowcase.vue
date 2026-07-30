@@ -291,14 +291,8 @@ function openProjectLink(url: string) {
             @click="toggleFolder"
           >
             <div class="flap-body">
-              <div class="flap-shine-line" />
-              <div class="flap-badge-box font-mono">
-                <span class="flap-folder-icon">📁</span>
-                <span class="flap-folder-title">Engineering Projects</span>
-                <span class="flap-count-tag">[{{ filteredProjects.length }} ITEMS]</span>
-              </div>
               <div class="flap-click-prompt font-mono">
-                <span>CLICK TO OPEN FOLDER GALLERY</span>
+                <span>CLICK TO OPEN PROJECTS GALLERY</span>
               </div>
             </div>
           </div>
@@ -696,62 +690,37 @@ function openProjectLink(url: string) {
 .flap-body {
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, #2a0d1d 0%, #12040c 100%);
-  border-radius: 16px;
-  border: 1px solid rgba(255, 224, 235, 0.25);
-  box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.15), 0 -15px 35px rgba(0, 0, 0, 0.8);
+  background: #160711;
+  border-radius: 18px;
+  border: 1.5px solid #BE2C55;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.95);
   position: relative;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
   padding: 16px;
+  transition: all 0.3s ease;
 }
 
-.flap-shine-line {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 224, 235, 0.6), transparent);
-}
-
-.flap-badge-box {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #0d0408;
-  border: 1px solid rgba(190, 44, 85, 0.4);
-  padding: 6px 14px;
-  border-radius: 8px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
-}
-
-.flap-folder-icon {
-  font-size: 0.9rem;
-}
-
-.flap-folder-title {
-  color: #FFE0EB;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-}
-
-.flap-count-tag {
-  color: #BE2C55;
-  font-size: 0.68rem;
-  font-weight: 800;
+.folder-front-flap.flap-hovered .flap-body {
+  background: #1B0714;
+  border-color: #FF2B63;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.98), 0 0 35px rgba(255, 43, 99, 0.35);
 }
 
 .flap-click-prompt {
-  font-size: 0.62rem;
-  font-weight: 700;
-  color: rgba(255, 224, 235, 0.6);
-  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #FFE0EB;
+  letter-spacing: 0.14em;
+  text-align: center;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.folder-front-flap.flap-hovered .flap-click-prompt {
+  color: #ffffff;
+  text-shadow: 0 0 16px rgba(255, 43, 99, 0.85);
 }
 
 /* Drag or Click Hint Badge */

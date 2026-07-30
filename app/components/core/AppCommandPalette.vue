@@ -5,6 +5,10 @@ import { useSystemState } from '~/composables/useSystemState'
 import { usePageTransition } from '~/composables/usePageTransition'
 
 const route = useRoute()
+// Hoisted to setup scope — useRouter() MUST NOT be called inside action handler closures
+// (module-scope closures run outside Vue's active component instance, causing silent failures
+// on every navigation after the first). Fix per nuxt-route-button-integrity audit, pattern #5.
+const router = useRouter()
 const isHomePage = computed(() => route.path === '/')
 
 const { isStarted } = useSystemState()
@@ -46,7 +50,10 @@ const actions: ActionItem[] = [
     category: 'NAVIGATION',
     icon: 'stack',
     handler: () => {
+      // Trigger sweep animation then navigate — previously only the animation fired,
+      // leaving the user stuck on the same page after closing the palette.
       startPinkSweep()
+      router.push('/hub')
     }
   },
   {
@@ -55,7 +62,7 @@ const actions: ActionItem[] = [
     category: 'NAVIGATION',
     icon: 'folder',
     handler: () => {
-      const router = useRouter()
+      // router is scoped to setup() above — safe to reference here via closure capture
       router.push('/projects')
     }
   },

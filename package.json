@@ -7,7 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test:nav-integrity": "playwright test"
   },
   "dependencies": {
     "@nuxtjs/google-fonts": "^3.2.0",
@@ -22,6 +23,7 @@
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@types/node": "^22.13.1"
   }
 }

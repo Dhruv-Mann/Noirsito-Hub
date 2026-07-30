@@ -117,15 +117,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 import RibbonCutCanvas from './RibbonCutCanvas.vue'
 import TechStackShowcase from './TechStackShowcase.vue'
 import { usePageTransition } from '~/composables/usePageTransition'
 
+const route = useRoute()
 const router = useRouter()
 const { sweepStage, resetPinkSweep } = usePageTransition()
+
+// Reset sweep transition whenever route changes so new page is unblocked
+watch(() => route.fullPath, () => {
+  resetPinkSweep()
+})
 
 const isBloodHovered = ref(false)
 const isExitSweeping = ref(false)

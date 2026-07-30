@@ -189,7 +189,7 @@ function openProjectLink(url: string) {
         <!-- Category Filter Pills -->
         <div class="category-filters font-mono">
           <button
-            v-for="cat in ['ALL', 'AI / ML', 'FULL STACK', 'SYSTEMS & C++']"
+            v-for="cat in ['ALL', 'AI / ML', 'FULL STACK']"
             :key="cat"
             class="filter-tab"
             :class="{ active: activeCategory === cat }"

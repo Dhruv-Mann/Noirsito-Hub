@@ -170,8 +170,6 @@ watch(selectedIndex, () => {
 })
 
 function handleKeyDown(e: KeyboardEvent) {
-  if (!isStarted.value) return
-
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
     e.preventDefault()
     isOpen.value = !isOpen.value
@@ -234,10 +232,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-if="isStarted">
-    <!-- Floating Ctrl+K Dynamic Island Trigger Pill (only rendered on Home page) -->
+  <div>
+    <!-- Floating Ctrl+K Dynamic Island Trigger Pill (only rendered on Home page when initialized) -->
     <button
-      v-if="isHomePage"
+      v-if="isHomePage && isStarted"
       class="cmd-k-trigger font-mono select-none"
       :class="{ expanded: isTriggerHovered }"
       @mouseenter="isTriggerHovered = true"
@@ -454,7 +452,7 @@ onUnmounted(() => {
 .palette-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 10000000;
   background: rgba(4, 5, 7, 0.8);
   backdrop-filter: blur(8px);
   display: flex;

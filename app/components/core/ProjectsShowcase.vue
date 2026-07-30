@@ -257,6 +257,11 @@ function openProjectLink(url: string) {
               @mouseleave="hoveredCardId = null"
               @pointerdown="handlePointerDown"
             >
+              <!-- Subtle Floating Title Above Card -->
+              <div class="hover-floating-title font-mono">
+                <span>{{ proj.title }}</span>
+              </div>
+
               <img :src="proj.image" :alt="proj.title" class="card-full-photo" />
 
               <!-- Mini Dynamic Island Bar on Each Project Card -->
@@ -644,13 +649,41 @@ function openProjectLink(url: string) {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
-  overflow: hidden;
+  overflow: visible;
   transform-origin: bottom center;
   transition: transform 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.25),
               opacity 0.3s ease,
               box-shadow 0.3s ease,
               border-color 0.3s ease;
   cursor: grab;
+}
+
+/* Subtle Floating Title Above Card PNG */
+.hover-floating-title {
+  position: absolute;
+  top: -38px;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  background: #0d0408;
+  border: 1.5px solid #BE2C55;
+  color: #FFE0EB;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 4px 14px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.95);
+  z-index: 100;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.folder-project-card.is-hovered-card .hover-floating-title,
+.folder-project-card:hover .hover-floating-title {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .folder-project-card:active {
@@ -667,6 +700,7 @@ function openProjectLink(url: string) {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 11px;
   pointer-events: none;
   transition: transform 0.35s ease;
 }

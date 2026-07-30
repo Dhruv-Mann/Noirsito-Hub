@@ -57,7 +57,7 @@ const projectsData: Record<string, ProjectDetail> = {
     windowsUrl: 'https://github.com/Dhruv-Mann/filemind/releases',
     macUrl: 'https://github.com/Dhruv-Mann/filemind/releases',
     docsUrl: 'https://github.com/Dhruv-Mann/filemind#readme',
-    techStack: ['Python', 'TypeScript', 'Ollama AI', 'Vector DB', 'Electron', 'SQLite'],
+    techStack: ['Tauri v2', 'Rust', 'React 18', 'Ollama AI', 'LanceDB', 'SQLite', 'MCP Protocol'],
     telemetry: [
       { label: 'INFERENCE ENGINE', value: 'Embedded Ollama (Local LLM)' },
       { label: 'SEARCH LATENCY', value: '< 0.42ms Local Context Query' },

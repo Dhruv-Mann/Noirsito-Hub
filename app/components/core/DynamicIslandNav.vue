@@ -89,7 +89,7 @@ function triggerCmdPalette() {
         </button>
 
         <button
-          class="island-nav-btn cmd-btn"
+          class="island-nav-btn"
           @click="triggerCmdPalette"
         >
           <span class="btn-prefix">04</span>
@@ -201,16 +201,6 @@ function triggerCmdPalette() {
   color: #FFE0EB;
   font-size: 0.65rem;
   opacity: 0.8;
-}
-
-.cmd-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.cmd-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .fade-fast-enter-active,

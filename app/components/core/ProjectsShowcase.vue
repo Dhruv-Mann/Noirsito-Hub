@@ -20,6 +20,7 @@ const activeCategory = ref<'ALL' | 'AI / ML' | 'FULL STACK' | 'SYSTEMS & C++'>('
 const isFolderOpen = ref(false)
 const hoverFolder = ref(false)
 const hoveredCardId = ref<string | null>(null)
+const activeReadProject = ref<Project | null>(null)
 
 // Drag tracking for closing folder
 const dragStartY = ref<number | null>(null)
@@ -245,6 +246,36 @@ function openProjectLink(url: string) {
               @click="openProjectLink(proj.githubUrl)"
             >
               <img :src="proj.image" :alt="proj.title" class="card-full-photo" />
+
+              <!-- Mini Dynamic Island Bar on Each Project Card -->
+              <div class="card-mini-island font-mono" @click.stop>
+                <!-- 1. Repo -->
+                <a :href="proj.githubUrl" target="_blank" rel="noopener" class="mini-island-btn" title="GitHub Repository">
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" class="github-icon">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                  </svg>
+                  <span>Repo</span>
+                </a>
+
+                <div class="mini-island-divider" />
+
+                <!-- 2. Live -->
+                <a :href="proj.demoUrl || proj.githubUrl" target="_blank" rel="noopener" class="mini-island-btn" title="Live System">
+                  <span class="live-pulse-dot" />
+                  <span>Live</span>
+                </a>
+
+                <div class="mini-island-divider" />
+
+                <!-- 3. Read -->
+                <button class="mini-island-btn" title="Read Project Details" @click.stop="activeReadProject = proj">
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                  </svg>
+                  <span>Read</span>
+                </button>
+              </div>
             </article>
           </div>
 
@@ -285,6 +316,53 @@ function openProjectLink(url: string) {
       </div>
 
     </div>
+
+    <!-- Read Project Modal Drawer -->
+    <Teleport to="body">
+      <Transition name="modal-fade">
+        <div
+          v-if="activeReadProject"
+          class="project-read-modal-overlay font-body"
+          @click="activeReadProject = null"
+        >
+          <div class="project-read-modal-card" @click.stop>
+            <button class="close-modal-btn font-mono" @click="activeReadProject = null">✕</button>
+
+            <div class="read-modal-header font-mono">
+              <span class="status-badge">● {{ activeReadProject.status }}</span>
+              <span class="telemetry-badge">{{ activeReadProject.telemetryBadge }}</span>
+            </div>
+
+            <h2 class="read-modal-title font-display">{{ activeReadProject.title }}</h2>
+            <p class="read-modal-sub font-mono">{{ activeReadProject.subtitle }}</p>
+
+            <p class="read-modal-desc">{{ activeReadProject.description }}</p>
+
+            <div class="read-modal-stack font-mono">
+              <span class="stack-label">TECH STACK:</span>
+              <span v-for="t in activeReadProject.techStack" :key="t" class="tech-tag">{{ t }}</span>
+            </div>
+
+            <div class="read-modal-actions font-mono">
+              <a :href="activeReadProject.githubUrl" target="_blank" rel="noopener" class="read-action-btn primary">
+                <span>GITHUB REPOSITORY</span>
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 17L17 7M17 7H7M17 7V17" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a v-if="activeReadProject.demoUrl" :href="activeReadProject.demoUrl" target="_blank" rel="noopener" class="read-action-btn secondary">
+                <span>LIVE SYSTEM</span>
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -690,5 +768,226 @@ function openProjectLink(url: string) {
   color: #ffffff;
   border-color: #BE2C55;
   box-shadow: 0 4px 16px rgba(190, 44, 85, 0.5);
+}
+
+/* Card Mini Dynamic Island Pill */
+.card-mini-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(13, 4, 8, 0.92);
+  border: 1px solid rgba(255, 224, 235, 0.25);
+  border-radius: 20px;
+  padding: 3px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 50;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  transition: all 0.25s ease;
+}
+
+.mini-island-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 224, 235, 0.85);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.mini-island-btn:hover {
+  background: #BE2C55;
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.mini-island-divider {
+  width: 1px;
+  height: 10px;
+  background: rgba(255, 224, 235, 0.2);
+}
+
+.live-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+  animation: pulse-live 1.8s infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* Read Project Modal Overlay & Card */
+.project-read-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(14px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.project-read-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  background: linear-gradient(180deg, #1e0713 0%, #0d0408 100%);
+  border: 1px solid rgba(190, 44, 85, 0.5);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95), 0 0 50px rgba(190, 44, 85, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255, 224, 235, 0.1);
+  border: 1px solid rgba(255, 224, 235, 0.2);
+  color: #FFE0EB;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.close-modal-btn:hover {
+  background: #BE2C55;
+  color: #ffffff;
+}
+
+.read-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.status-badge {
+  color: #BE2C55;
+}
+
+.telemetry-badge {
+  background: rgba(190, 44, 85, 0.2);
+  border: 1px solid #BE2C55;
+  color: #FFE0EB;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.read-modal-title {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #FFE0EB;
+  margin: 0;
+}
+
+.read-modal-sub {
+  font-size: 0.8rem;
+  color: rgba(255, 224, 235, 0.7);
+  margin: 0;
+}
+
+.read-modal-desc {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.read-modal-stack {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+}
+
+.stack-label {
+  color: rgba(255, 224, 235, 0.6);
+  font-weight: 800;
+  margin-right: 4px;
+}
+
+.tech-tag {
+  background: rgba(190, 44, 85, 0.2);
+  border: 1px solid rgba(190, 44, 85, 0.4);
+  color: #FFE0EB;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.read-modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.read-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.read-action-btn.primary {
+  background: #BE2C55;
+  color: #ffffff;
+  border: 1px solid #BE2C55;
+}
+
+.read-action-btn.primary:hover {
+  background: #e03b68;
+}
+
+.read-action-btn.secondary {
+  background: rgba(255, 224, 235, 0.1);
+  color: #FFE0EB;
+  border: 1px solid rgba(255, 224, 235, 0.2);
+}
+
+.read-action-btn.secondary:hover {
+  background: rgba(255, 224, 235, 0.2);
+}
+
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
 }
 </style>

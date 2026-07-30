@@ -17,7 +17,7 @@ useSeoMeta({
 .page-projects {
   width: 100%;
   min-height: 100vh;
-  background-color: #2A0C1B;
+  background-color: #050507;
   overflow-x: hidden;
 }
 </style>

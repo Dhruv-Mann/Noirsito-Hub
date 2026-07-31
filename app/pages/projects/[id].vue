@@ -88,23 +88,26 @@ const projectsData: Record<string, ProjectDetail> = {
       { label: 'LINK KILL SWITCH', value: 'Instant One-Click Link Revocation' }
     ]
   },
-  'project-three': {
-    id: 'project-three',
-    title: 'Project 03',
-    subtitle: 'Upcoming System',
-    tagline: 'Final flagship project showcase system in active development. Architecture specs and live deployment coming soon.',
-    badge: 'FLAGSHIP SYSTEM',
-    status: 'IN DEVELOPMENT',
+  'noirsito-ui': {
+    id: 'noirsito-ui',
+    title: 'Noirsito UI',
+    subtitle: 'Vue 3 & Nuxt 4 Component Registry & CLI',
+    tagline: 'A minimalist, high-performance Vue 3 & Nuxt 4 component registry built with mathematical precision, Golden Ratio typography, and direct local source code injection.',
+    badge: 'COMPONENT REGISTRY & CLI',
+    status: 'PRODUCTION',
     category: 'FULL STACK',
-    description: 'This is the reserved slot for your third and final featured project.',
-    architectureText: 'Full system architecture documentation and interactive telemetry will be populated upon release.',
-    githubUrl: 'https://github.com/Dhruv-Mann',
-    techStack: ['TypeScript', 'Nuxt 4', 'Nitro', 'PostgreSQL'],
+    description: 'Unlike traditional UI component libraries requiring heavy runtime dependencies, Noirsito UI provides zero-dependency Vue 3 Single File Components (SFCs) that you inject directly into your codebase via a single CLI command (`npx noirsito-ui add <component>`). You retain 100% code ownership with zero technical debt.',
+    architectureText: 'Built with Nuxt 4, Vue 3, and Tailwind CSS. Features direct DOM canvas interaction bypass for 60fps physics, strict layout containment (`contain: paint layout`), and automated component scaffolding.',
+    image: '/Noirsito-UI.png',
+    githubUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI',
+    demoUrl: 'https://noirsito-ui.vercel.app/',
+    docsUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI#readme',
+    techStack: ['Nuxt 4', 'Vue 3', 'TypeScript', 'Node CLI', 'Tailwind CSS'],
     telemetry: [
-      { label: 'STATUS', value: 'In Active Development' },
-      { label: 'ARCHITECTURE', value: 'Full-Stack Modern Web SaaS' },
-      { label: 'DEPLOYMENT', value: 'Vercel Edge Platform' },
-      { label: 'REPOSITORY', value: 'Dhruv-Mann GitHub' }
+      { label: 'CLI DISTRIBUTION', value: 'npx noirsito-ui add <component>' },
+      { label: 'DOM PERFORMANCE', value: 'Direct DOM Bypass (60fps Physics)' },
+      { label: 'CSS CONTAINMENT', value: 'contain: paint layout (Zero Thrashing)' },
+      { label: 'DEPENDENCY FOOTPRINT', value: '0 Runtime Dependencies / Copy SFC' }
     ]
   }
 }

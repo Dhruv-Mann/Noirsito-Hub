@@ -55,16 +55,17 @@ const projects: Project[] = [
     image: '/Sentinel-Vision.png'
   },
   {
-    id: 'project-three',
-    title: 'Project 03',
-    subtitle: 'Upcoming Featured System',
-    status: 'IN DEVELOPMENT',
+    id: 'noirsito-ui',
+    title: 'Noirsito UI',
+    subtitle: 'Minimalist Vue 3 & Nuxt 4 Component Registry & CLI',
+    status: 'PRODUCTION',
     category: 'FULL STACK',
-    description: 'Final flagship project showcase system in development. Details and live deployment coming soon.',
-    techStack: ['TypeScript', 'Nuxt 4', 'Nitro', 'PostgreSQL'],
-    githubUrl: 'https://github.com/Dhruv-Mann',
-    telemetryBadge: 'FLAGSHIP SYSTEM',
-    image: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=800&auto=format&fit=crop'
+    description: 'Zero-dependency Vue 3 component registry and direct CLI tool that injects raw TypeScript components into your codebase.',
+    techStack: ['Nuxt 4', 'Vue 3', 'TypeScript', 'Node CLI', 'Tailwind CSS'],
+    githubUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI',
+    demoUrl: 'https://noirsito-ui.vercel.app/',
+    telemetryBadge: 'COMPONENT REGISTRY & CLI',
+    image: '/Noirsito-UI.png'
   }
 ]
 

@@ -1,16 +1,22 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { usePageTransition } from '~/composables/usePageTransition'
 
 const props = defineProps<{
   activeTab?: 'home' | 'tech-stack' | 'projects'
+  isReadPage?: boolean
 }>()
 
+const route = useRoute()
 const router = useRouter()
 const { resetPinkSweep } = usePageTransition()
 
 const isHovered = ref(false)
+
+const isAmberTheme = computed(() => {
+  return props.isReadPage || (route.path.startsWith('/projects/') && route.path !== '/projects')
+})
 
 const currentTitle = computed(() => {
   if (props.activeTab === 'projects') return 'PROJECTS'
@@ -45,7 +51,7 @@ function triggerCmdPalette() {
 <template>
   <div
     class="dynamic-island-wrapper font-mono select-none"
-    :class="{ expanded: isHovered }"
+    :class="{ expanded: isHovered, 'amber-theme': isAmberTheme }"
     @mouseenter="isHovered = true"
     @mouseleave="isHovered = false"
   >
@@ -221,5 +227,53 @@ function triggerCmdPalette() {
   .btn-prefix {
     display: none;
   }
+}
+
+/* ==========================================================================
+   Amber Read Detail Page Theme (#2F0F03, #FAAA48, #FFDDAC)
+   ========================================================================== */
+.dynamic-island-wrapper.amber-theme {
+  background: #2F0F03;
+  border-color: rgba(250, 170, 72, 0.45);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.85), 0 0 20px rgba(250, 170, 72, 0.25);
+}
+
+.dynamic-island-wrapper.amber-theme.expanded {
+  border-color: #FAAA48;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.95), 0 0 32px rgba(250, 170, 72, 0.4);
+}
+
+.dynamic-island-wrapper.amber-theme .island-collapsed-content {
+  color: #FFDDAC;
+}
+
+.dynamic-island-wrapper.amber-theme .pulse-dot {
+  background-color: #FAAA48;
+  box-shadow: 0 0 10px #FAAA48;
+}
+
+.dynamic-island-wrapper.amber-theme .chevron-icon {
+  color: #FAAA48;
+}
+
+.dynamic-island-wrapper.amber-theme .island-nav-btn {
+  color: rgba(255, 221, 172, 0.75);
+}
+
+.dynamic-island-wrapper.amber-theme .island-nav-btn:hover {
+  background: rgba(250, 170, 72, 0.2);
+  color: #FFDDAC;
+  border-color: rgba(250, 170, 72, 0.5);
+}
+
+.dynamic-island-wrapper.amber-theme .island-nav-btn.active {
+  background: #FAAA48;
+  border-color: #FAAA48;
+  color: #2F0F03;
+}
+
+.dynamic-island-wrapper.amber-theme .btn-prefix {
+  color: #2F0F03;
+  opacity: 0.85;
 }
 </style>

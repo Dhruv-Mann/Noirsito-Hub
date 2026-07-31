@@ -232,7 +232,7 @@ useSeoMeta({
 
       <!-- ROW 2: Full-Width 2-Line Hero Editorial Statement -->
       <section class="m5-statement-section">
-        <h1 class="m5-hero-statement font-display">
+        <h1 class="m5-hero-statement font-waverly">
           {{ project.heroStatement }}
         </h1>
       </section>
@@ -294,7 +294,12 @@ useSeoMeta({
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Abril+Fatface&family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap');
+
+/* Typography: Waverly Display Serif */
+.font-waverly {
+  font-family: 'Waverly', 'Waverly CF', 'Playfair Display', Georgia, serif !important;
+}
 
 /* Typography Pairing: Abril Fatface + Archivo */
 .font-display {
@@ -957,6 +962,7 @@ useSeoMeta({
 }
 
 .m5-hero-statement {
+  font-family: 'Waverly', 'Waverly CF', 'Playfair Display', Georgia, serif !important;
   font-size: clamp(2.4rem, 4.2vw, 3.6rem);
   line-height: 1.18;
   letter-spacing: -0.015em;

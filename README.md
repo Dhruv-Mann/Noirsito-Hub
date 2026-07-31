@@ -1,15 +1,14 @@
 # Noirsito Hub
 
-A minimalist, high-performance Hub website to showcase tech stack, engineering projects, and interactive system read pages.
+A minimalist, high-performance Hub website built to showcase my tech stack and engineering projects.
 
 ---
 
 ## 🎯 Purpose
 
-Noirsito Hub serves as a central engineering laboratory to showcase:
-- **Noirsito UI** — Minimalist Vue 3 & Nuxt 4 Component Registry & CLI.
-- **Filemind** — Autonomous Local File Intelligence Engine (Tauri v2, Rust, Ollama AI).
-- **Sentinel Vision** — Resume Intelligence & Real-Time Tracking Telemetry Platform (Next.js 16, Supabase RLS).
+Noirsito Hub serves as a central showcase for:
+- Demonstrating core technical stack proficiency.
+- Featuring interactive engineering project read pages, telemetry logs, and system architectures.
 
 ---
 
@@ -18,7 +17,7 @@ Noirsito Hub serves as a central engineering laboratory to showcase:
 - **Framework:** Nuxt 4 (v4.0+) / Nitro
 - **Core Library:** Vue 3 (Composition API)
 - **Language:** TypeScript 5
-- **Styling:** Vanilla CSS, Dynamic CSS Custom Properties, 5-Column Layout Modernism
+- **Styling:** Vanilla CSS, Dynamic Custom Color Themes, 5-Column Layout Modernism
 - **Typography:** Waverly Display Serif, Abril Fatface, Archivo, Fira Code
 - **Deployment:** Vercel
 

@@ -313,14 +313,14 @@ onBeforeUnmount(() => {
    ROOT: Matches home page pixel canvas base (#341514) + deep black
    ============================================================ */
 .tech-stack-showcase {
-  position: absolute;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
   /* Architectural Obsidian Dark Mode — Zero AI-slop glowing pink radial blobs */
   background: linear-gradient(160deg, #111215 0%, #090a0d 50%, #040507 100%);
   color: #FAFAFA;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
   z-index: 10;
   display: flex;
 }
@@ -368,45 +368,28 @@ onBeforeUnmount(() => {
 /* Main Stage Container */
 .stage-container {
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
+  height: auto;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   position: relative;
   z-index: 10;
 }
 
-/* Left Side Content Area */
+/* Left Side Content Area - Single Unified Page Scroll */
 .left-content-column {
   width: 48vw;
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 96px 48px 48px 64px;
+  padding: 110px 48px 80px 64px;
   z-index: 15;
   opacity: 0;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(174, 59, 139, 0.4) transparent;
+  overflow: visible;
   animation: content-immediate-fade 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.05s;
-}
-
-.left-content-column::-webkit-scrollbar {
-  width: 5px;
-}
-
-.left-content-column::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.left-content-column::-webkit-scrollbar-thumb {
-  background: rgba(174, 59, 139, 0.4);
-  border-radius: 3px;
-}
-
-.left-content-column::-webkit-scrollbar-thumb:hover {
-  background: rgba(174, 59, 139, 0.8);
 }
 
 /* Entrance animation */
@@ -598,7 +581,8 @@ onBeforeUnmount(() => {
   bottom: 0;
   width: 60vw;
   height: 100vh;
-  z-index: 20;
+  z-index: 5;
+  pointer-events: none;
   background: linear-gradient(155deg, rgba(255, 255, 255, 0.05) 0%, rgba(18, 19, 23, 0.98) 40%, rgba(6, 7, 9, 1) 100%);
   border-left: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: -20px 0 50px rgba(0, 0, 0, 0.7);

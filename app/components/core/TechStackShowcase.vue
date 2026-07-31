@@ -386,7 +386,27 @@ onBeforeUnmount(() => {
   padding: 96px 48px 48px 64px;
   z-index: 15;
   opacity: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(174, 59, 139, 0.4) transparent;
   animation: content-immediate-fade 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.05s;
+}
+
+.left-content-column::-webkit-scrollbar {
+  width: 5px;
+}
+
+.left-content-column::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.left-content-column::-webkit-scrollbar-thumb {
+  background: rgba(174, 59, 139, 0.4);
+  border-radius: 3px;
+}
+
+.left-content-column::-webkit-scrollbar-thumb:hover {
+  background: rgba(174, 59, 139, 0.8);
 }
 
 /* Entrance animation */
@@ -630,5 +650,29 @@ onBeforeUnmount(() => {
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.75rem;
   letter-spacing: 0.15em;
+}
+
+@media (max-width: 1024px) {
+  .tech-stack-showcase {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+  .stage-container {
+    flex-direction: column;
+  }
+  .left-content-column {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    padding: 96px 24px 48px 24px;
+    overflow-y: visible;
+  }
+  .fullscreen-slanted-sheet {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    clip-path: none !important;
+  }
 }
 </style>

@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import DynamicIslandNav from '~/components/core/DynamicIslandNav.vue'
 
 const route = useRoute()
 const router = useRouter()
 const projectId = computed(() => (route.params.id as string) || 'filemind')
+
+const isEntered = ref(false)
 
 // Listen for ESC key to navigate back to /projects
 function handleKeyDown(e: KeyboardEvent) {
@@ -16,6 +18,10 @@ function handleKeyDown(e: KeyboardEvent) {
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown)
+  // Trigger multi-segment entrance animation sequence smoothly after DOM paint
+  requestAnimationFrame(() => {
+    isEntered.value = true
+  })
 })
 
 onUnmounted(() => {
@@ -123,7 +129,10 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="project-showcase-page font-body select-none">
+  <div class="project-showcase-page font-body select-none" :class="{ 'is-entered': isEntered }">
+    <!-- Top Amber Shimmer Curtain Reveal Line -->
+    <div class="amber-shimmer-curtain" aria-hidden="true" />
+
     <!-- Dynamic Island Navigation Header -->
     <DynamicIslandNav active-tab="projects" />
 
@@ -281,6 +290,24 @@ useSeoMeta({
   overflow-x: hidden;
 }
 
+/* Ambient Top Shimmer Curtain Reveal */
+.amber-shimmer-curtain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #FAAA48 40%, #FFDDAC 50%, #FAAA48 60%, transparent);
+  z-index: 99;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.is-entered .amber-shimmer-curtain {
+  transform: scaleX(1);
+}
+
 .showcase-bg-layer {
   position: absolute;
   inset: 0;
@@ -298,7 +325,7 @@ useSeoMeta({
   padding: 0 24px;
 }
 
-/* Nav Bar */
+/* Segment 2: Nav Bar Entrance */
 .showcase-nav-bar {
   display: flex;
   align-items: center;
@@ -306,6 +333,15 @@ useSeoMeta({
   font-size: 0.76rem;
   font-weight: 700;
   margin-bottom: 2.5rem;
+  opacity: 0;
+  transform: translateY(-16px);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s,
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
+}
+
+.is-entered .showcase-nav-bar {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .showcase-back-link {
@@ -350,19 +386,43 @@ useSeoMeta({
   gap: 1rem;
 }
 
+/* Segment 3: Main Title Clip & 3D Blur Reveal */
 .showcase-main-title {
   font-size: clamp(2.8rem, 5vw, 4.2rem);
   color: #FAAA48;
   margin: 0;
   line-height: 1.05;
   letter-spacing: 0.01em;
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(28px) rotateX(10deg);
+  transform-origin: bottom center;
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.16s,
+              filter 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.16s,
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.16s;
 }
 
+.is-entered .showcase-main-title {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0) rotateX(0deg);
+}
+
+/* Segment 4: Subtitle & Abstract Paragraph */
 .showcase-subtitle {
   font-size: clamp(1.6rem, 3vw, 2.2rem);
   color: #D8BFD8;
   margin: 0;
   letter-spacing: 0em;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.26s,
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.26s;
+}
+
+.is-entered .showcase-subtitle {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .showcase-abstract {
@@ -370,9 +430,18 @@ useSeoMeta({
   line-height: 1.65;
   color: rgba(255, 221, 172, 0.9);
   margin: 0.4rem 0 0 0;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.34s,
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.34s;
 }
 
-/* Action Buttons (Solid Matte, Zero Glass, Zero Glow) */
+.is-entered .showcase-abstract {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Segment 5: Action Buttons (Solid Matte, Zero Glass, Zero Glow) */
 .showcase-actions-bar {
   display: flex;
   flex-wrap: wrap;
@@ -390,7 +459,20 @@ useSeoMeta({
   font-size: 0.8rem;
   font-weight: 700;
   text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translateY(14px) scale(0.96);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.showcase-actions-bar .solid-btn:nth-child(1) { transition-delay: 0.42s, 0.42s, 0s, 0s, 0s; }
+.showcase-actions-bar .solid-btn:nth-child(2) { transition-delay: 0.48s, 0.48s, 0s, 0s, 0s; }
+.showcase-actions-bar .solid-btn:nth-child(3) { transition-delay: 0.54s, 0.54s, 0s, 0s, 0s; }
+
+.is-entered .solid-btn {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .solid-btn.primary-btn {
@@ -428,19 +510,40 @@ useSeoMeta({
   color: #FAAA48;
 }
 
-/* Dividers */
+/* Dividers Stagger */
 .solid-divider {
   border: 0;
   height: 1px;
   background: rgba(250, 170, 72, 0.2);
   margin: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s;
 }
 
-/* Sections */
+.is-entered .solid-divider {
+  transform: scaleX(1);
+}
+
+/* Segment 6: Sections Stagger */
 .showcase-section {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.showcase-section:nth-of-type(1) { transition-delay: 0.52s; }
+.showcase-section:nth-of-type(2) { transition-delay: 0.63s; }
+.showcase-section:nth-of-type(3) { transition-delay: 0.74s; }
+.showcase-section:nth-of-type(4) { transition-delay: 0.85s; }
+
+.is-entered .showcase-section {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .section-tag-num {
@@ -469,7 +572,7 @@ useSeoMeta({
   margin: 0;
 }
 
-/* Minimal Telemetry Tiles Grid (Solid Surfaces, Zero Glass) */
+/* Segment 7: Telemetry Tiles Stagger (Solid Surfaces, Zero Glass) */
 .telemetry-specs-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -485,7 +588,21 @@ useSeoMeta({
   display: flex;
   flex-direction: column;
   gap: 6px;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease;
+}
+
+.telemetry-specs-grid .telemetry-tile:nth-child(1) { transition-delay: 0.76s, 0.76s, 0s; }
+.telemetry-specs-grid .telemetry-tile:nth-child(2) { transition-delay: 0.82s, 0.82s, 0s; }
+.telemetry-specs-grid .telemetry-tile:nth-child(3) { transition-delay: 0.88s, 0.88s, 0s; }
+.telemetry-specs-grid .telemetry-tile:nth-child(4) { transition-delay: 0.94s, 0.94s, 0s; }
+
+.is-entered .telemetry-tile {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .telemetry-tile:hover {

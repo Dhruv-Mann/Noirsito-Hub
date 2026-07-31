@@ -316,11 +316,10 @@ onBeforeUnmount(() => {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  /* Architectural Obsidian Dark Mode — Zero AI-slop glowing pink radial blobs */
+  /* Architectural Obsidian Dark Mode */
   background: linear-gradient(160deg, #111215 0%, #090a0d 50%, #040507 100%);
   color: #FAFAFA;
   overflow-x: hidden;
-  overflow-y: visible;
   z-index: 10;
   display: flex;
 }
@@ -365,11 +364,10 @@ onBeforeUnmount(() => {
   box-shadow: 0 0 24px rgba(255, 255, 255, 0.2);
 }
 
-/* Main Stage Container */
+/* Main Stage Container — stretches with content, no fixed height */
 .stage-container {
   width: 100%;
   min-height: 100vh;
-  height: auto;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -377,7 +375,7 @@ onBeforeUnmount(() => {
   z-index: 10;
 }
 
-/* Left Side Content Area - Single Unified Page Scroll */
+/* Left Content Area — grows with accordion items, no internal scroll */
 .left-content-column {
   width: 48vw;
   min-height: 100vh;
@@ -581,8 +579,7 @@ onBeforeUnmount(() => {
   bottom: 0;
   width: 60vw;
   height: 100vh;
-  z-index: 5;
-  pointer-events: none;
+  z-index: 20;
   background: linear-gradient(155deg, rgba(255, 255, 255, 0.05) 0%, rgba(18, 19, 23, 0.98) 40%, rgba(6, 7, 9, 1) 100%);
   border-left: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: -20px 0 50px rgba(0, 0, 0, 0.7);

@@ -18,6 +18,5 @@ useSeoMeta({
   width: 100%;
   min-height: 100vh;
   background-color: #050507;
-  overflow-x: hidden;
 }
 </style>

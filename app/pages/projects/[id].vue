@@ -41,103 +41,123 @@ interface ProjectDetail {
   architectureText: string
   image: string
   accentColor: string
-  secondaryAccent: string
-  proseColor: string
+  paperBg: string
   surfaceBg: string
-  pageBg: string
   githubUrl: string
   demoUrl?: string
   windowsUrl?: string
   macUrl?: string
   docsUrl?: string
   techStack: string[]
-  telemetry: { label: string; value: string }[]
+  col1Title: string
+  col1Text: string
+  col2Title: string
+  col2Text: string
+  col3Title: string
+  col3Text: string
+  col4Title: string
+  col4Text: string
+  heroStatement: string
+  metaYear: string
+  metaAuthor: string
+  metaTitle: string
 }
 
 const projectsData: Record<string, ProjectDetail> = {
   filemind: {
     id: 'filemind',
-    title: 'Download Filemind',
+    title: 'Filemind',
     subtitle: 'Local MCP Organizer',
-    tagline: 'A private, local-first desktop application that categorizes and organizes your Downloads directory (or any other specified directory) using embedded Ollama AI inference and real-time transaction undo capabilities.',
+    tagline: 'A private, local-first desktop application that categorizes and organizes your Downloads directory using embedded Ollama AI inference.',
     badge: 'LOCAL MCP ORGANIZER',
     status: 'PRODUCTION',
     category: 'AI / ML',
-    description: 'FileMind is engineered from the ground up for total privacy and zero-leak file context indexing. Operating directly on your local storage, it combines embedded vector embeddings with Ollama local inference to organize unstructured desktop data without transmitting a single byte to remote servers.',
-    architectureText: 'Powered by an asynchronous SQLite + Vector DB pipeline, FileMind creates instant local embeddings for your documents, code files, and downloads. Every automated file relocation is tracked in a local transaction log, allowing instant 1-click reversals.',
+    description: 'FileMind is engineered from the ground up for total privacy and zero-leak file context indexing. Operating directly on your local storage, it combines embedded vector embeddings with Ollama local inference.',
+    architectureText: 'Powered by an asynchronous SQLite + Vector DB pipeline, FileMind creates instant local embeddings for your documents. Every automated file relocation is logged for instant 1-click reversals.',
     image: '/filemind.png',
-    accentColor: '#34D399',
-    secondaryAccent: '#9CA3AF',
-    proseColor: '#E5E7EB',
-    surfaceBg: '#0F1713',
-    pageBg: '#08040B',
+    accentColor: '#00A19B',
+    paperBg: '#E4DDD3',
+    surfaceBg: '#080A0F',
     githubUrl: 'https://github.com/Dhruv-Mann/filemind',
     demoUrl: 'https://filemind.vercel.app/',
     windowsUrl: 'https://github.com/Dhruv-Mann/filemind/releases',
     macUrl: 'https://github.com/Dhruv-Mann/filemind/releases',
     docsUrl: 'https://github.com/Dhruv-Mann/filemind#readme',
     techStack: ['Tauri v2', 'Rust', 'React 18', 'Ollama AI', 'LanceDB', 'SQLite', 'MCP Protocol'],
-    telemetry: [
-      { label: 'INFERENCE ENGINE', value: 'Embedded Ollama (Local LLM)' },
-      { label: 'SEARCH LATENCY', value: '< 0.42ms Local Context Query' },
-      { label: 'PRIVACY GUARANTEE', value: '100% On-Device / Zero API Leaks' },
-      { label: 'TRANSACTION LOG', value: 'Real-time Reversible Undo' }
-    ]
+    col1Title: '[01] Purpose & Function',
+    col1Text: 'A private, local-first desktop application that automatically categorizes and organizes your Downloads directory using embedded Ollama AI inference with real-time reversible undo.',
+    col2Title: '[02] Architecture Stack',
+    col2Text: 'Tauri v2 • Rust • React 18 • Embedded Ollama LLM • LanceDB Vector Store • SQLite Transaction Log • MCP Protocol.',
+    col3Title: '[03] Zero-Leak Privacy',
+    col3Text: 'Engineered from the ground up for 100% on-device privacy. Operating directly on local storage, no file context ever leaves your machine.',
+    col4Title: '[04] SQLite Vector Log',
+    col4Text: 'Powered by an asynchronous SQLite + Vector DB pipeline, creating instant embeddings. Every automated relocation is logged for instant 1-click reversals.',
+    heroStatement: 'The ethos of FileMind is deeply rooted in local privacy and architectural speed, combining embedded vector search, local LLM inference, and zero remote server leaks.',
+    metaYear: '[2026]',
+    metaAuthor: 'Tauri v2 • Rust',
+    metaTitle: 'Desktop System App'
   },
   'sentinel-vision': {
     id: 'sentinel-vision',
     title: 'Sentinel Vision',
     subtitle: 'Resume Intelligence Platform',
-    tagline: 'Turn your resume into a data source. Track who is opening your resume, location hotspots, device types, reading duration, and trigger instant kill-switch link revocation with GDPR/CCPA privacy compliance.',
+    tagline: 'Turn your resume into a data source. Track who is opening your resume, location hotspots, device types, and reading duration.',
     badge: 'RESUME INTELLIGENCE',
     status: 'PRODUCTION',
     category: 'FULL STACK',
-    description: 'Sentinel Vision embeds invisible tracking telemetry into resume links. Job seekers gain real-time analytics on viewer identity, city/country location, device platform, and exact engagement duration without collecting raw PII or relying on invasive third-party ad scripts.',
-    architectureText: 'Built with Next.js 16 App Router, React 19, and Supabase PostgreSQL with Row-Level Security (RLS). Features IP anonymization (masked host octets), DNT/GPC opt-out detection, dynamic 1-7 month link expiration, and 1-click link termination.',
+    description: 'Sentinel Vision embeds invisible tracking telemetry into resume links. Job seekers gain real-time analytics on viewer identity, city/country location, and device platform without collecting raw PII.',
+    architectureText: 'Built with Next.js 16 App Router, React 19, and Supabase PostgreSQL with Row-Level Security (RLS). Features IP anonymization and dynamic link expiration.',
     image: '/Sentinel-Vision.png',
-    accentColor: '#38BDF8',
-    secondaryAccent: '#94A3B8',
-    proseColor: '#F1F5F9',
-    surfaceBg: '#0C141D',
-    pageBg: '#08040B',
+    accentColor: '#DC2626',
+    paperBg: '#FEE2E2',
+    surfaceBg: '#0F0A0B',
     githubUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision',
     demoUrl: 'https://sentinel-vision-five.vercel.app/',
     docsUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision#readme',
     techStack: ['Next.js 16', 'React 19', 'TypeScript 5', 'Supabase', 'PostgreSQL RLS', 'Tailwind CSS 4'],
-    telemetry: [
-      { label: 'GEO INTELLIGENCE', value: 'Real-Time Viewer City & Country' },
-      { label: 'PRIVACY & SECURITY', value: 'GDPR / CCPA Compliant + IP Masking' },
-      { label: 'ENGAGEMENT METRIC', value: 'Precise Time-On-Page Duration' },
-      { label: 'DATABASE & AUTH', value: 'Supabase PostgreSQL + RLS' },
-      { label: 'LINK KILL SWITCH', value: 'Instant One-Click Link Revocation' }
-    ]
+    col1Title: '[01] Purpose & Function',
+    col1Text: 'Turn your resume into an active data source. Track who is opening your resume, viewer location hotspots, device types, reading duration, and trigger instant 1-click link revocation.',
+    col2Title: '[02] Architecture Stack',
+    col2Text: 'Next.js 16 • React 19 • TypeScript 5 • Supabase PostgreSQL • Row-Level Security (RLS) • Tailwind CSS 4.',
+    col3Title: '[03] Privacy & Compliance',
+    col3Text: 'Built with IP anonymization (masked host octets), DNT/GPC opt-out detection, dynamic 1-7 month link expiration, and full GDPR/CCPA privacy compliance.',
+    col4Title: '[04] Link Kill Switch',
+    col4Text: 'Empowers job seekers with real-time viewer engagement analytics, country/city detection, and 1-click instant remote link termination.',
+    heroStatement: 'The ethos of Sentinel Vision is deeply rooted in applicant privacy and real-time link intelligence, transforming static resume documents into actionable telemetry.',
+    metaYear: '[2026]',
+    metaAuthor: 'Next.js 16 • Supabase',
+    metaTitle: 'Resume Intelligence Platform'
   },
   'noirsito-ui': {
     id: 'noirsito-ui',
     title: 'Noirsito UI',
     subtitle: 'Vue 3 & Nuxt 4 Component Registry & CLI',
-    tagline: 'A minimalist, high-performance Vue 3 & Nuxt 4 component registry built with mathematical precision, Golden Ratio typography, and direct local source code injection.',
+    tagline: 'A minimalist, high-performance Vue 3 & Nuxt 4 component registry built with mathematical precision and direct local source code injection.',
     badge: 'COMPONENT REGISTRY & CLI',
     status: 'PRODUCTION',
     category: 'FULL STACK',
-    description: 'Unlike traditional UI component libraries requiring heavy runtime dependencies, Noirsito UI provides zero-dependency Vue 3 Single File Components (SFCs) that you inject directly into your codebase via a single CLI command (`npx noirsito-ui add <component>`). You retain 100% code ownership with zero technical debt.',
-    architectureText: 'Built with Nuxt 4, Vue 3, and Tailwind CSS. Features direct DOM canvas interaction bypass for 60fps physics, strict layout containment (`contain: paint layout`), and automated component scaffolding.',
+    description: 'Unlike traditional UI component libraries requiring heavy runtime dependencies, Noirsito UI provides zero-dependency Vue 3 Single File Components (SFCs) injected directly into your codebase via CLI.',
+    architectureText: 'Built with Nuxt 4, Vue 3, and Tailwind CSS. Features direct DOM canvas interaction bypass for 60fps physics, strict layout containment, and automated component scaffolding.',
     image: '/Noirsito-UI.png',
-    accentColor: '#FAAA48',
-    secondaryAccent: '#D8BFD8',
-    proseColor: '#FFDDAC',
-    surfaceBg: '#150817',
-    pageBg: '#08040B',
+    accentColor: '#EA580C',
+    paperBg: '#FFEDD5',
+    surfaceBg: '#120905',
     githubUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI',
     demoUrl: 'https://noirsito-ui.vercel.app/',
     docsUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI#readme',
     techStack: ['Nuxt 4', 'Vue 3', 'TypeScript', 'Node CLI', 'Tailwind CSS'],
-    telemetry: [
-      { label: 'CLI DISTRIBUTION', value: 'npx noirsito-ui add <component>' },
-      { label: 'DOM PERFORMANCE', value: 'Direct DOM Bypass (60fps Physics)' },
-      { label: 'CSS CONTAINMENT', value: 'contain: paint layout (Zero Thrashing)' },
-      { label: 'DEPENDENCY FOOTPRINT', value: '0 Runtime Dependencies / Copy SFC' }
-    ]
+    col1Title: '[01] Purpose & Function',
+    col1Text: 'A minimalist, high-performance Vue 3 & Nuxt 4 component registry built with mathematical precision, Golden Ratio typography, and direct local source code injection.',
+    col2Title: '[02] Architecture Stack',
+    col2Text: 'Nuxt 4 • Vue 3 • TypeScript • Node CLI • Tailwind CSS • Direct DOM Bypass • Strict Layout Containment.',
+    col3Title: '[03] Zero Dependency Footprint',
+    col3Text: 'Unlike heavy runtime UI libraries, Noirsito UI provides zero-dependency Single File Components (SFCs) injected directly into your codebase via a single CLI command.',
+    col4Title: '[04] Direct CLI Scaffolding',
+    col4Text: 'Execute npx noirsito-ui add <component> to scaffold production-grade components while retaining 100% code ownership with zero technical debt.',
+    heroStatement: 'The ethos of Noirsito UI is deeply rooted in mathematical design precision, zero runtime dependencies, and instant CLI source code ownership.',
+    metaYear: '[2026]',
+    metaAuthor: 'Nuxt 4 • Vue 3',
+    metaTitle: 'Component Registry & CLI'
   }
 }
 
@@ -152,67 +172,62 @@ useSeoMeta({
 </script>
 
 <template>
-  <!-- 5 COLUMNS LAYOUT MODERNISM (SPECIAL READ PAGE FOR FILEMIND) -->
   <div
-    v-if="projectId === 'filemind'"
     class="modernist-5col-page font-body select-none"
     :class="{ 'is-entered': isEntered }"
+    :style="{
+      '--m5-paper-bg': project.paperBg,
+      '--m5-accent': project.accentColor,
+      '--m5-surface-bg': project.surfaceBg
+    }"
   >
-    <!-- Dynamic Island Navigation Header (Connected to Site Theme) -->
+    <!-- Dynamic Island Navigation Header -->
     <DynamicIslandNav
       active-tab="projects"
       is-read-page
-      accent-color="#00A19B"
-      surface-bg="#E4DDD3"
+      :accent-color="project.accentColor"
+      :surface-bg="project.paperBg"
     />
 
     <div class="m5-container">
       <!-- ROW 1: 4-Column Structured Header Row -->
       <header class="m5-grid m5-grid-4col m5-header-row">
-        <!-- Col 1 (First Place): Purpose & Function -->
+        <!-- Col 1: Purpose & Function -->
         <div class="m5-col">
-          <span class="m5-bracket-num font-body">[01] Purpose &amp; Function</span>
-          <p class="m5-para-text font-body">
-            A private, local-first desktop application that automatically categorizes and organizes your Downloads directory using embedded Ollama AI inference with real-time reversible undo.
-          </p>
+          <span class="m5-bracket-num font-body">{{ project.col1Title }}</span>
+          <p class="m5-para-text font-body">{{ project.col1Text }}</p>
         </div>
 
         <!-- Col 2: Architecture Stack -->
         <div class="m5-col">
-          <span class="m5-bracket-num font-body">[02] Architecture Stack</span>
-          <p class="m5-para-text font-body">
-            Tauri v2 • Rust • React 18 • Embedded Ollama LLM • LanceDB Vector Store • SQLite Transaction Log • MCP Protocol.
-          </p>
+          <span class="m5-bracket-num font-body">{{ project.col2Title }}</span>
+          <p class="m5-para-text font-body">{{ project.col2Text }}</p>
         </div>
 
-        <!-- Col 3: Zero-Leak Privacy -->
+        <!-- Col 3: Privacy & Special Feature -->
         <div class="m5-col">
-          <span class="m5-bracket-num font-body">[03] Zero-Leak Privacy</span>
-          <p class="m5-para-text font-body">
-            Engineered from the ground up for 100% on-device privacy. Operating directly on local storage, no file context ever leaves your machine.
-          </p>
+          <span class="m5-bracket-num font-body">{{ project.col3Title }}</span>
+          <p class="m5-para-text font-body">{{ project.col3Text }}</p>
         </div>
 
-        <!-- Col 4: SQLite Vector Log + Top Right Close Glyph -->
+        <!-- Col 4: Engine Spec + Return Link -->
         <div class="m5-col">
           <div class="m5-top-right-header">
-            <span class="m5-bracket-num font-body">[04] SQLite Vector Log</span>
+            <span class="m5-bracket-num font-body">{{ project.col4Title }}</span>
             <NuxtLink to="/projects" class="m5-close-glyph font-mono" title="Back to Projects">—</NuxtLink>
           </div>
-          <p class="m5-para-text font-body">
-            Powered by an asynchronous SQLite + Vector DB pipeline, creating instant embeddings. Every automated relocation is logged for instant 1-click reversals.
-          </p>
+          <p class="m5-para-text font-body">{{ project.col4Text }}</p>
         </div>
       </header>
 
-      <!-- ROW 2: Full-Width 2-Line Editorial Statement -->
+      <!-- ROW 2: Full-Width 2-Line Hero Editorial Statement -->
       <section class="m5-statement-section">
         <h1 class="m5-hero-statement font-display">
-          The ethos of FileMind is deeply rooted in local privacy and architectural speed, combining embedded vector search, local LLM inference, and zero remote server leaks.
+          {{ project.heroStatement }}
         </h1>
       </section>
 
-      <!-- ROW 3: Interactive Inner Banner Box (Filemind Screenshot + Same-Size Dithered Reveal) -->
+      <!-- ROW 3: Interactive Inner Banner Box (Project Screenshot + Same-Size Dithered Reveal) -->
       <section
         class="m5-interactive-box"
         :class="{ 'is-box-hovered': isFilemindImageHovered }"
@@ -223,12 +238,12 @@ useSeoMeta({
           <!-- Left Side: App Screenshot -->
           <div class="m5-box-left">
             <div class="m5-item-meta font-body">
-              <span class="m5-item-year">[2026]</span>
-              <span class="m5-item-author">Tauri v2 • Rust</span>
-              <span class="m5-item-title font-body">Desktop System App</span>
+              <span class="m5-item-year">{{ project.metaYear }}</span>
+              <span class="m5-item-author">{{ project.metaAuthor }}</span>
+              <span class="m5-item-title font-body">{{ project.metaTitle }}</span>
             </div>
             <div class="m5-app-screenshot-frame">
-              <img src="/filemind.png" alt="Filemind Desktop App Screenshot" class="m5-app-img" />
+              <img :src="project.image" :alt="project.title" class="m5-app-img" />
             </div>
           </div>
 
@@ -241,7 +256,7 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- ROW 4: Modernist Action Links & Tech Stack -->
+      <!-- ROW 4: Modernist Action Links -->
       <footer class="m5-footer-bar font-body">
         <div class="m5-actions-row">
           <a v-if="project.windowsUrl" :href="project.windowsUrl" target="_blank" rel="noopener" class="m5-action-btn">
@@ -256,170 +271,12 @@ useSeoMeta({
           <a :href="project.githubUrl" target="_blank" rel="noopener" class="m5-action-btn">
             [ GITHUB REPO ]
           </a>
+          <a v-if="project.docsUrl" :href="project.docsUrl" target="_blank" rel="noopener" class="m5-action-btn">
+            [ READ DOCS ]
+          </a>
         </div>
       </footer>
     </div>
-  </div>
-
-  <!-- STANDARD SHOWCASE FOR OTHER PROJECTS (Sentinel Vision & Noirsito UI) -->
-  <div
-    v-else
-    class="project-showcase-page font-body select-none"
-    :class="{ 'is-entered': isEntered }"
-    :style="{
-      '--project-accent': project.accentColor,
-      '--project-secondary': project.secondaryAccent,
-      '--project-prose': project.proseColor,
-      '--project-surface': project.surfaceBg,
-      '--project-page-bg': project.pageBg
-    }"
-  >
-    <!-- Top Signature Shimmer Curtain Reveal Line -->
-    <div class="amber-shimmer-curtain" aria-hidden="true" />
-
-    <!-- Dynamic Island Navigation Header -->
-    <DynamicIslandNav
-      active-tab="projects"
-      is-read-page
-      :accent-color="project.accentColor"
-      :surface-bg="project.surfaceBg"
-    />
-
-    <!-- Solid Deep Background -->
-    <div class="showcase-bg-layer" aria-hidden="true" />
-
-    <main class="showcase-container">
-      <!-- Top Navigation & Esc Hint Row -->
-      <header class="showcase-nav-bar font-mono">
-        <NuxtLink to="/projects" class="showcase-back-link">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2">
-            <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span>BACK TO PROJECTS</span>
-          <span class="esc-hint font-mono">[ESC]</span>
-        </NuxtLink>
-        <span class="showcase-badge-tag">{{ project.badge }}</span>
-      </header>
-
-      <!-- EXECUTIVE HERO HEADER (No Glass, No Neon) -->
-      <article class="showcase-article">
-        <header class="showcase-header">
-          <h1 class="showcase-main-title font-display">{{ project.title }}</h1>
-          <h2 class="showcase-subtitle font-display">{{ project.subtitle }}</h2>
-
-          <p class="showcase-abstract font-body">{{ project.tagline }}</p>
-
-          <!-- Solid Interactive Action Buttons (No Glass, No Glow) -->
-          <div class="showcase-actions-bar font-mono">
-            <a
-              v-if="project.demoUrl"
-              :href="project.demoUrl"
-              target="_blank"
-              rel="noopener"
-              class="solid-btn primary-btn"
-            >
-              <span>Live System Demo</span>
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-
-            <a
-              v-if="project.windowsUrl"
-              :href="project.windowsUrl"
-              target="_blank"
-              rel="noopener"
-              class="solid-btn secondary-btn"
-            >
-              <span>Download .exe</span>
-            </a>
-
-            <a
-              :href="project.githubUrl"
-              target="_blank"
-              rel="noopener"
-              class="solid-btn outline-btn"
-            >
-              <span>GitHub Repo</span>
-            </a>
-          </div>
-        </header>
-
-        <!-- HERO VISUAL SCREENSHOT BEZEL FRAME -->
-        <div v-if="project.image" class="hero-image-frame">
-          <div class="frame-header-bar font-mono">
-            <div class="frame-dots">
-              <span class="frame-dot red" />
-              <span class="frame-dot yellow" />
-              <span class="frame-dot green" />
-            </div>
-            <span class="frame-url-title">{{ project.id }}.system.app</span>
-            <span class="frame-status-badge">{{ project.status }}</span>
-          </div>
-          <div class="frame-image-wrapper">
-            <img :src="project.image" :alt="project.title" class="hero-project-img" />
-          </div>
-        </div>
-
-        <hr class="solid-divider" />
-
-        <!-- SECTION 01: OVERVIEW & LOCAL PRIVACY (Prose Style) -->
-        <section class="showcase-section">
-          <div class="section-tag-num font-mono">01 // OVERVIEW & LOCAL PRIVACY</div>
-          <h3 class="section-title-heading font-display">Zero-Leak Local Storage Engine</h3>
-          <div class="prose-content font-body">
-            <p>{{ project.description }}</p>
-          </div>
-        </section>
-
-        <hr class="solid-divider" />
-
-        <!-- SECTION 02: SYSTEM ARCHITECTURE & UNDO PIPELINE -->
-        <section class="showcase-section">
-          <div class="section-tag-num font-mono">02 // TRANSACTIONAL UNDO LOGS</div>
-          <h3 class="section-title-heading font-display">Asynchronous SQLite Vector Pipeline</h3>
-          <div class="prose-content font-body">
-            <p>{{ project.architectureText }}</p>
-          </div>
-        </section>
-
-        <hr class="solid-divider" />
-
-        <!-- SECTION 03: MINIMAL SPECS GRID (Catchy Minimal UI Components, No Glass) -->
-        <section class="showcase-section">
-          <div class="section-tag-num font-mono">03 // SYSTEM SPECIFICATIONS</div>
-          <h3 class="section-title-heading font-display">Technical Telemetry</h3>
-          
-          <div class="telemetry-specs-grid font-mono">
-            <div v-for="t in project.telemetry" :key="t.label" class="telemetry-tile">
-              <span class="tile-label">{{ t.label }}</span>
-              <span class="tile-value">{{ t.value }}</span>
-            </div>
-          </div>
-        </section>
-
-        <hr class="solid-divider" />
-
-        <!-- SECTION 04: TECH STACK & FOOTER -->
-        <section class="showcase-section showcase-footer-section">
-          <div class="stack-tags-row font-mono">
-            <span class="stack-title-label">TECH STACK:</span>
-            <div class="stack-pills">
-              <span v-for="t in project.techStack" :key="t" class="stack-pill-tag">{{ t }}</span>
-            </div>
-          </div>
-
-          <footer class="showcase-page-footer font-mono">
-            <span>Engineering Showcase • Dhruv Mann</span>
-            <div class="footer-nav-links">
-              <a :href="project.githubUrl" target="_blank" rel="noopener">GitHub</a>
-              <a v-if="project.docsUrl" :href="project.docsUrl" target="_blank" rel="noopener">Docs</a>
-              <NuxtLink to="/projects">Projects</NuxtLink>
-            </div>
-          </footer>
-        </section>
-      </article>
-    </main>
   </div>
 </template>
 
@@ -943,14 +800,14 @@ useSeoMeta({
 }
 
 /* ==========================================================================
-   5 COLUMNS LAYOUT MODERNISM (FILEMIND READ PAGE - #E4DDD3 & #00A19B TEAL)
+   5 COLUMNS LAYOUT MODERNISM (DATA-DRIVEN FOR ALL PROJECTS)
    ========================================================================== */
 .modernist-5col-page {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: #E4DDD3; /* Warm Paper Canvas Requested by User */
-  color: #1C1B18;       /* Deep Ink Typography */
+  background: var(--m5-paper-bg, #E4DDD3);
+  color: #1C1B18;
   padding-top: 100px;
   padding-bottom: 80px;
   overflow-x: hidden;
@@ -992,7 +849,7 @@ useSeoMeta({
 
 .m5-bracket-num {
   font-size: 0.85rem;
-  color: #00A19B; /* Vivid Teal Accent Requested by User */
+  color: var(--m5-accent, #00A19B);
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 700;
@@ -1002,7 +859,7 @@ useSeoMeta({
 .m5-para-text {
   font-size: 0.82rem;
   line-height: 1.6;
-  color: #4A4740; /* Readable Ink Text */
+  color: #4A4740;
   margin: 0;
 }
 
@@ -1015,7 +872,7 @@ useSeoMeta({
 
 .m5-close-glyph {
   font-size: 1.5rem;
-  color: #00A19B;
+  color: var(--m5-accent, #00A19B);
   text-decoration: none;
   line-height: 1;
   font-weight: 700;
@@ -1046,7 +903,7 @@ useSeoMeta({
   font-size: clamp(2.4rem, 4.2vw, 3.6rem);
   line-height: 1.18;
   letter-spacing: -0.015em;
-  color: #1C1B18; /* Deep Ink Title */
+  color: #1C1B18;
   font-weight: 400;
   margin: 0;
   width: 100%;
@@ -1070,8 +927,8 @@ useSeoMeta({
 
 .m5-box-inner {
   width: 100%;
-  background: #080A0F; /* Solid Dark Inner Banner Box */
-  border: 1px solid rgba(0, 161, 155, 0.35); /* Teal Accent Border */
+  background: var(--m5-surface-bg, #080A0F);
+  border: 1px solid var(--m5-accent, #00A19B);
   border-radius: 12px;
   padding: 28px 36px;
   display: flex;
@@ -1085,8 +942,8 @@ useSeoMeta({
 }
 
 .m5-interactive-box:hover .m5-box-inner {
-  border-color: #00A19B;
-  box-shadow: 0 20px 48px rgba(0, 161, 155, 0.2);
+  border-color: var(--m5-accent, #00A19B);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.25);
 }
 
 .m5-box-left {
@@ -1107,7 +964,7 @@ useSeoMeta({
 }
 
 .m5-item-year {
-  color: #00A19B;
+  color: var(--m5-accent, #00A19B);
   font-weight: 600;
 }
 
@@ -1151,7 +1008,7 @@ useSeoMeta({
 
 .m5-dither-reveal-frame {
   width: 100%;
-  height: 100%; /* Top to bottom fill inside black box */
+  height: 100%;
   background: transparent;
   display: flex;
   align-items: center;
@@ -1170,12 +1027,12 @@ useSeoMeta({
 }
 
 .m5-dither-img {
-  width: 100%;
   height: 100%;
-  object-fit: cover; /* Fills top to bottom seamlessly */
+  width: auto;
+  object-fit: contain;
   object-position: right center;
   display: block;
-  mix-blend-mode: lighten; /* Black BG disappears, particles blend seamlessly into dark box */
+  mix-blend-mode: lighten;
   filter: contrast(1.15) brightness(1.05);
 }
 
@@ -1205,7 +1062,7 @@ useSeoMeta({
 .m5-action-btn {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #00A19B;
+  color: var(--m5-accent, #00A19B);
   text-decoration: none;
   letter-spacing: 0.04em;
   transition: color 0.2s ease, transform 0.2s ease;

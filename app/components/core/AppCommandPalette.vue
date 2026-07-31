@@ -20,6 +20,20 @@ const searchQuery = ref('')
 const selectedIndex = ref(0)
 const copiedMessage = ref('')
 
+const projectThemes: Record<string, { accent: string; paperBg: string; surfaceBg: string }> = {
+  filemind: { accent: '#00A19B', paperBg: '#E4DDD3', surfaceBg: '#080A0F' },
+  'sentinel-vision': { accent: '#DC2626', paperBg: '#FEE2E2', surfaceBg: '#0F0A0B' },
+  'noirsito-ui': { accent: '#EA580C', paperBg: '#FFEDD5', surfaceBg: '#120905' }
+}
+
+const activeProjectTheme = computed(() => {
+  if (route.path.startsWith('/projects/')) {
+    const id = route.params.id as string
+    return projectThemes[id] || projectThemes['filemind']
+  }
+  return null
+})
+
 interface ActionItem {
   id: string
   title: string
@@ -261,7 +275,15 @@ onUnmounted(() => {
     <!-- Command Palette Modal -->
     <Transition name="palette-fade">
       <div v-if="isOpen" class="palette-backdrop" @click.self="isOpen = false">
-        <div class="palette-modal font-body">
+        <div
+          class="palette-modal font-body"
+          :class="{ 'custom-theme': !!activeProjectTheme }"
+          :style="activeProjectTheme ? {
+            '--cmd-accent': activeProjectTheme.accent,
+            '--cmd-paper-bg': activeProjectTheme.paperBg,
+            '--cmd-surface-bg': activeProjectTheme.surfaceBg
+          } : {}"
+        >
           <!-- Search Header -->
           <div class="palette-header">
             <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
@@ -694,5 +716,60 @@ onUnmounted(() => {
 .toast-fade-leave-to {
   opacity: 0;
   transform: translateY(10px);
+}
+
+/* ==========================================================================
+   Project Read Page Color-Coded Command Palette Theme
+   ========================================================================== */
+.palette-modal.custom-theme {
+  background: var(--cmd-surface-bg, #080A0F);
+  border: 1px solid var(--cmd-accent, #00A19B);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+}
+
+.palette-modal.custom-theme .palette-header {
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+.palette-modal.custom-theme .search-icon {
+  color: var(--cmd-accent, #00A19B);
+}
+
+.palette-modal.custom-theme .esc-badge {
+  border-color: var(--cmd-accent, #00A19B);
+  color: var(--cmd-accent, #00A19B);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.palette-modal.custom-theme .category-header {
+  color: var(--cmd-accent, #00A19B);
+  font-weight: 800;
+}
+
+.palette-modal.custom-theme .action-item.selected {
+  background: rgba(255, 255, 255, 0.08);
+  border-left-color: var(--cmd-accent, #00A19B);
+  color: #FFFFFF;
+}
+
+.palette-modal.custom-theme .action-icon {
+  color: var(--cmd-accent, #00A19B);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.palette-modal.custom-theme .action-item.selected .action-icon {
+  background: var(--cmd-accent, #00A19B);
+  color: #FFFFFF;
+}
+
+.palette-modal.custom-theme .copy-inline-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--cmd-accent, #00A19B);
+  color: var(--cmd-accent, #00A19B);
+}
+
+.palette-modal.custom-theme .copy-inline-btn:hover {
+  background: var(--cmd-accent, #00A19B);
+  color: #FFFFFF;
 }
 </style>

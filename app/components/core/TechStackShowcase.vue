@@ -313,13 +313,13 @@ onBeforeUnmount(() => {
    ROOT: Matches home page pixel canvas base (#341514) + deep black
    ============================================================ */
 .tech-stack-showcase {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  /* Architectural Obsidian Dark Mode */
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
   background: linear-gradient(160deg, #111215 0%, #090a0d 50%, #040507 100%);
   color: #FAFAFA;
-  overflow-x: hidden;
+  overflow: hidden;
   z-index: 10;
   display: flex;
 }
@@ -364,30 +364,38 @@ onBeforeUnmount(() => {
   box-shadow: 0 0 24px rgba(255, 255, 255, 0.2);
 }
 
-/* Main Stage Container — stretches with content, no fixed height */
+/* Main Stage Container */
 .stage-container {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   position: relative;
   z-index: 10;
 }
 
-/* Left Content Area — grows with accordion items, no internal scroll */
+/* Left Content Area — scrolls internally, no visible scrollbar */
 .left-content-column {
   width: 48vw;
-  min-height: 100vh;
-  height: auto;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 110px 48px 80px 64px;
+  padding: 96px 48px 48px 64px;
   z-index: 15;
   opacity: 0;
-  overflow: visible;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Hide scrollbar across all browsers */
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE/Edge */
   animation: content-immediate-fade 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.05s;
+}
+
+/* Hide webkit scrollbar (Chrome/Safari) */
+.left-content-column::-webkit-scrollbar {
+  display: none;
 }
 
 /* Entrance animation */

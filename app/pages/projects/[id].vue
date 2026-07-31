@@ -11,29 +11,6 @@ const isEntered = ref(false)
 const isFilemindImageHovered = ref(false)
 const activeMobileTab = ref<0 | 1 | 2 | 3>(0)
 
-// 3D Parallax Tilt state
-const tiltX = ref(0)
-const tiltY = ref(0)
-
-function handleBoxMouseMove(e: MouseEvent) {
-  const target = e.currentTarget as HTMLElement
-  if (!target) return
-  const rect = target.getBoundingClientRect()
-  const x = e.clientX - rect.left
-  const y = e.clientY - rect.top
-  const centerX = rect.width / 2
-  const centerY = rect.height / 2
-
-  tiltX.value = -((y - centerY) / centerY) * 7
-  tiltY.value = ((x - centerX) / centerX) * 9
-}
-
-function handleBoxMouseLeave() {
-  isFilemindImageHovered.value = false
-  tiltX.value = 0
-  tiltY.value = 0
-}
-
 // J / K Keyboard Navigation Loop
 const projectKeys = ['noirsito-ui', 'filemind', 'sentinel-vision'] as const
 
@@ -322,25 +299,14 @@ useSeoMeta({
         </h1>
       </section>
 
-      <!-- ROW 3: Interactive Inner Banner Box with 3D Parallax Tilt -->
+      <!-- ROW 3: Interactive Inner Banner Box -->
       <section
         class="m5-interactive-box"
         :class="{ 'is-box-hovered': isFilemindImageHovered }"
         @mouseenter="isFilemindImageHovered = true; triggerHaptic();"
-        @mousemove="handleBoxMouseMove"
-        @mouseleave="handleBoxMouseLeave"
+        @mouseleave="isFilemindImageHovered = false"
       >
-        <div
-          class="m5-box-inner"
-          :style="{
-            transform: isFilemindImageHovered
-              ? `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.01, 1.01, 1.01)`
-              : 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
-            transition: isFilemindImageHovered
-              ? 'transform 0.08s cubic-bezier(0.1, 1, 0.1, 1)'
-              : 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease'
-          }"
-        >
+        <div class="m5-box-inner">
           <!-- Left Side: App Screenshot -->
           <div class="m5-box-left">
             <div class="m5-item-meta font-body">

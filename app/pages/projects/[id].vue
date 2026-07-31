@@ -9,11 +9,69 @@ const projectId = computed(() => (route.params.id as string) || 'filemind')
 
 const isEntered = ref(false)
 const isFilemindImageHovered = ref(false)
+const activeMobileTab = ref<0 | 1 | 2 | 3>(0)
 
-// Listen for ESC key to navigate back to /projects
+// 3D Parallax Tilt state
+const tiltX = ref(0)
+const tiltY = ref(0)
+
+function handleBoxMouseMove(e: MouseEvent) {
+  const target = e.currentTarget as HTMLElement
+  if (!target) return
+  const rect = target.getBoundingClientRect()
+  const x = e.clientX - rect.left
+  const y = e.clientY - rect.top
+  const centerX = rect.width / 2
+  const centerY = rect.height / 2
+
+  tiltX.value = -((y - centerY) / centerY) * 7
+  tiltY.value = ((x - centerX) / centerX) * 9
+}
+
+function handleBoxMouseLeave() {
+  isFilemindImageHovered.value = false
+  tiltX.value = 0
+  tiltY.value = 0
+}
+
+// J / K Keyboard Navigation Loop
+const projectKeys = ['noirsito-ui', 'filemind', 'sentinel-vision'] as const
+
+const currentIndex = computed(() => {
+  const idx = projectKeys.indexOf(projectId.value as any)
+  return idx >= 0 ? idx : 1
+})
+
+const prevProject = computed(() => {
+  const prevIdx = (currentIndex.value - 1 + projectKeys.length) % projectKeys.length
+  return projectsData[projectKeys[prevIdx]]
+})
+
+const nextProject = computed(() => {
+  const nextIdx = (currentIndex.value + 1) % projectKeys.length
+  return projectsData[projectKeys[nextIdx]]
+})
+
+function triggerHaptic() {
+  if (typeof window !== 'undefined' && 'vibrate' in navigator) {
+    try {
+      navigator.vibrate(12)
+    } catch {}
+  }
+}
+
 function handleKeyDown(e: KeyboardEvent) {
+  if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
+
   if (e.key === 'Escape') {
+    triggerHaptic()
     router.push('/projects')
+  } else if (e.key.toLowerCase() === 'j') {
+    triggerHaptic()
+    router.push(`/projects/${prevProject.value.id}`)
+  } else if (e.key.toLowerCase() === 'k') {
+    triggerHaptic()
+    router.push(`/projects/${nextProject.value.id}`)
   }
 }
 
@@ -189,42 +247,69 @@ useSeoMeta({
     />
 
     <div class="m5-container">
-      <!-- TOP NAVIGATION BAR -->
+      <!-- TOP NAVIGATION BAR (With J/K Shortcuts & Return Button) -->
       <nav class="m5-top-nav font-mono">
-        <NuxtLink to="/projects" class="m5-back-nav-btn font-body">
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span>BACK TO PROJECTS</span>
-          <span class="m5-esc-hint font-mono">[ESC]</span>
-        </NuxtLink>
+        <div class="m5-top-nav-left">
+          <NuxtLink to="/projects" class="m5-back-nav-btn font-body" @click="triggerHaptic">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>BACK TO PROJECTS</span>
+            <span class="m5-esc-hint font-mono">[ESC]</span>
+          </NuxtLink>
+        </div>
+
+        <div class="m5-top-nav-right font-mono">
+          <NuxtLink :to="`/projects/${prevProject.id}`" class="m5-cycle-btn" @click="triggerHaptic" title="Press J for Previous Project">
+            <span class="m5-key-tag">[J]</span>
+            <span class="m5-cycle-label">← {{ prevProject.title }}</span>
+          </NuxtLink>
+          <span class="m5-nav-sep">•</span>
+          <NuxtLink :to="`/projects/${nextProject.id}`" class="m5-cycle-btn" @click="triggerHaptic" title="Press K for Next Project">
+            <span class="m5-cycle-label">{{ nextProject.title }} →</span>
+            <span class="m5-key-tag">[K]</span>
+          </NuxtLink>
+        </div>
       </nav>
+
+      <!-- MOBILE TABBED SELECTOR (< 768px viewports) -->
+      <div class="m5-mobile-tab-bar font-mono select-none">
+        <button
+          v-for="(title, i) in ['[01] Purpose', '[02] Stack', '[03] Privacy', '[04] Spec']"
+          :key="i"
+          class="m5-mobile-tab-btn"
+          :class="{ active: activeMobileTab === i }"
+          @click="activeMobileTab = i as 0|1|2|3; triggerHaptic();"
+        >
+          {{ title }}
+        </button>
+      </div>
 
       <!-- ROW 1: 4-Column Structured Header Row -->
       <header class="m5-grid m5-grid-4col m5-header-row">
         <!-- Col 1: Purpose & Function -->
-        <div class="m5-col">
+        <div class="m5-col" style="--col-index: 0;" :class="{ 'mobile-show': activeMobileTab === 0 }">
           <span class="m5-bracket-num font-body">{{ project.col1Title }}</span>
           <p class="m5-para-text font-body">{{ project.col1Text }}</p>
         </div>
 
         <!-- Col 2: Architecture Stack -->
-        <div class="m5-col">
+        <div class="m5-col" style="--col-index: 1;" :class="{ 'mobile-show': activeMobileTab === 1 }">
           <span class="m5-bracket-num font-body">{{ project.col2Title }}</span>
           <p class="m5-para-text font-body">{{ project.col2Text }}</p>
         </div>
 
         <!-- Col 3: Privacy & Special Feature -->
-        <div class="m5-col">
+        <div class="m5-col" style="--col-index: 2;" :class="{ 'mobile-show': activeMobileTab === 2 }">
           <span class="m5-bracket-num font-body">{{ project.col3Title }}</span>
           <p class="m5-para-text font-body">{{ project.col3Text }}</p>
         </div>
 
         <!-- Col 4: Engine Spec + Return Link -->
-        <div class="m5-col">
+        <div class="m5-col" style="--col-index: 3;" :class="{ 'mobile-show': activeMobileTab === 3 }">
           <div class="m5-top-right-header">
             <span class="m5-bracket-num font-body">{{ project.col4Title }}</span>
-            <NuxtLink to="/projects" class="m5-close-glyph font-mono" title="Back to Projects">—</NuxtLink>
+            <NuxtLink to="/projects" class="m5-close-glyph font-mono" title="Back to Projects" @click="triggerHaptic">—</NuxtLink>
           </div>
           <p class="m5-para-text font-body">{{ project.col4Text }}</p>
         </div>
@@ -237,14 +322,25 @@ useSeoMeta({
         </h1>
       </section>
 
-      <!-- ROW 3: Interactive Inner Banner Box (Project Screenshot + Same-Size Dithered Reveal) -->
+      <!-- ROW 3: Interactive Inner Banner Box with 3D Parallax Tilt -->
       <section
         class="m5-interactive-box"
         :class="{ 'is-box-hovered': isFilemindImageHovered }"
-        @mouseenter="isFilemindImageHovered = true"
-        @mouseleave="isFilemindImageHovered = false"
+        @mouseenter="isFilemindImageHovered = true; triggerHaptic();"
+        @mousemove="handleBoxMouseMove"
+        @mouseleave="handleBoxMouseLeave"
       >
-        <div class="m5-box-inner">
+        <div
+          class="m5-box-inner"
+          :style="{
+            transform: isFilemindImageHovered
+              ? `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.01, 1.01, 1.01)`
+              : 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
+            transition: isFilemindImageHovered
+              ? 'transform 0.08s cubic-bezier(0.1, 1, 0.1, 1)'
+              : 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease'
+          }"
+        >
           <!-- Left Side: App Screenshot -->
           <div class="m5-box-left">
             <div class="m5-item-meta font-body">
@@ -829,6 +925,7 @@ useSeoMeta({
   padding-top: 100px;
   padding-bottom: 80px;
   overflow-x: hidden;
+  transition: background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .m5-container {
@@ -856,6 +953,7 @@ useSeoMeta({
 .m5-top-nav {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: -1rem;
   opacity: 0;
   transform: translateY(-12px);
@@ -866,6 +964,12 @@ useSeoMeta({
 .is-entered .m5-top-nav {
   opacity: 1;
   transform: translateY(0);
+}
+
+.m5-top-nav-left, .m5-top-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .m5-back-nav-btn {
@@ -896,7 +1000,66 @@ useSeoMeta({
   margin-left: 2px;
 }
 
-/* Row 1 Header */
+.m5-cycle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1C1B18;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.m5-cycle-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(0, 0, 0, 0.08);
+  border-color: var(--m5-accent, #00A19B);
+  color: var(--m5-accent, #00A19B);
+}
+
+.m5-key-tag {
+  color: var(--m5-accent, #00A19B);
+  font-weight: 800;
+}
+
+.m5-nav-sep {
+  color: rgba(28, 27, 24, 0.3);
+}
+
+/* Mobile Tabbed Selector (< 768px) */
+.m5-mobile-tab-bar {
+  display: none;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.m5-mobile-tab-btn {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #1C1B18;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.m5-mobile-tab-btn.active {
+  background: var(--m5-accent, #00A19B);
+  border-color: var(--m5-accent, #00A19B);
+  color: #FFFFFF;
+}
+
+/* Row 1 Header & Staggered Column Animation */
 .m5-header-row {
   opacity: 0;
   transform: translateY(-16px);
@@ -904,7 +1067,16 @@ useSeoMeta({
               transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
 }
 
-.is-entered .m5-header-row {
+.m5-col {
+  opacity: 0;
+  transform: translateY(-12px);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(0.08s + var(--col-index, 0) * 0.07s);
+}
+
+.is-entered .m5-header-row,
+.is-entered .m5-col {
   opacity: 1;
   transform: translateY(0);
 }
@@ -1153,9 +1325,21 @@ useSeoMeta({
   .m5-grid-4col {
     grid-template-columns: 1fr;
   }
+  .m5-mobile-tab-bar {
+    display: flex;
+  }
+  .m5-top-nav-right {
+    font-size: 0.7rem;
+  }
   .m5-container {
     padding: 0 20px;
-    gap: 3rem;
+    gap: 2.5rem;
+  }
+  .m5-header-row .m5-col {
+    display: none;
+  }
+  .m5-header-row .m5-col.mobile-show {
+    display: block;
   }
 }
 </style>

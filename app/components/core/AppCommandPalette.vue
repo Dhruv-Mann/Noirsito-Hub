@@ -772,4 +772,18 @@ onUnmounted(() => {
   background: var(--cmd-accent, #00A19B);
   color: #FFFFFF;
 }
+
+.palette-modal.custom-theme .palette-body {
+  scrollbar-color: var(--cmd-accent, #00A19B) rgba(0, 0, 0, 0.2);
+}
+
+.palette-modal.custom-theme .palette-body::-webkit-scrollbar-thumb {
+  background: var(--cmd-accent, #00A19B);
+  border-radius: 4px;
+}
+
+.palette-modal.custom-theme .palette-body::-webkit-scrollbar-thumb:hover {
+  background: var(--cmd-accent, #00A19B);
+  filter: brightness(1.2);
+}
 </style>

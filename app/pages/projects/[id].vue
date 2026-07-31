@@ -39,6 +39,7 @@ function triggerHaptic() {
 
 function handleKeyDown(e: KeyboardEvent) {
   if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
+  if (e.metaKey || e.ctrlKey || e.altKey) return
 
   if (e.key === 'Escape') {
     triggerHaptic()

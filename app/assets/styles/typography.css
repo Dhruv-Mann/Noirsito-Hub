@@ -55,7 +55,7 @@ p, .body-text {
   font-family: var(--font-body);
   font-size: 1.125rem;
   line-height: 1.618; /* Golden Ratio vertical rhythm */
-  color: #E17888;
+  color: inherit;
   max-width: 58ch;
   text-wrap: pretty;
   font-optical-sizing: auto;
@@ -66,7 +66,8 @@ p, .body-text {
 .subtext {
   font-size: 1rem;
   line-height: 1.618;
-  color: rgba(225, 120, 136, 0.85);
+  color: inherit;
+  opacity: 0.85;
   text-wrap: pretty;
 }
 

@@ -6,6 +6,8 @@ import { usePageTransition } from '~/composables/usePageTransition'
 const props = defineProps<{
   activeTab?: 'home' | 'tech-stack' | 'projects'
   isReadPage?: boolean
+  accentColor?: string
+  surfaceBg?: string
 }>()
 
 const route = useRoute()
@@ -14,8 +16,19 @@ const { resetPinkSweep } = usePageTransition()
 
 const isHovered = ref(false)
 
-const isAmberTheme = computed(() => {
+const isProjectRead = computed(() => {
   return props.isReadPage || (route.path.startsWith('/projects/') && route.path !== '/projects')
+})
+
+const customIslandStyle = computed(() => {
+  if (!isProjectRead.value && !props.accentColor) return {}
+  const accent = props.accentColor || '#FAAA48'
+  const bg = props.surfaceBg || '#2F0F03'
+
+  return {
+    '--island-accent': accent,
+    '--island-bg': bg
+  }
 })
 
 const currentTitle = computed(() => {
@@ -51,7 +64,8 @@ function triggerCmdPalette() {
 <template>
   <div
     class="dynamic-island-wrapper font-mono select-none"
-    :class="{ expanded: isHovered, 'amber-theme': isAmberTheme }"
+    :class="{ expanded: isHovered, 'custom-theme': isProjectRead }"
+    :style="customIslandStyle"
     @mouseenter="isHovered = true"
     @mouseleave="isHovered = false"
   >
@@ -230,50 +244,50 @@ function triggerCmdPalette() {
 }
 
 /* ==========================================================================
-   Amber Read Detail Page Theme (#2F0F03, #FAAA48, #FFDDAC)
+   Dynamic Project Read Detail Page Theme (Solid OLED, No Glows)
    ========================================================================== */
-.dynamic-island-wrapper.amber-theme {
-  background: #2F0F03;
-  border-color: rgba(250, 170, 72, 0.45);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.85), 0 0 20px rgba(250, 170, 72, 0.25);
+.dynamic-island-wrapper.custom-theme {
+  background: var(--island-bg, #180A1A);
+  border: 1px solid var(--island-accent, #FAAA48);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
 }
 
-.dynamic-island-wrapper.amber-theme.expanded {
-  border-color: #FAAA48;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.95), 0 0 32px rgba(250, 170, 72, 0.4);
+.dynamic-island-wrapper.custom-theme.expanded {
+  border-color: var(--island-accent, #FAAA48);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.95);
 }
 
-.dynamic-island-wrapper.amber-theme .island-collapsed-content {
-  color: #FFDDAC;
+.dynamic-island-wrapper.custom-theme .island-collapsed-content {
+  color: var(--island-accent, #FFDDAC);
 }
 
-.dynamic-island-wrapper.amber-theme .pulse-dot {
-  background-color: #FAAA48;
-  box-shadow: 0 0 10px #FAAA48;
+.dynamic-island-wrapper.custom-theme .pulse-dot {
+  background-color: var(--island-accent, #FAAA48);
+  box-shadow: none;
 }
 
-.dynamic-island-wrapper.amber-theme .chevron-icon {
-  color: #FAAA48;
+.dynamic-island-wrapper.custom-theme .chevron-icon {
+  color: var(--island-accent, #FAAA48);
 }
 
-.dynamic-island-wrapper.amber-theme .island-nav-btn {
-  color: rgba(255, 221, 172, 0.75);
+.dynamic-island-wrapper.custom-theme .island-nav-btn {
+  color: rgba(255, 255, 255, 0.85);
 }
 
-.dynamic-island-wrapper.amber-theme .island-nav-btn:hover {
-  background: rgba(250, 170, 72, 0.2);
-  color: #FFDDAC;
-  border-color: rgba(250, 170, 72, 0.5);
+.dynamic-island-wrapper.custom-theme .island-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  border-color: var(--island-accent, #FAAA48);
 }
 
-.dynamic-island-wrapper.amber-theme .island-nav-btn.active {
-  background: #FAAA48;
-  border-color: #FAAA48;
-  color: #2F0F03;
+.dynamic-island-wrapper.custom-theme .island-nav-btn.active {
+  background: var(--island-accent, #FAAA48);
+  border-color: var(--island-accent, #FAAA48);
+  color: #08040B;
 }
 
-.dynamic-island-wrapper.amber-theme .btn-prefix {
-  color: #2F0F03;
+.dynamic-island-wrapper.custom-theme .btn-prefix {
+  color: inherit;
   opacity: 0.85;
 }
 </style>

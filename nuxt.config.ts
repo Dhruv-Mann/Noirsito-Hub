@@ -39,7 +39,7 @@ export default defineNuxtConfig({
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: 'Personal Operating System and Digital Hub of Dhruv Mann - AI Systems, Full-Stack Architecture, Research & Engineering Explorations.' },
-        { name: 'theme-color', content: '#341514' },
+        { name: 'theme-color', content: '#08040B' },
         { property: 'og:title', content: 'Dhruv Mann • Digital Hub & OS' },
         { property: 'og:description', content: 'Central operating system for AI projects, research, systems engineering, and design explorations.' },
         { property: 'og:type', content: 'website' }

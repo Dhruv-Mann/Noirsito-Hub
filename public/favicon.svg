@@ -1,6 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" rx="6" fill="#341514"/>
-  <rect width="30" height="30" x="1" y="1" rx="5" fill="none" stroke="rgba(225,120,136,0.3)"/>
-  <path d="M10 9h6c2.2 0 4 1.8 4 4s-1.8 4-4 4h-6V9z" fill="none" stroke="#AE3B8B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M10 17h6c2.2 0 4 1.8 4 4s-1.8 4-4 4h-6v-8z" fill="none" stroke="#E17888" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="amber-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FAAA48" />
+      <stop offset="100%" stop-color="#E3A008" />
+    </linearGradient>
+    <linearGradient id="cream-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFDDAC" />
+      <stop offset="100%" stop-color="#FAAA48" />
+    </linearGradient>
+  </defs>
+
+  <!-- OLED Dark Canvas with Subtle Amber Accent Border -->
+  <rect width="64" height="64" rx="14" fill="#08040B"/>
+  <rect width="62" height="62" x="1" y="1" rx="13" fill="none" stroke="#FAAA48" stroke-opacity="0.35" stroke-width="1.2"/>
+
+  <!-- Subtle Architectural Monogram "N" -->
+  <path d="M19 45V19" stroke="url(#amber-grad)" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M19 19L45 45" stroke="url(#cream-grad)" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M45 45V19" stroke="url(#amber-grad)" stroke-width="4.5" stroke-linecap="round"/>
+
+  <!-- Hub Telemetry Node Pulse Dot -->
+  <circle cx="45" cy="19" r="3.2" fill="#FAAA48"/>
 </svg>

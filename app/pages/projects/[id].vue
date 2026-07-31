@@ -38,6 +38,12 @@ interface ProjectDetail {
   category: string
   description: string
   architectureText: string
+  image: string
+  accentColor: string
+  secondaryAccent: string
+  proseColor: string
+  surfaceBg: string
+  pageBg: string
   githubUrl: string
   demoUrl?: string
   windowsUrl?: string
@@ -52,12 +58,18 @@ const projectsData: Record<string, ProjectDetail> = {
     id: 'filemind',
     title: 'Download Filemind',
     subtitle: 'Local MCP Organizer',
-    tagline: 'A private, local-first desktop application that categorizes and organizes your Downloads directory(or any other specified directory) using embedded Ollama AI inference and real-time transaction undo capabilities.',
+    tagline: 'A private, local-first desktop application that categorizes and organizes your Downloads directory (or any other specified directory) using embedded Ollama AI inference and real-time transaction undo capabilities.',
     badge: 'LOCAL MCP ORGANIZER',
     status: 'PRODUCTION',
     category: 'AI / ML',
     description: 'FileMind is engineered from the ground up for total privacy and zero-leak file context indexing. Operating directly on your local storage, it combines embedded vector embeddings with Ollama local inference to organize unstructured desktop data without transmitting a single byte to remote servers.',
     architectureText: 'Powered by an asynchronous SQLite + Vector DB pipeline, FileMind creates instant local embeddings for your documents, code files, and downloads. Every automated file relocation is tracked in a local transaction log, allowing instant 1-click reversals.',
+    image: '/filemind.png',
+    accentColor: '#34D399',
+    secondaryAccent: '#9CA3AF',
+    proseColor: '#E5E7EB',
+    surfaceBg: '#0F1713',
+    pageBg: '#08040B',
     githubUrl: 'https://github.com/Dhruv-Mann/filemind',
     demoUrl: 'https://filemind.vercel.app/',
     windowsUrl: 'https://github.com/Dhruv-Mann/filemind/releases',
@@ -82,6 +94,11 @@ const projectsData: Record<string, ProjectDetail> = {
     description: 'Sentinel Vision embeds invisible tracking telemetry into resume links. Job seekers gain real-time analytics on viewer identity, city/country location, device platform, and exact engagement duration without collecting raw PII or relying on invasive third-party ad scripts.',
     architectureText: 'Built with Next.js 16 App Router, React 19, and Supabase PostgreSQL with Row-Level Security (RLS). Features IP anonymization (masked host octets), DNT/GPC opt-out detection, dynamic 1-7 month link expiration, and 1-click link termination.',
     image: '/Sentinel-Vision.png',
+    accentColor: '#38BDF8',
+    secondaryAccent: '#94A3B8',
+    proseColor: '#F1F5F9',
+    surfaceBg: '#0C141D',
+    pageBg: '#08040B',
     githubUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision',
     demoUrl: 'https://sentinel-vision-five.vercel.app/',
     docsUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision#readme',
@@ -105,6 +122,11 @@ const projectsData: Record<string, ProjectDetail> = {
     description: 'Unlike traditional UI component libraries requiring heavy runtime dependencies, Noirsito UI provides zero-dependency Vue 3 Single File Components (SFCs) that you inject directly into your codebase via a single CLI command (`npx noirsito-ui add <component>`). You retain 100% code ownership with zero technical debt.',
     architectureText: 'Built with Nuxt 4, Vue 3, and Tailwind CSS. Features direct DOM canvas interaction bypass for 60fps physics, strict layout containment (`contain: paint layout`), and automated component scaffolding.',
     image: '/Noirsito-UI.png',
+    accentColor: '#FAAA48',
+    secondaryAccent: '#D8BFD8',
+    proseColor: '#FFDDAC',
+    surfaceBg: '#150817',
+    pageBg: '#08040B',
     githubUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI',
     demoUrl: 'https://noirsito-ui.vercel.app/',
     docsUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI#readme',
@@ -129,12 +151,27 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="project-showcase-page font-body select-none" :class="{ 'is-entered': isEntered }">
-    <!-- Top Amber Shimmer Curtain Reveal Line -->
+  <div
+    class="project-showcase-page font-body select-none"
+    :class="{ 'is-entered': isEntered }"
+    :style="{
+      '--project-accent': project.accentColor,
+      '--project-secondary': project.secondaryAccent,
+      '--project-prose': project.proseColor,
+      '--project-surface': project.surfaceBg,
+      '--project-page-bg': project.pageBg
+    }"
+  >
+    <!-- Top Signature Shimmer Curtain Reveal Line -->
     <div class="amber-shimmer-curtain" aria-hidden="true" />
 
     <!-- Dynamic Island Navigation Header -->
-    <DynamicIslandNav active-tab="projects" />
+    <DynamicIslandNav
+      active-tab="projects"
+      is-read-page
+      :accent-color="project.accentColor"
+      :surface-bg="project.surfaceBg"
+    />
 
     <!-- Solid Deep Background -->
     <div class="showcase-bg-layer" aria-hidden="true" />
@@ -163,26 +200,26 @@ useSeoMeta({
           <!-- Solid Interactive Action Buttons (No Glass, No Glow) -->
           <div class="showcase-actions-bar font-mono">
             <a
-              v-if="project.windowsUrl"
-              :href="project.windowsUrl"
+              v-if="project.demoUrl"
+              :href="project.demoUrl"
               target="_blank"
               rel="noopener"
               class="solid-btn primary-btn"
             >
-              <span>Download .exe (Windows)</span>
+              <span>Live System Demo</span>
               <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </a>
 
             <a
-              v-if="project.macUrl"
-              :href="project.macUrl"
+              v-if="project.windowsUrl"
+              :href="project.windowsUrl"
               target="_blank"
               rel="noopener"
               class="solid-btn secondary-btn"
             >
-              <span>Download .dmg (macOS)</span>
+              <span>Download .exe</span>
             </a>
 
             <a
@@ -195,6 +232,22 @@ useSeoMeta({
             </a>
           </div>
         </header>
+
+        <!-- HERO VISUAL SCREENSHOT BEZEL FRAME -->
+        <div v-if="project.image" class="hero-image-frame">
+          <div class="frame-header-bar font-mono">
+            <div class="frame-dots">
+              <span class="frame-dot red" />
+              <span class="frame-dot yellow" />
+              <span class="frame-dot green" />
+            </div>
+            <span class="frame-url-title">{{ project.id }}.system.app</span>
+            <span class="frame-status-badge">{{ project.status }}</span>
+          </div>
+          <div class="frame-image-wrapper">
+            <img :src="project.image" :alt="project.title" class="hero-project-img" />
+          </div>
+        </div>
 
         <hr class="solid-divider" />
 
@@ -283,8 +336,8 @@ useSeoMeta({
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: #08040B;
-  color: #FFDDAC;
+  background: var(--project-page-bg, #08040B);
+  color: var(--project-prose, #FFDDAC);
   padding-top: 100px;
   padding-bottom: 80px;
   overflow-x: hidden;
@@ -297,7 +350,7 @@ useSeoMeta({
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #FAAA48 40%, #FFDDAC 50%, #FAAA48 60%, transparent);
+  background: linear-gradient(90deg, transparent, var(--project-accent, #FAAA48) 40%, #FFDDAC 50%, var(--project-accent, #FAAA48) 60%, transparent);
   z-index: 99;
   transform: scaleX(0);
   transform-origin: center;
@@ -311,7 +364,7 @@ useSeoMeta({
 .showcase-bg-layer {
   position: absolute;
   inset: 0;
-  background: #08040B;
+  background: var(--project-page-bg, #08040B);
   pointer-events: none;
   z-index: 1;
 }
@@ -348,26 +401,27 @@ useSeoMeta({
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #FAAA48;
+  color: var(--project-accent, #FAAA48);
   text-decoration: none;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .showcase-back-link:hover {
-  color: #FFDDAC;
+  color: var(--project-prose, #FFDDAC);
   transform: translateX(-3px);
 }
 
 .esc-hint {
   font-size: 0.65rem;
-  color: rgba(255, 221, 172, 0.45);
+  color: var(--project-secondary, #D8BFD8);
+  opacity: 0.6;
   margin-left: 4px;
 }
 
 .showcase-badge-tag {
-  background: #150817;
-  border: 1px solid #FAAA48;
-  color: #FFDDAC;
+  background: var(--project-surface, #150817);
+  border: 1px solid var(--project-accent, #FAAA48);
+  color: var(--project-prose, #FFDDAC);
   padding: 4px 12px;
   border-radius: 4px;
   letter-spacing: 0.08em;
@@ -389,7 +443,7 @@ useSeoMeta({
 /* Segment 3: Main Title Clip & 3D Blur Reveal */
 .showcase-main-title {
   font-size: clamp(2.8rem, 5vw, 4.2rem);
-  color: #FAAA48;
+  color: var(--project-accent, #FAAA48);
   margin: 0;
   line-height: 1.05;
   letter-spacing: 0.01em;
@@ -408,10 +462,90 @@ useSeoMeta({
   transform: translateY(0) rotateX(0deg);
 }
 
+/* Hero Visual Screenshot Bezel Frame */
+.hero-image-frame {
+  margin-top: 1rem;
+  border-radius: 12px;
+  background: var(--project-surface, #0E050D);
+  border: 1px solid var(--project-accent, #FAAA48);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7), 0 0 24px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(22px) scale(0.98);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.38s,
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.38s,
+              border-color 0.3s ease;
+}
+
+.is-entered .hero-image-frame {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.frame-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--project-surface, rgba(14, 5, 13, 0.95));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.frame-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.frame-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+.frame-dot.red { background: #FF5F56; }
+.frame-dot.yellow { background: #FFBD2E; }
+.frame-dot.green { background: #27C93F; }
+
+.frame-url-title {
+  font-size: 0.7rem;
+  color: var(--project-accent, #FAAA48);
+  letter-spacing: 0.08em;
+}
+
+.frame-status-badge {
+  font-size: 0.62rem;
+  color: var(--project-prose, #FFDDAC);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+}
+
+.frame-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--project-surface, #050206);
+  overflow: hidden;
+}
+
+.hero-project-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-image-frame:hover .hero-project-img {
+  transform: scale(1.02);
+}
+
+/* Segment 4: Subtitle & Abstract Paragraph */
 /* Segment 4: Subtitle & Abstract Paragraph */
 .showcase-subtitle {
   font-size: clamp(1.6rem, 3vw, 2.2rem);
-  color: #D8BFD8;
+  color: var(--project-secondary, #D8BFD8);
   margin: 0;
   letter-spacing: 0em;
   opacity: 0;
@@ -428,7 +562,7 @@ useSeoMeta({
 .showcase-abstract {
   font-size: 1.12rem;
   line-height: 1.65;
-  color: rgba(255, 221, 172, 0.9);
+  color: var(--project-prose, rgba(255, 221, 172, 0.9)) !important;
   margin: 0.4rem 0 0 0;
   opacity: 0;
   transform: translateY(18px);
@@ -476,45 +610,45 @@ useSeoMeta({
 }
 
 .solid-btn.primary-btn {
-  background: #FAAA48;
+  background: var(--project-accent, #FAAA48);
   color: #08040B;
-  border: 1px solid #FAAA48;
+  border: 1px solid var(--project-accent, #FAAA48);
 }
 
 .solid-btn.primary-btn:hover {
-  background: #FFDDAC;
-  border-color: #FFDDAC;
+  background: #FFFFFF;
+  border-color: #FFFFFF;
   transform: translateY(-2px);
 }
 
 .solid-btn.secondary-btn {
-  background: #180A1A;
-  border: 1px solid #D8BFD8;
-  color: #D8BFD8;
+  background: var(--project-surface, #180A1A);
+  border: 1px solid var(--project-secondary, #D8BFD8);
+  color: var(--project-secondary, #D8BFD8);
 }
 
 .solid-btn.secondary-btn:hover {
-  background: #240E27;
-  color: #FFDDAC;
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
   transform: translateY(-2px);
 }
 
 .solid-btn.outline-btn {
   background: transparent;
-  border: 1px solid rgba(255, 221, 172, 0.3);
-  color: #FFDDAC;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--project-prose, #FFDDAC);
 }
 
 .solid-btn.outline-btn:hover {
-  border-color: #FAAA48;
-  color: #FAAA48;
+  border-color: var(--project-accent, #FAAA48);
+  color: var(--project-accent, #FAAA48);
 }
 
 /* Dividers Stagger */
 .solid-divider {
   border: 0;
   height: 1px;
-  background: rgba(250, 170, 72, 0.2);
+  background: rgba(255, 255, 255, 0.12);
   margin: 0;
   transform: scaleX(0);
   transform-origin: left center;
@@ -549,27 +683,38 @@ useSeoMeta({
 .section-tag-num {
   font-size: 0.72rem;
   font-weight: 800;
-  color: #FAAA48;
+  color: var(--project-accent, #FAAA48);
   letter-spacing: 0.14em;
 }
 
 .section-title-heading {
   font-size: 2rem;
-  color: #FFDDAC;
+  color: var(--project-prose, #FFDDAC);
   margin: 0;
 }
 
 .prose-content {
   font-size: 1.05rem;
   line-height: 1.7;
-  color: rgba(255, 221, 172, 0.88);
-  border-left: 2px solid #FAAA48;
+  color: var(--project-prose, rgba(255, 221, 172, 0.88));
+  border-left: 2px solid var(--project-accent, #FAAA48);
   padding-left: 1.4rem;
   margin-top: 0.4rem;
 }
 
 .prose-content p {
   margin: 0;
+  color: var(--project-prose, rgba(255, 221, 172, 0.88)) !important;
+}
+
+.prose-content p::first-letter {
+  font-family: 'Abril Fatface', Georgia, serif;
+  font-size: 2.7rem;
+  line-height: 0.85;
+  float: left;
+  margin-right: 0.6rem;
+  margin-top: 0.1rem;
+  color: var(--project-accent, #FAAA48);
 }
 
 /* Segment 7: Telemetry Tiles Stagger (Solid Surfaces, Zero Glass) */
@@ -581,8 +726,8 @@ useSeoMeta({
 }
 
 .telemetry-tile {
-  background: #120713;
-  border: 1px solid rgba(250, 170, 72, 0.25);
+  background: var(--project-surface, #120713);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   padding: 16px 18px;
   display: flex;
@@ -607,20 +752,20 @@ useSeoMeta({
 
 .telemetry-tile:hover {
   transform: translateY(-2px);
-  border-color: #FAAA48;
+  border-color: var(--project-accent, #FAAA48);
 }
 
 .tile-label {
   font-size: 0.65rem;
   font-weight: 800;
-  color: #D8BFD8;
+  color: var(--project-secondary, #D8BFD8);
   letter-spacing: 0.1em;
 }
 
 .tile-value {
   font-size: 0.88rem;
   font-weight: 700;
-  color: #FFDDAC;
+  color: var(--project-prose, #FFDDAC);
   font-variant-numeric: tabular-nums;
 }
 
@@ -640,7 +785,7 @@ useSeoMeta({
 .stack-title-label {
   font-size: 0.72rem;
   font-weight: 800;
-  color: #D8BFD8;
+  color: var(--project-secondary, #D8BFD8);
 }
 
 .stack-pills {
@@ -650,9 +795,9 @@ useSeoMeta({
 }
 
 .stack-pill-tag {
-  background: #180A1A;
-  border: 1px solid rgba(216, 191, 216, 0.35);
-  color: #FFDDAC;
+  background: var(--project-surface, #180A1A);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--project-prose, #FFDDAC);
   font-size: 0.72rem;
   font-weight: 600;
   padding: 4px 12px;
@@ -664,8 +809,8 @@ useSeoMeta({
   align-items: center;
   justify-content: space-between;
   font-size: 0.72rem;
-  color: rgba(255, 221, 172, 0.5);
-  border-top: 1px solid rgba(250, 170, 72, 0.18);
+  color: var(--project-secondary, rgba(255, 221, 172, 0.5));
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
   padding-top: 20px;
 }
 
@@ -676,12 +821,12 @@ useSeoMeta({
 }
 
 .footer-nav-links a {
-  color: #FAAA48;
+  color: var(--project-accent, #FAAA48);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .footer-nav-links a:hover {
-  color: #FFDDAC;
+  color: var(--project-prose, #FFDDAC);
 }
 </style>

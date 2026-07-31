@@ -55,6 +55,10 @@ function handleKeyDown(e: KeyboardEvent) {
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown)
+  if (typeof document !== 'undefined') {
+    document.documentElement.style.overflow = 'auto'
+    document.body.style.overflow = 'auto'
+  }
   setTimeout(() => {
     isEntered.value = true
   }, 50)
@@ -62,6 +66,10 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown)
+  if (typeof document !== 'undefined') {
+    document.documentElement.style.overflow = ''
+    document.body.style.overflow = ''
+  }
 })
 
 interface ProjectDetail {

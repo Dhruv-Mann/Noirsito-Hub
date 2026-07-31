@@ -29,6 +29,19 @@ const isDragging = ref(false)
 
 const projects: Project[] = [
   {
+    id: 'noirsito-ui',
+    title: 'Noirsito UI',
+    subtitle: 'Minimalist Vue 3 & Nuxt 4 Component Registry & CLI',
+    status: 'PRODUCTION',
+    category: 'FULL STACK',
+    description: 'Zero-dependency Vue 3 component registry and direct CLI tool that injects raw TypeScript components into your codebase.',
+    techStack: ['Nuxt 4', 'Vue 3', 'TypeScript', 'Node CLI', 'Tailwind CSS'],
+    githubUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI',
+    demoUrl: 'https://noirsito-ui.vercel.app/',
+    telemetryBadge: 'COMPONENT REGISTRY & CLI',
+    image: '/Noirsito-UI.png'
+  },
+  {
     id: 'filemind',
     title: 'Filemind',
     subtitle: 'Autonomous Local File Intelligence & Context Engine',
@@ -53,19 +66,6 @@ const projects: Project[] = [
     demoUrl: 'https://sentinel-vision-five.vercel.app/',
     telemetryBadge: 'RESUME INTELLIGENCE',
     image: '/Sentinel-Vision.png'
-  },
-  {
-    id: 'noirsito-ui',
-    title: 'Noirsito UI',
-    subtitle: 'Minimalist Vue 3 & Nuxt 4 Component Registry & CLI',
-    status: 'PRODUCTION',
-    category: 'FULL STACK',
-    description: 'Zero-dependency Vue 3 component registry and direct CLI tool that injects raw TypeScript components into your codebase.',
-    techStack: ['Nuxt 4', 'Vue 3', 'TypeScript', 'Node CLI', 'Tailwind CSS'],
-    githubUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI',
-    demoUrl: 'https://noirsito-ui.vercel.app/',
-    telemetryBadge: 'COMPONENT REGISTRY & CLI',
-    image: '/Noirsito-UI.png'
   }
 ]
 

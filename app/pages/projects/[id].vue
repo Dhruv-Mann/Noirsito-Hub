@@ -19,10 +19,9 @@ function handleKeyDown(e: KeyboardEvent) {
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown)
-  // Trigger multi-segment entrance animation sequence smoothly after DOM paint
-  requestAnimationFrame(() => {
+  setTimeout(() => {
     isEntered.value = true
-  })
+  }, 50)
 })
 
 onUnmounted(() => {
@@ -190,6 +189,17 @@ useSeoMeta({
     />
 
     <div class="m5-container">
+      <!-- TOP NAVIGATION BAR -->
+      <nav class="m5-top-nav font-mono">
+        <NuxtLink to="/projects" class="m5-back-nav-btn font-body">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>BACK TO PROJECTS</span>
+          <span class="m5-esc-hint font-mono">[ESC]</span>
+        </NuxtLink>
+      </nav>
+
       <!-- ROW 1: 4-Column Structured Header Row -->
       <header class="m5-grid m5-grid-4col m5-header-row">
         <!-- Col 1: Purpose & Function -->
@@ -259,6 +269,9 @@ useSeoMeta({
       <!-- ROW 4: Modernist Action Links -->
       <footer class="m5-footer-bar font-body">
         <div class="m5-actions-row">
+          <NuxtLink to="/projects" class="m5-action-btn m5-action-back font-body">
+            [ ← BACK TO PROJECTS ]
+          </NuxtLink>
           <a v-if="project.windowsUrl" :href="project.windowsUrl" target="_blank" rel="noopener" class="m5-action-btn">
             [ DOWNLOAD .EXE ]
           </a>
@@ -832,6 +845,50 @@ useSeoMeta({
 .m5-grid-4col {
   grid-template-columns: repeat(4, 1fr);
   gap: 32px;
+}
+
+/* Top Navigation Bar */
+.m5-top-nav {
+  display: flex;
+  align-items: center;
+  margin-bottom: -1rem;
+  opacity: 0;
+  transform: translateY(-12px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.is-entered .m5-top-nav {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.m5-back-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--m5-accent, #00A19B);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.m5-back-nav-btn:hover {
+  transform: translateX(-3px);
+  background: rgba(0, 0, 0, 0.08);
+  border-color: var(--m5-accent, #00A19B);
+}
+
+.m5-esc-hint {
+  font-size: 0.7rem;
+  opacity: 0.65;
+  margin-left: 2px;
 }
 
 /* Row 1 Header */

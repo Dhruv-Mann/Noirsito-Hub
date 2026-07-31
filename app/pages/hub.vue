@@ -2,8 +2,8 @@
 import TechStackShowcase from '~/components/core/TechStackShowcase.vue'
 
 useSeoMeta({
-  title: 'Dhruv Mann • Hub OS & System Architecture',
-  description: 'Explore the projects, architecture, and personal operating system of Dhruv Mann.'
+  title: 'Dhruv Mann • Hub & System Architecture',
+  description: 'Explore the projects, architecture, and tech stack of Dhruv Mann.'
 })
 </script>
 

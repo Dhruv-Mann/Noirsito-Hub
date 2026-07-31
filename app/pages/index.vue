@@ -6,8 +6,8 @@ import { useSystemState } from '~/composables/useSystemState'
 const { isStarted } = useSystemState()
 
 useSeoMeta({
-  title: 'Dhruv Mann • Digital Hub & OS',
-  description: 'Personal digital operating system of Dhruv Mann.'
+  title: 'Dhruv Mann • Digital Hub',
+  description: 'Personal digital hub of Dhruv Mann.'
 })
 </script>
 

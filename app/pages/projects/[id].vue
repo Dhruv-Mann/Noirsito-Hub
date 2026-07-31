@@ -8,6 +8,7 @@ const router = useRouter()
 const projectId = computed(() => (route.params.id as string) || 'filemind')
 
 const isEntered = ref(false)
+const isFilemindImageHovered = ref(false)
 
 // Listen for ESC key to navigate back to /projects
 function handleKeyDown(e: KeyboardEvent) {
@@ -151,7 +152,118 @@ useSeoMeta({
 </script>
 
 <template>
+  <!-- 5 COLUMNS LAYOUT MODERNISM (SPECIAL READ PAGE FOR FILEMIND) -->
   <div
+    v-if="projectId === 'filemind'"
+    class="modernist-5col-page font-body select-none"
+    :class="{ 'is-entered': isEntered }"
+  >
+    <!-- Dynamic Island Navigation Header (Connected to Site Theme) -->
+    <DynamicIslandNav
+      active-tab="projects"
+      is-read-page
+      accent-color="#00A19B"
+      surface-bg="#E4DDD3"
+    />
+
+    <div class="m5-container">
+      <!-- ROW 1: 4-Column Structured Header Row -->
+      <header class="m5-grid m5-grid-4col m5-header-row">
+        <!-- Col 1 (First Place): Purpose & Function -->
+        <div class="m5-col">
+          <span class="m5-bracket-num font-body">[01] Purpose &amp; Function</span>
+          <p class="m5-para-text font-body">
+            A private, local-first desktop application that automatically categorizes and organizes your Downloads directory using embedded Ollama AI inference with real-time reversible undo.
+          </p>
+        </div>
+
+        <!-- Col 2: Architecture Stack -->
+        <div class="m5-col">
+          <span class="m5-bracket-num font-body">[02] Architecture Stack</span>
+          <p class="m5-para-text font-body">
+            Tauri v2 • Rust • React 18 • Embedded Ollama LLM • LanceDB Vector Store • SQLite Transaction Log • MCP Protocol.
+          </p>
+        </div>
+
+        <!-- Col 3: Zero-Leak Privacy -->
+        <div class="m5-col">
+          <span class="m5-bracket-num font-body">[03] Zero-Leak Privacy</span>
+          <p class="m5-para-text font-body">
+            Engineered from the ground up for 100% on-device privacy. Operating directly on local storage, no file context ever leaves your machine.
+          </p>
+        </div>
+
+        <!-- Col 4: SQLite Vector Log + Top Right Close Glyph -->
+        <div class="m5-col">
+          <div class="m5-top-right-header">
+            <span class="m5-bracket-num font-body">[04] SQLite Vector Log</span>
+            <NuxtLink to="/projects" class="m5-close-glyph font-mono" title="Back to Projects">—</NuxtLink>
+          </div>
+          <p class="m5-para-text font-body">
+            Powered by an asynchronous SQLite + Vector DB pipeline, creating instant embeddings. Every automated relocation is logged for instant 1-click reversals.
+          </p>
+        </div>
+      </header>
+
+      <!-- ROW 2: Full-Width 2-Line Editorial Statement -->
+      <section class="m5-statement-section">
+        <h1 class="m5-hero-statement font-display">
+          The ethos of FileMind is deeply rooted in local privacy and architectural speed, combining embedded vector search, local LLM inference, and zero remote server leaks.
+        </h1>
+      </section>
+
+      <!-- ROW 3: Interactive Inner Banner Box (Filemind Screenshot + Same-Size Dithered Reveal) -->
+      <section
+        class="m5-interactive-box"
+        :class="{ 'is-box-hovered': isFilemindImageHovered }"
+        @mouseenter="isFilemindImageHovered = true"
+        @mouseleave="isFilemindImageHovered = false"
+      >
+        <div class="m5-box-inner">
+          <!-- Left Side: App Screenshot -->
+          <div class="m5-box-left">
+            <div class="m5-item-meta font-body">
+              <span class="m5-item-year">[2026]</span>
+              <span class="m5-item-author">Tauri v2 • Rust</span>
+              <span class="m5-item-title font-body">Desktop System App</span>
+            </div>
+            <div class="m5-app-screenshot-frame">
+              <img src="/filemind.png" alt="Filemind Desktop App Screenshot" class="m5-app-img" />
+            </div>
+          </div>
+
+          <!-- Right Side: Same-Size Dithered Image Reveal -->
+          <div class="m5-box-right" aria-hidden="true">
+            <div class="m5-dither-reveal-frame">
+              <img src="/dithered2.png" alt="Dithered Reveal Asset" class="m5-dither-img" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROW 4: Modernist Action Links & Tech Stack -->
+      <footer class="m5-footer-bar font-body">
+        <div class="m5-actions-row">
+          <a v-if="project.windowsUrl" :href="project.windowsUrl" target="_blank" rel="noopener" class="m5-action-btn">
+            [ DOWNLOAD .EXE ]
+          </a>
+          <a v-if="project.macUrl" :href="project.macUrl" target="_blank" rel="noopener" class="m5-action-btn">
+            [ DOWNLOAD .DMG ]
+          </a>
+          <a v-if="project.demoUrl" :href="project.demoUrl" target="_blank" rel="noopener" class="m5-action-btn">
+            [ LIVE DEMO ]
+          </a>
+          <a :href="project.githubUrl" target="_blank" rel="noopener" class="m5-action-btn">
+            [ GITHUB REPO ]
+          </a>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- STANDARD SHOWCASE FOR OTHER PROJECTS (Sentinel Vision & Noirsito UI) -->
+  <div
+    v-else
     class="project-showcase-page font-body select-none"
     :class="{ 'is-entered': isEntered }"
     :style="{
@@ -828,5 +940,302 @@ useSeoMeta({
 
 .footer-nav-links a:hover {
   color: var(--project-prose, #FFDDAC);
+}
+
+/* ==========================================================================
+   5 COLUMNS LAYOUT MODERNISM (FILEMIND READ PAGE - #E4DDD3 & #00A19B TEAL)
+   ========================================================================== */
+.modernist-5col-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: #E4DDD3; /* Warm Paper Canvas Requested by User */
+  color: #1C1B18;       /* Deep Ink Typography */
+  padding-top: 100px;
+  padding-bottom: 80px;
+  overflow-x: hidden;
+}
+
+.m5-container {
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 4.5rem;
+}
+
+.m5-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 28px;
+}
+
+.m5-grid-4col {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+
+/* Row 1 Header */
+.m5-header-row {
+  opacity: 0;
+  transform: translateY(-16px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.08s,
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
+}
+
+.is-entered .m5-header-row {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.m5-bracket-num {
+  font-size: 0.85rem;
+  color: #00A19B; /* Vivid Teal Accent Requested by User */
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.m5-para-text {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #4A4740; /* Readable Ink Text */
+  margin: 0;
+}
+
+.m5-top-right-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.m5-close-glyph {
+  font-size: 1.5rem;
+  color: #00A19B;
+  text-decoration: none;
+  line-height: 1;
+  font-weight: 700;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.m5-close-glyph:hover {
+  transform: scale(1.3);
+  color: #1C1B18;
+}
+
+/* Row 2 Hero Statement */
+.m5-statement-section {
+  margin: 1rem 0;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s,
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+}
+
+.is-entered .m5-statement-section {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.m5-hero-statement {
+  font-size: clamp(2.4rem, 4.2vw, 3.6rem);
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  color: #1C1B18; /* Deep Ink Title */
+  font-weight: 400;
+  margin: 0;
+  width: 100%;
+  text-wrap: balance;
+}
+
+/* Row 3 Interactive Inner Banner Box */
+.m5-interactive-box {
+  width: 100%;
+  margin: 0.5rem 0;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.35s,
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.35s;
+}
+
+.is-entered .m5-interactive-box {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.m5-box-inner {
+  width: 100%;
+  background: #080A0F; /* Solid Dark Inner Banner Box */
+  border: 1px solid rgba(0, 161, 155, 0.35); /* Teal Accent Border */
+  border-radius: 12px;
+  padding: 28px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.m5-interactive-box:hover .m5-box-inner {
+  border-color: #00A19B;
+  box-shadow: 0 20px 48px rgba(0, 161, 155, 0.2);
+}
+
+.m5-box-left {
+  flex: 1;
+  max-width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  z-index: 5;
+}
+
+.m5-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.8rem;
+  color: #9CA3AF;
+}
+
+.m5-item-year {
+  color: #00A19B;
+  font-weight: 600;
+}
+
+.m5-item-author {
+  color: #E5E7EB;
+  font-weight: 500;
+}
+
+.m5-item-title {
+  color: #9CA3AF;
+  font-style: italic;
+}
+
+.m5-app-screenshot-frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: 280px;
+  background: #080A0F;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.m5-app-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.m5-box-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 48%;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.m5-dither-reveal-frame {
+  width: 100%;
+  height: 100%; /* Top to bottom fill inside black box */
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  opacity: 0;
+  transform: translateX(16px);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.4) 15%, black 45%);
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.4) 15%, black 45%);
+}
+
+.is-box-hovered .m5-dither-reveal-frame {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.m5-dither-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Fills top to bottom seamlessly */
+  object-position: right center;
+  display: block;
+  mix-blend-mode: lighten; /* Black BG disappears, particles blend seamlessly into dark box */
+  filter: contrast(1.15) brightness(1.05);
+}
+
+/* Row 4 Footer Actions */
+.m5-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-top: 1px solid rgba(28, 27, 24, 0.18);
+  padding-top: 2rem;
+  margin-top: 1rem;
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.48s;
+}
+
+.is-entered .m5-footer-bar {
+  opacity: 1;
+}
+
+.m5-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.m5-action-btn {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #00A19B;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.m5-action-btn:hover {
+  color: #1C1B18;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1024px) {
+  .m5-grid-4col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .m5-box-inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .m5-box-left, .m5-box-right {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .m5-grid-4col {
+    grid-template-columns: 1fr;
+  }
+  .m5-container {
+    padding: 0 20px;
+    gap: 3rem;
+  }
 }
 </style>

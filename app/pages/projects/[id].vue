@@ -1027,9 +1027,9 @@ useSeoMeta({
 }
 
 .m5-dither-img {
+  width: 100%;
   height: 100%;
-  width: auto;
-  object-fit: contain;
+  object-fit: cover;
   object-position: right center;
   display: block;
   mix-blend-mode: lighten;

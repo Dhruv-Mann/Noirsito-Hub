@@ -634,32 +634,38 @@ function openProjectLink(url: string) {
   cursor: grab;
 }
 
-/* Subtle Floating Title Above Card PNG */
+/* Bold Standalone Title Above Card PNG */
 .hover-floating-title {
   position: absolute;
   top: -38px;
   left: 50%;
-  transform: translateX(-50%) translateY(8px);
+  transform: translateX(-50%) translateY(4px);
   opacity: 0;
   pointer-events: none;
   white-space: nowrap;
-  background: #0d0408;
-  border: 1.5px solid #BE2C55;
-  color: #FFE0EB;
-  font-size: 0.74rem;
+  background: transparent;
+  border: none;
+  color: #FFFFFF;
+  font-size: 1.05rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  padding: 4px 14px;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.95);
+  letter-spacing: 0.12em;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.8);
   z-index: 100;
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
 }
 
+.folder-project-card.is-open-card .hover-floating-title,
 .folder-project-card.is-hovered-card .hover-floating-title,
 .folder-project-card:hover .hover-floating-title {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+.folder-project-card.is-hovered-card .hover-floating-title {
+  color: #FFE0EB;
 }
 
 .folder-project-card:active {

@@ -131,7 +131,7 @@ function triggerCmdPalette() {
   border: 1px solid rgba(190, 44, 85, 0.4);
   border-radius: 28px;
   height: 42px;
-  width: 150px;
+  width: 172px;
   padding: 0 16px;
   display: flex;
   align-items: center;
@@ -153,20 +153,23 @@ function triggerCmdPalette() {
 .island-collapsed-content {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 8px;
   color: #FFE0EB;
   font-size: 0.78125rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   white-space: nowrap;
+  width: 100%;
 }
 
 .pulse-dot {
   width: 7px;
   height: 7px;
+  flex-shrink: 0;
   border-radius: 50%;
-  background-color: #BE2C55;
-  box-shadow: 0 0 10px #BE2C55;
+  background-color: #FF2A5F;
+  box-shadow: 0 0 10px #FF2A5F, 0 0 16px rgba(255, 42, 95, 0.8);
   animation: pulse-glow 2s infinite ease-in-out;
 }
 
@@ -176,7 +179,8 @@ function triggerCmdPalette() {
 }
 
 .chevron-icon {
-  color: #BE2C55;
+  color: #FF2A5F;
+  flex-shrink: 0;
   transition: transform 0.2s ease;
 }
 

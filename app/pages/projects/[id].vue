@@ -208,6 +208,11 @@ const project = computed<ProjectDetail>(() => {
   return projectsData[projectId.value] || projectsData['filemind']
 })
 
+const cursorSvgUrl = computed(() => {
+  const color = encodeURIComponent(project.value.accentColor)
+  return `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='${color}' stroke='%23ffffff' stroke-width='1.5' stroke-linejoin='round' d='M13.64 21.97l-3.22-6.66-3.83 3.83V2.5l14.7 11.47-5.4 1.13 3.22 6.66-5.47 2.21z'/%3E%3C/svg%3E") 3 2, auto`
+})
+
 useSeoMeta({
   title: computed(() => `${project.value.title} • Dhruv Mann`),
   description: computed(() => project.value.tagline)
@@ -221,7 +226,8 @@ useSeoMeta({
     :style="{
       '--m5-paper-bg': project.paperBg,
       '--m5-accent': project.accentColor,
-      '--m5-surface-bg': project.surfaceBg
+      '--m5-surface-bg': project.surfaceBg,
+      '--m5-cursor-url': cursorSvgUrl
     }"
   >
     <!-- Dynamic Island Navigation Header -->
@@ -901,6 +907,17 @@ useSeoMeta({
   padding-bottom: 80px;
   overflow-x: hidden;
   transition: background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modernist-5col-page,
+.modernist-5col-page *,
+.modernist-5col-page *::before,
+.modernist-5col-page *::after,
+.modernist-5col-page a,
+.modernist-5col-page button,
+.modernist-5col-page input,
+.modernist-5col-page [role="button"] {
+  cursor: var(--m5-cursor-url, auto) !important;
 }
 
 .m5-container {

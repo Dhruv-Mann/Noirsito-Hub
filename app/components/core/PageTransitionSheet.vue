@@ -322,11 +322,26 @@ function updateKineticFont(
   }
 }
 
+watch(sweepStage, (stage) => {
+  if (typeof document !== 'undefined' && typeof window !== 'undefined') {
+    if (stage !== 'idle') {
+      window.scrollTo(0, 0)
+      document.documentElement.style.overflow = 'hidden'
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
+    }
+  }
+}, { immediate: true })
+
 function handleMouseDown() { isMouseDown.value = true }
 function handleMouseUp() { isMouseDown.value = false }
 
 function handleWheel(e: WheelEvent) {
   if (sweepStage.value !== 'full' || hasNavigated.value || isCurtainSplit.value) return
+  e.preventDefault()
+  e.stopPropagation()
 
   if (e.deltaY < 0 && isExitSweeping.value) {
     isExitSweeping.value = false
@@ -362,6 +377,10 @@ function handleReturnHome() {
   isBloodHovered.value = false
   hasNavigated.value = false
   resetPinkSweep()
+  if (typeof document !== 'undefined') {
+    document.documentElement.style.overflow = ''
+    document.body.style.overflow = ''
+  }
 }
 
 let touchStartY = 0
@@ -371,6 +390,8 @@ function handleTouchStart(e: TouchEvent) {
 
 function handleTouchMove(e: TouchEvent) {
   if (sweepStage.value !== 'full' || hasNavigated.value || isCurtainSplit.value || e.touches.length === 0) return
+  e.preventDefault()
+  e.stopPropagation()
   const currentY = e.touches[0].clientY
   const deltaY = (touchStartY - currentY) * 0.75
   touchStartY = currentY

@@ -29,6 +29,10 @@ export function usePageTransition() {
   function resetPinkSweep() {
     isSweeping.value = false
     sweepStage.value = 'idle'
+    if (typeof document !== 'undefined') {
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
+    }
   }
 
   return {

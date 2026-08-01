@@ -16,9 +16,9 @@ const selectedIndex = ref(0)
 const copiedMessage = ref('')
 
 const projectThemes: Record<string, { accent: string; paperBg: string; surfaceBg: string }> = {
-  filemind: { accent: '#00A19B', paperBg: '#E4DDD3', surfaceBg: '#080A0F' },
-  'sentinel-vision': { accent: '#DC2626', paperBg: '#FEE2E2', surfaceBg: '#0F0A0B' },
-  'noirsito-ui': { accent: '#EA580C', paperBg: '#FFEDD5', surfaceBg: '#120905' }
+  filemind: { accent: '#00A19B', paperBg: 'rgba(0, 161, 155, 0.15)', surfaceBg: '#031413' },
+  'sentinel-vision': { accent: '#DC2626', paperBg: 'rgba(220, 38, 38, 0.15)', surfaceBg: '#170404' },
+  'noirsito-ui': { accent: '#EA580C', paperBg: 'rgba(234, 88, 12, 0.15)', surfaceBg: '#170A03' }
 }
 
 const activeProjectTheme = computed(() => {
@@ -27,6 +27,12 @@ const activeProjectTheme = computed(() => {
     return projectThemes[id] || projectThemes['filemind']
   }
   return null
+})
+
+const cursorSvgUrl = computed(() => {
+  if (!activeProjectTheme.value) return null
+  const color = encodeURIComponent(activeProjectTheme.value.accent)
+  return `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='${color}' stroke='%23ffffff' stroke-width='1.5' stroke-linejoin='round' d='M13.64 21.97l-3.22-6.66-3.83 3.83V2.5l14.7 11.47-5.4 1.13 3.22 6.66-5.47 2.21z'/%3E%3C/svg%3E") 3 2, auto`
 })
 
 interface ActionItem {
@@ -257,7 +263,6 @@ onUnmounted(() => {
       @mouseleave="isTriggerHovered = false"
       @click="isOpen = true"
     >
-      <span class="cmd-pulse-dot" />
       <span class="cmd-mnemonic font-mono">CTRL+K</span>
       <Transition name="fade-fast">
         <span v-if="isTriggerHovered" class="cmd-k-label font-mono">COMMAND PALETTE</span>
@@ -266,15 +271,20 @@ onUnmounted(() => {
 
     <!-- Command Palette Modal -->
     <Transition name="palette-fade">
-      <div v-if="isOpen" class="palette-backdrop" @click.self="isOpen = false">
+      <div
+        v-if="isOpen"
+        class="palette-backdrop"
+        :style="activeProjectTheme ? {
+          '--cmd-accent': activeProjectTheme.accent,
+          '--cmd-paper-bg': activeProjectTheme.paperBg,
+          '--cmd-surface-bg': activeProjectTheme.surfaceBg,
+          '--cmd-cursor-url': cursorSvgUrl
+        } : {}"
+        @click.self="isOpen = false"
+      >
         <div
           class="palette-modal font-body"
           :class="{ 'custom-theme': !!activeProjectTheme }"
-          :style="activeProjectTheme ? {
-            '--cmd-accent': activeProjectTheme.accent,
-            '--cmd-paper-bg': activeProjectTheme.paperBg,
-            '--cmd-surface-bg': activeProjectTheme.surfaceBg
-          } : {}"
         >
           <!-- Search Header -->
           <div class="palette-header">
@@ -482,6 +492,17 @@ onUnmounted(() => {
   align-items: flex-start;
   justify-content: center;
   padding-top: 12vh;
+}
+
+.palette-backdrop,
+.palette-backdrop *,
+.palette-backdrop *::before,
+.palette-backdrop *::after,
+.palette-backdrop a,
+.palette-backdrop button,
+.palette-backdrop input,
+.palette-backdrop [role="button"] {
+  cursor: var(--cmd-cursor-url, auto) !important;
 }
 
 .palette-modal {

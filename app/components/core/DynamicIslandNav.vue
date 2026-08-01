@@ -72,7 +72,6 @@ function triggerCmdPalette() {
     <!-- Collapsed Pill Header State -->
     <Transition name="fade-fast" mode="out-in">
       <div v-if="!isHovered" key="collapsed" class="island-collapsed-content">
-        <span class="pulse-dot" />
         <span class="island-title">{{ currentTitle }}</span>
         <svg class="chevron-icon" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>

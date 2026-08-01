@@ -255,7 +255,6 @@ function openProjectLink(url: string) {
 
                 <!-- 2. Live -->
                 <a :href="proj.demoUrl || proj.githubUrl" target="_blank" rel="noopener" class="mini-island-btn" title="Live System">
-                  <span class="live-pulse-dot" />
                   <span>Live</span>
                 </a>
 

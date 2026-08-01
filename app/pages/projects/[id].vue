@@ -122,8 +122,8 @@ const projectsData: Record<string, ProjectDetail> = {
     architectureText: 'Powered by an asynchronous SQLite + Vector DB pipeline, FileMind creates instant local embeddings for your documents. Every automated file relocation is logged for instant 1-click reversals.',
     image: '/filemind.png',
     accentColor: '#00A19B',
-    paperBg: '#1A0A09',
-    surfaceBg: '#120505',
+    paperBg: 'rgba(0, 161, 155, 0.15)',
+    surfaceBg: '#031413',
     githubUrl: 'https://github.com/Dhruv-Mann/filemind',
     demoUrl: 'https://filemind.vercel.app/',
     windowsUrl: 'https://github.com/Dhruv-Mann/filemind/releases',
@@ -155,8 +155,8 @@ const projectsData: Record<string, ProjectDetail> = {
     architectureText: 'Built with Next.js 16 App Router, React 19, and Supabase PostgreSQL with Row-Level Security (RLS). Features IP anonymization and dynamic link expiration.',
     image: '/Sentinel-Vision.png',
     accentColor: '#DC2626',
-    paperBg: '#1A0A09',
-    surfaceBg: '#120505',
+    paperBg: 'rgba(220, 38, 38, 0.15)',
+    surfaceBg: '#170404',
     githubUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision',
     demoUrl: 'https://sentinel-vision-five.vercel.app/',
     docsUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision#readme',
@@ -186,8 +186,8 @@ const projectsData: Record<string, ProjectDetail> = {
     architectureText: 'Built with Nuxt 4, Vue 3, and Tailwind CSS. Features direct DOM canvas interaction bypass for 60fps physics, strict layout containment, and automated component scaffolding.',
     image: '/Noirsito-UI.png',
     accentColor: '#EA580C',
-    paperBg: '#1A0A09',
-    surfaceBg: '#120505',
+    paperBg: 'rgba(234, 88, 12, 0.15)',
+    surfaceBg: '#170A03',
     githubUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI',
     demoUrl: 'https://noirsito-ui.vercel.app/',
     docsUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI#readme',
@@ -233,6 +233,9 @@ useSeoMeta({
       '--m5-cursor-url': cursorSvgUrl
     }"
   >
+    <!-- Dynamic Ambient Backdrop Glow Layer -->
+    <div class="m5-ambient-glow" aria-hidden="true" />
+
     <!-- Dynamic Island Navigation Header -->
     <DynamicIslandNav
       active-tab="projects"
@@ -912,6 +915,18 @@ useSeoMeta({
   transition: background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.m5-ambient-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 900px;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 20%, var(--m5-paper-bg, rgba(174, 59, 139, 0.15)), transparent 70%);
+  z-index: 0;
+  transition: background 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 .modernist-5col-page,
 .modernist-5col-page *,
 .modernist-5col-page *::before,
@@ -924,6 +939,8 @@ useSeoMeta({
 }
 
 .m5-container {
+  position: relative;
+  z-index: 5;
   width: 100%;
   max-width: 1380px;
   margin: 0 auto;
@@ -1063,16 +1080,16 @@ useSeoMeta({
               transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
 }
 
+/* Zero Card Container: Pure Editorial Text */
 .m5-col {
   opacity: 0;
   transform: translateY(-12px);
-  background: rgba(26, 10, 9, 0.65);
-  border: 1px solid rgba(225, 120, 136, 0.18);
-  border-radius: 10px;
-  padding: 20px 22px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
   transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.25s ease;
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: calc(0.08s + var(--col-index, 0) * 0.07s);
 }
 
@@ -1305,19 +1322,18 @@ useSeoMeta({
   font-weight: 700;
   color: var(--m5-accent, #AE3B8B);
   text-decoration: none;
-  letter-spacing: 0.04em;
-  padding: 8px 16px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: color 0.2s ease, transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  letter-spacing: 0.05em;
+  padding: 4px 6px;
+  background: transparent;
+  border: none;
+  transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
 }
 
 .m5-action-btn:hover {
   color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.12);
-  border-color: var(--m5-accent, #AE3B8B);
+  background: transparent;
   transform: translateY(-1px);
+  opacity: 0.9;
 }
 
 @media (max-width: 1024px) {

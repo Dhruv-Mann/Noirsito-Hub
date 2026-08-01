@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import PixelMatrixCanvas from './PixelMatrixCanvas.vue'
-import FractalTree from './FractalTree.vue'
 import LissajousOrbit from './LissajousOrbit.vue'
 import CornerStarsCanvas from './CornerStarsCanvas.vue'
 import { useSystemState } from '~/composables/useSystemState'
@@ -91,17 +90,16 @@ onUnmounted(() => {
         class="hero-text-block" 
         :class="{ Assembled: isAssembled }"
       >
-        <!-- Stacked Name Heading with Metallic Shimmer Reveal & Animated Fractal Tree -->
+        <!-- Stacked Name Heading with Metallic Shimmer Reveal -->
         <h1 class="main-name-heading font-display">
-          <!-- Line 1: Dhruv with Animated Fractal Tree placed right after -->
+          <!-- Line 1: Dhruv -->
           <span class="first-name">
             <span class="first-name-text">Dhruv</span>
-            <FractalTree />
           </span>
-          <!-- Line 2: Mann (Bright Pink) with aka Noirsito tag -->
+          <!-- Line 2: Mann (Bright Pink) with refined editorial aka Noirsito moniker -->
           <span class="last-name">
             <span class="name-text">Mann</span>
-            <span class="aka-tag font-mono">aka Noirsito</span>
+            <span class="aka-tag font-mono">— aka Noirsito</span>
           </span>
         </h1>
 
@@ -185,6 +183,29 @@ onUnmounted(() => {
   width: 100%;
   pointer-events: none;
   padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-emblem-stage {
+  position: relative;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(24px) scale(0.95);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-right: 40px;
+}
+
+.hero-text-block.Assembled + .hero-emblem-stage {
+  opacity: 0.85;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.3s;
+}
+
+.hero-emblem-stage:hover {
+  opacity: 1;
 }
 
 .hero-text-block {
@@ -275,30 +296,34 @@ onUnmounted(() => {
   text-shadow: 0 0 32px rgba(174, 59, 139, 0.9), 0 0 60px rgba(174, 59, 139, 0.6);
 }
 
-/* aka Noirsito Tag (Dusty Pink / Espresso) */
+/* aka Noirsito Moniker — Clean Editorial Monospace Typography */
 .aka-tag {
   display: inline-flex;
   align-items: center;
-  font-size: clamp(0.75rem, 1.2vw, 0.9375rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #E17888;
-  background-color: rgba(174, 59, 139, 0.2);
-  border: 1px solid rgba(174, 59, 139, 0.45);
-  padding: 4px 14px;
-  border-radius: var(--radius-full);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  background: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  opacity: 0.85;
   vertical-align: middle;
-  transition: all 0.3s var(--ease-out);
+  transition: color 0.3s ease, text-shadow 0.3s ease, opacity 0.3s ease;
 }
 
 .aka-tag:hover {
   color: #ffffff;
-  background-color: #AE3B8B;
-  border-color: #AE3B8B;
-  box-shadow: 0 4px 20px rgba(174, 59, 139, 0.6);
-  transform: translateY(-2px) scale(1.04);
+  opacity: 1;
+  text-shadow: 0 0 16px rgba(225, 120, 136, 0.7);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  transform: none;
 }
 
 /* Meta Block with Head to Hub button — Hidden until user clicks to initialize */

@@ -298,11 +298,13 @@ function handleResize() {
 }
 
 onMounted(() => {
+  openCategories.value = []
   window.addEventListener('resize', handleResize)
   loadSourceImage()
 })
 
 onBeforeUnmount(() => {
+  openCategories.value = []
   window.removeEventListener('resize', handleResize)
   if (animRafId) cancelAnimationFrame(animRafId)
 })

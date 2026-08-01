@@ -323,15 +323,24 @@ function updateKineticFont(
 }
 
 watch(sweepStage, (stage) => {
-  if (typeof document !== 'undefined' && typeof window !== 'undefined') {
-    if (stage !== 'idle') {
-      window.scrollTo(0, 0)
-      document.documentElement.style.overflow = 'hidden'
-      document.body.style.overflow = 'hidden'
-    } else {
+  if (stage === 'idle') {
+    isCurtainSplit.value = false
+    isExitSweeping.value = false
+    ribbonKey.value++
+    techStackKey.value++
+    scrollProgress.value = 0
+    accumScroll = 0
+    isScrollActive.value = false
+    isBloodHovered.value = false
+    hasNavigated.value = false
+    if (typeof document !== 'undefined') {
       document.documentElement.style.overflow = ''
       document.body.style.overflow = ''
     }
+  } else if (typeof document !== 'undefined' && typeof window !== 'undefined') {
+    window.scrollTo(0, 0)
+    document.documentElement.style.overflow = 'hidden'
+    document.body.style.overflow = 'hidden'
   }
 }, { immediate: true })
 
@@ -371,6 +380,7 @@ function handleReturnHome() {
   isCurtainSplit.value = false
   isExitSweeping.value = false
   ribbonKey.value++
+  techStackKey.value++
   scrollProgress.value = 0
   accumScroll = 0
   isScrollActive.value = false

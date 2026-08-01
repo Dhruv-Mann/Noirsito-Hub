@@ -313,7 +313,7 @@ onBeforeUnmount(() => {
    ROOT: Matches home page pixel canvas base (#341514) + deep black
    ============================================================ */
 .tech-stack-showcase {
-  position: absolute;
+  position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;

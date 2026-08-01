@@ -8,6 +8,9 @@ useSeoMeta({
 })
 
 onMounted(() => {
+  if (typeof window !== 'undefined') {
+    window.scrollTo(0, 0)
+  }
   if (typeof document !== 'undefined') {
     document.documentElement.style.overflow = 'hidden'
     document.body.style.overflow = 'hidden'

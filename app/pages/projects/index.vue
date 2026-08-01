@@ -1,9 +1,16 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import ProjectsShowcase from '~/components/core/ProjectsShowcase.vue'
 
 useSeoMeta({
   title: 'Projects & Systems • Dhruv Mann',
   description: 'Explore featured engineering projects, custom WebGL engines, AI agent frameworks, and production SaaS applications by Dhruv Mann.'
+})
+
+onMounted(() => {
+  if (typeof window !== 'undefined') {
+    window.scrollTo(0, 0)
+  }
 })
 </script>
 

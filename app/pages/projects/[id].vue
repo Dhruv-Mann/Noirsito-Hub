@@ -55,6 +55,9 @@ function handleKeyDown(e: KeyboardEvent) {
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown)
+  if (typeof window !== 'undefined') {
+    window.scrollTo(0, 0)
+  }
   if (typeof document !== 'undefined') {
     document.documentElement.style.overflow = 'auto'
     document.body.style.overflow = 'auto'

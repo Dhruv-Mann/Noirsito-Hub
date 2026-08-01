@@ -8,6 +8,10 @@ export function usePageTransition() {
     if (isSweeping.value) return
     isSweeping.value = true
 
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0)
+    }
+
     // Phase 1: Sweep halfway up
     sweepStage.value = 'halfway'
 

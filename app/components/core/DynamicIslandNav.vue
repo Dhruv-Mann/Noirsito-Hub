@@ -248,51 +248,52 @@ function triggerCmdPalette() {
 }
 
 /* ==========================================================================
-   Dynamic Project Read Detail Page Theme (High-Contrast Adaptive)
+   Dynamic Project Read Detail Page Theme (High-Contrast Dark Adaptive)
    ========================================================================== */
 .dynamic-island-wrapper.custom-theme {
-  background: var(--island-bg, #E4DDD3);
-  border: 1px solid var(--island-accent, #00A19B);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  background: var(--island-bg, rgba(26, 10, 9, 0.92));
+  border: 1px solid var(--island-accent, #AE3B8B);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .dynamic-island-wrapper.custom-theme.expanded {
-  border-color: var(--island-accent, #00A19B);
-  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.2);
+  border-color: var(--island-accent, #AE3B8B);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.6);
 }
 
 .dynamic-island-wrapper.custom-theme .island-collapsed-content {
-  color: #1C1B18;
+  color: #FFFFFF;
 }
 
 .dynamic-island-wrapper.custom-theme .pulse-dot {
-  background-color: var(--island-accent, #00A19B);
-  box-shadow: none;
+  background-color: var(--island-accent, #AE3B8B);
+  box-shadow: 0 0 8px var(--island-accent, #AE3B8B);
 }
 
 .dynamic-island-wrapper.custom-theme .chevron-icon {
-  color: var(--island-accent, #00A19B);
+  color: var(--island-accent, #AE3B8B);
 }
 
 .dynamic-island-wrapper.custom-theme .island-nav-btn {
-  color: #1C1B18;
+  color: #E5D5D5;
   font-weight: 700;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .dynamic-island-wrapper.custom-theme .island-nav-btn:hover {
-  background: rgba(0, 0, 0, 0.08);
-  color: #000000;
-  border-color: var(--island-accent, #00A19B);
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  border-color: var(--island-accent, #AE3B8B);
 }
 
 .dynamic-island-wrapper.custom-theme .island-nav-btn.active {
-  background: var(--island-accent, #00A19B);
-  border-color: var(--island-accent, #00A19B);
+  background: var(--island-accent, #AE3B8B);
+  border-color: var(--island-accent, #AE3B8B);
   color: #FFFFFF;
 }
 
 .dynamic-island-wrapper.custom-theme .btn-prefix {
-  color: var(--island-accent, #00A19B);
+  color: var(--island-accent, #AE3B8B);
   opacity: 1;
   font-weight: 800;
 }

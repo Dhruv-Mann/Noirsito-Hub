@@ -122,8 +122,8 @@ const projectsData: Record<string, ProjectDetail> = {
     architectureText: 'Powered by an asynchronous SQLite + Vector DB pipeline, FileMind creates instant local embeddings for your documents. Every automated file relocation is logged for instant 1-click reversals.',
     image: '/filemind.png',
     accentColor: '#00A19B',
-    paperBg: '#E4DDD3',
-    surfaceBg: '#080A0F',
+    paperBg: '#1A0A09',
+    surfaceBg: '#120505',
     githubUrl: 'https://github.com/Dhruv-Mann/filemind',
     demoUrl: 'https://filemind.vercel.app/',
     windowsUrl: 'https://github.com/Dhruv-Mann/filemind/releases',
@@ -155,8 +155,8 @@ const projectsData: Record<string, ProjectDetail> = {
     architectureText: 'Built with Next.js 16 App Router, React 19, and Supabase PostgreSQL with Row-Level Security (RLS). Features IP anonymization and dynamic link expiration.',
     image: '/Sentinel-Vision.png',
     accentColor: '#DC2626',
-    paperBg: '#FEE2E2',
-    surfaceBg: '#0F0A0B',
+    paperBg: '#1A0A09',
+    surfaceBg: '#120505',
     githubUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision',
     demoUrl: 'https://sentinel-vision-five.vercel.app/',
     docsUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision#readme',
@@ -186,8 +186,8 @@ const projectsData: Record<string, ProjectDetail> = {
     architectureText: 'Built with Nuxt 4, Vue 3, and Tailwind CSS. Features direct DOM canvas interaction bypass for 60fps physics, strict layout containment, and automated component scaffolding.',
     image: '/Noirsito-UI.png',
     accentColor: '#EA580C',
-    paperBg: '#FFEDD5',
-    surfaceBg: '#120905',
+    paperBg: '#1A0A09',
+    surfaceBg: '#120505',
     githubUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI',
     demoUrl: 'https://noirsito-ui.vercel.app/',
     docsUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI#readme',
@@ -904,8 +904,8 @@ useSeoMeta({
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: var(--m5-paper-bg, #E4DDD3);
-  color: #1C1B18;
+  background: transparent;
+  color: #FFFFFF;
   padding-top: 100px;
   padding-bottom: 80px;
   overflow-x: hidden;
@@ -974,19 +974,20 @@ useSeoMeta({
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  color: var(--m5-accent, #00A19B);
+  color: var(--m5-accent, #AE3B8B);
   text-decoration: none;
   padding: 6px 14px;
   border-radius: 6px;
-  background: rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .m5-back-nav-btn:hover {
   transform: translateX(-3px);
-  background: rgba(0, 0, 0, 0.08);
-  border-color: var(--m5-accent, #00A19B);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--m5-accent, #AE3B8B);
+  color: #FFFFFF;
 }
 
 .m5-esc-hint {
@@ -1001,29 +1002,29 @@ useSeoMeta({
   gap: 6px;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #1C1B18;
+  color: #FFFFFF;
   text-decoration: none;
   padding: 5px 10px;
   border-radius: 6px;
-  background: rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .m5-cycle-btn:hover {
   transform: translateY(-1px);
-  background: rgba(0, 0, 0, 0.08);
-  border-color: var(--m5-accent, #00A19B);
-  color: var(--m5-accent, #00A19B);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--m5-accent, #AE3B8B);
+  color: var(--m5-accent, #AE3B8B);
 }
 
 .m5-key-tag {
-  color: var(--m5-accent, #00A19B);
+  color: var(--m5-accent, #AE3B8B);
   font-weight: 800;
 }
 
 .m5-nav-sep {
-  color: rgba(28, 27, 24, 0.3);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 /* Mobile Tabbed Selector (< 768px) */
@@ -1036,9 +1037,9 @@ useSeoMeta({
 }
 
 .m5-mobile-tab-btn {
-  background: rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #1C1B18;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #E5D5D5;
   font-size: 0.75rem;
   font-weight: 700;
   padding: 6px 12px;
@@ -1049,8 +1050,8 @@ useSeoMeta({
 }
 
 .m5-mobile-tab-btn.active {
-  background: var(--m5-accent, #00A19B);
-  border-color: var(--m5-accent, #00A19B);
+  background: var(--m5-accent, #AE3B8B);
+  border-color: var(--m5-accent, #AE3B8B);
   color: #FFFFFF;
 }
 
@@ -1065,9 +1066,18 @@ useSeoMeta({
 .m5-col {
   opacity: 0;
   transform: translateY(-12px);
+  background: rgba(26, 10, 9, 0.65);
+  border: 1px solid rgba(225, 120, 136, 0.18);
+  border-radius: 10px;
+  padding: 20px 22px;
   transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease;
   transition-delay: calc(0.08s + var(--col-index, 0) * 0.07s);
+}
+
+.m5-col:hover {
+  border-color: var(--m5-accent, #AE3B8B);
 }
 
 .is-entered .m5-header-row,
@@ -1078,7 +1088,7 @@ useSeoMeta({
 
 .m5-bracket-num {
   font-size: 0.85rem;
-  color: var(--m5-accent, #00A19B);
+  color: var(--m5-accent, #AE3B8B);
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 700;
@@ -1086,9 +1096,9 @@ useSeoMeta({
 }
 
 .m5-para-text {
-  font-size: 0.82rem;
-  line-height: 1.6;
-  color: #4A4740;
+  font-size: 0.84rem;
+  line-height: 1.65;
+  color: #E5D5D5;
   margin: 0;
 }
 
@@ -1101,7 +1111,7 @@ useSeoMeta({
 
 .m5-close-glyph {
   font-size: 1.5rem;
-  color: var(--m5-accent, #00A19B);
+  color: var(--m5-accent, #AE3B8B);
   text-decoration: none;
   line-height: 1;
   font-weight: 700;
@@ -1110,7 +1120,7 @@ useSeoMeta({
 
 .m5-close-glyph:hover {
   transform: scale(1.3);
-  color: #1C1B18;
+  color: #FFFFFF;
 }
 
 /* Row 2 Hero Statement */
@@ -1133,11 +1143,12 @@ useSeoMeta({
   font-size: clamp(2.4rem, 4.2vw, 3.6rem);
   line-height: 1.18;
   letter-spacing: -0.015em;
-  color: #1C1B18;
+  color: #FFFFFF;
   font-weight: 400;
   margin: 0;
   width: 100%;
   text-wrap: balance;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
 /* Row 3 Interactive Inner Banner Box */
@@ -1157,8 +1168,8 @@ useSeoMeta({
 
 .m5-box-inner {
   width: 100%;
-  background: var(--m5-surface-bg, #080A0F);
-  border: 1px solid var(--m5-accent, #00A19B);
+  background: var(--m5-surface-bg, rgba(20, 8, 7, 0.92));
+  border: 1px solid var(--m5-accent, #AE3B8B);
   border-radius: 12px;
   padding: 28px 36px;
   display: flex;
@@ -1167,13 +1178,13 @@ useSeoMeta({
   gap: 32px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .m5-interactive-box:hover .m5-box-inner {
-  border-color: var(--m5-accent, #00A19B);
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.25);
+  border-color: var(--m5-accent, #AE3B8B);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
 }
 
 .m5-box-left {
@@ -1190,21 +1201,21 @@ useSeoMeta({
   align-items: center;
   gap: 12px;
   font-size: 0.8rem;
-  color: #9CA3AF;
+  color: #E17888;
 }
 
 .m5-item-year {
-  color: var(--m5-accent, #00A19B);
+  color: var(--m5-accent, #AE3B8B);
   font-weight: 600;
 }
 
 .m5-item-author {
-  color: #E5E7EB;
+  color: #FFFFFF;
   font-weight: 500;
 }
 
 .m5-item-title {
-  color: #9CA3AF;
+  color: #E5D5D5;
   font-style: italic;
 }
 
@@ -1212,10 +1223,10 @@ useSeoMeta({
   width: 100%;
   aspect-ratio: 16 / 9;
   height: 280px;
-  background: #080A0F;
+  background: #0E0505;
   border-radius: 6px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .m5-app-img {
@@ -1271,7 +1282,7 @@ useSeoMeta({
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  border-top: 1px solid rgba(28, 27, 24, 0.18);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
   padding-top: 2rem;
   margin-top: 1rem;
   opacity: 0;
@@ -1285,21 +1296,27 @@ useSeoMeta({
 .m5-actions-row {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
 }
 
 .m5-action-btn {
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--m5-accent, #00A19B);
+  color: var(--m5-accent, #AE3B8B);
   text-decoration: none;
   letter-spacing: 0.04em;
-  transition: color 0.2s ease, transform 0.2s ease;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: color 0.2s ease, transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
 .m5-action-btn:hover {
-  color: #1C1B18;
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--m5-accent, #AE3B8B);
   transform: translateY(-1px);
 }
 

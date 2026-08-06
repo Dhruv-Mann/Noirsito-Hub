@@ -93,6 +93,8 @@ withDefaults(defineProps<Props>(), {
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700;800&display=swap');
+
 .interactive-hover-btn {
   position: relative;
   display: inline-flex;
@@ -103,7 +105,7 @@ withDefaults(defineProps<Props>(), {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #ffffff;
-  font-family: var(--font-mono, monospace);
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.04em;

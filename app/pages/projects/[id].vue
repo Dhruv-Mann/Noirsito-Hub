@@ -124,9 +124,9 @@ const projectsData: Record<string, ProjectDetail> = {
     description: 'FileMind is engineered from the ground up for total privacy and zero-leak file context indexing. Operating directly on your local storage, it combines embedded vector embeddings with Ollama local inference.',
     architectureText: 'Powered by an asynchronous SQLite + Vector DB pipeline, FileMind creates instant local embeddings for your documents. Every automated file relocation is logged for instant 1-click reversals.',
     image: '/filemind.png',
-    accentColor: '#00A19B',
-    paperBg: 'rgba(0, 161, 155, 0.15)',
-    surfaceBg: '#031413',
+    accentColor: '#AF719D',
+    paperBg: 'rgba(175, 113, 157, 0.15)',
+    surfaceBg: '#0A0609',
     githubUrl: 'https://github.com/Dhruv-Mann/filemind',
     demoUrl: 'https://filemind.vercel.app/',
     windowsUrl: 'https://github.com/Dhruv-Mann/filemind/releases',
@@ -157,9 +157,9 @@ const projectsData: Record<string, ProjectDetail> = {
     description: 'Sentinel Vision embeds invisible tracking telemetry into resume links. Job seekers gain real-time analytics on viewer identity, city/country location, and device platform without collecting raw PII.',
     architectureText: 'Built with Next.js 16 App Router, React 19, and Supabase PostgreSQL with Row-Level Security (RLS). Features IP anonymization and dynamic link expiration.',
     image: '/Sentinel-Vision.png',
-    accentColor: '#DC2626',
-    paperBg: 'rgba(220, 38, 38, 0.15)',
-    surfaceBg: '#170404',
+    accentColor: '#CB2957',
+    paperBg: 'rgba(203, 41, 87, 0.15)',
+    surfaceBg: '#0A0002',
     githubUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision',
     demoUrl: 'https://sentinel-vision-five.vercel.app/',
     docsUrl: 'https://github.com/Dhruv-Mann/Sentinel-Vision#readme',
@@ -188,9 +188,9 @@ const projectsData: Record<string, ProjectDetail> = {
     description: 'Unlike traditional UI component libraries requiring heavy runtime dependencies, Noirsito UI provides zero-dependency Vue 3 Single File Components (SFCs) injected directly into your codebase via CLI.',
     architectureText: 'Built with Nuxt 4, Vue 3, and Tailwind CSS. Features direct DOM canvas interaction bypass for 60fps physics, strict layout containment, and automated component scaffolding.',
     image: '/Noirsito-UI.png',
-    accentColor: '#EA580C',
-    paperBg: 'rgba(234, 88, 12, 0.15)',
-    surfaceBg: '#170A03',
+    accentColor: '#D97757',
+    paperBg: 'rgba(217, 119, 87, 0.15)',
+    surfaceBg: '#0A0402',
     githubUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI',
     demoUrl: 'https://noirsito-ui.vercel.app/',
     docsUrl: 'https://github.com/Dhruv-Mann/Noirsito-UI#readme',
@@ -331,8 +331,8 @@ useSeoMeta({
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: #08040B; /* Dark background so InceptionScreen blends in */
-  color: #FFDDAC;
+  background: #000000;
+  color: #EEEEEE;
 }
 
 .m5-top-nav {

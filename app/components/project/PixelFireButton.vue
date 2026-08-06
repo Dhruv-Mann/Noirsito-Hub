@@ -313,6 +313,8 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600&display=swap');
+
 .pixel-fire-btn {
   position: relative;
   display: inline-flex;
@@ -326,6 +328,7 @@ onBeforeUnmount(() => {
   border: none;
   background: #2a2a2a;
   padding: 0 16px;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: -0.015em;

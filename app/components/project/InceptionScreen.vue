@@ -244,6 +244,8 @@ const fauxBtnStyle = computed(() => ({
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
 .inception-screen {
   display: flex;
   flex-direction: column;
@@ -295,7 +297,7 @@ const fauxBtnStyle = computed(() => ({
   background: rgba(255, 255, 255, 0.06);
   font-size: 12px;
   color: rgba(255, 255, 255, 0.5);
-  font-family: var(--font-mono, monospace);
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .inception-screen__lock-icon {
@@ -303,7 +305,7 @@ const fauxBtnStyle = computed(() => ({
 }
 
 .inception-screen__depth-tag {
-  font-family: var(--font-mono, monospace);
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 10px;
   opacity: 0.6;
 }
@@ -323,13 +325,14 @@ const fauxBtnStyle = computed(() => ({
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 56px 32px 0;
+  padding: 96px 32px 0;
   text-align: center;
 }
 
 .inception-screen__eyebrow {
-  font-family: var(--font-mono, monospace);
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 11px;
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin: 0;
@@ -341,9 +344,11 @@ const fauxBtnStyle = computed(() => ({
   font-size: 44px;
   line-height: 1.05;
   font-weight: 400;
+  letter-spacing: -0.01em;
   color: #ffffff;
   text-wrap: balance;
-  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-family: 'Times', 'Times New Roman', serif;
+  font-style: italic;
 }
 
 .inception-screen__sub {
@@ -353,6 +358,7 @@ const fauxBtnStyle = computed(() => ({
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.55);
   text-wrap: pretty;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .inception-screen__pills {
@@ -370,7 +376,7 @@ const fauxBtnStyle = computed(() => ({
   border-radius: 4px;
   border: 1px solid;
   background: rgba(255, 255, 255, 0.04);
-  font-family: var(--font-mono, monospace);
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .inception-screen__btn-area {
@@ -422,7 +428,7 @@ const fauxBtnStyle = computed(() => ({
   text-decoration: none;
   letter-spacing: 0.05em;
   transition: opacity 0.2s ease;
-  font-family: var(--font-body, sans-serif);
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .inception-screen__action-link:hover {

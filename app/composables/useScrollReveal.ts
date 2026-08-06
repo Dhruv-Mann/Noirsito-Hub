@@ -17,7 +17,7 @@ export function useScrollReveal(options: IntersectionObserverInit = { threshold:
 
     if (elementRef.value) {
       observer = new IntersectionObserver(([entry]: IntersectionObserverEntry[]) => {
-        if (entry.isIntersecting) {
+        if (entry?.isIntersecting) {
           isRevealed.value = true
           if (elementRef.value && observer) {
             observer.unobserve(elementRef.value)

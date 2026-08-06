@@ -3,6 +3,8 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import DynamicIslandNav from '~/components/core/DynamicIslandNav.vue'
 import InteractiveHoverButton from '~/components/ui/InteractiveHoverButton.vue'
+import ScrollInception from '~/components/project/ScrollInception.vue'
+import type { InceptionScreenData, ActionLink } from '~/components/project/InceptionScreen.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -212,9 +214,42 @@ const project = computed<ProjectDetail>(() => {
   return projectsData[projectId.value] || projectsData['filemind']
 })
 
-const cursorSvgUrl = computed(() => {
-  const color = encodeURIComponent(project.value.accentColor)
-  return `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='${color}' stroke='%23ffffff' stroke-width='1.5' stroke-linejoin='round' d='M13.64 21.97l-3.22-6.66-3.83 3.83V2.5l14.7 11.47-5.4 1.13 3.22 6.66-5.47 2.21z'/%3E%3C/svg%3E") 3 2, auto`
+// Inception Screen Data
+const screens = computed<InceptionScreenData[]>(() => {
+  const p = project.value
+  return [
+    {
+      eyebrow: '01 / OVERVIEW',
+      heading: p.title,
+      sub: p.description,
+      techStack: p.techStack,
+      image: p.image
+    },
+    {
+      eyebrow: '02 / ARCHITECTURE',
+      heading: p.col2Title.replace(/\[\d+\]\s*/, ''),
+      sub: p.architectureText,
+      techStack: []
+    },
+    {
+      eyebrow: '03 / PRIVACY & SPEC',
+      heading: p.col3Title.replace(/\[\d+\]\s*/, ''),
+      sub: p.col3Text,
+      techStack: [],
+      actions: true
+    }
+  ]
+})
+
+const actionLinks = computed<ActionLink[]>(() => {
+  const p = project.value
+  const links: ActionLink[] = []
+  if (p.githubUrl) links.push({ label: 'GITHUB', href: p.githubUrl })
+  if (p.demoUrl) links.push({ label: 'LIVE DEMO', href: p.demoUrl })
+  if (p.windowsUrl) links.push({ label: 'WINDOWS .EXE', href: p.windowsUrl })
+  if (p.macUrl) links.push({ label: 'MACOS .DMG', href: p.macUrl })
+  if (p.docsUrl) links.push({ label: 'DOCS', href: p.docsUrl })
+  return links
 })
 
 useSeoMeta({
@@ -224,19 +259,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <div
-    class="modernist-5col-page font-body select-none"
-    :class="{ 'is-entered': isEntered }"
-    :style="{
-      '--m5-paper-bg': 'transparent',
-      '--m5-accent': project.accentColor,
-      '--m5-surface-bg': 'transparent',
-      '--m5-cursor-url': cursorSvgUrl
-    }"
-  >
-    <!-- Dynamic Ambient Backdrop Glow Layer (Now transparent) -->
-    <div class="m5-ambient-glow" aria-hidden="true" />
-
+  <div class="read-page-wrapper font-body select-none">
     <!-- Dynamic Island Navigation Header -->
     <DynamicIslandNav
       active-tab="projects"
@@ -245,755 +268,90 @@ useSeoMeta({
       surface-bg="transparent"
     />
 
-    <div class="m5-container">
-      <!-- TOP NAVIGATION BAR (With J/K Shortcuts & Return Button) -->
-      <nav class="m5-top-nav font-mono">
-        <div class="m5-top-nav-left">
-          <InteractiveHoverButton
-            to="/projects"
-            :accent-color="project.accentColor"
-            @click="triggerHaptic"
-          >
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span>BACK TO PROJECTS</span>
-            <span class="m5-esc-hint font-mono">[ESC]</span>
-          </InteractiveHoverButton>
-        </div>
-
-        <div class="m5-top-nav-right font-mono">
-          <InteractiveHoverButton
-            :to="`/projects/${prevProject.id}`"
-            :accent-color="project.accentColor"
-            title="Press J for Previous Project"
-            @click="triggerHaptic"
-          >
-            <span class="m5-key-tag">[J]</span>
-            <span class="m5-cycle-label">← {{ prevProject.title }}</span>
-          </InteractiveHoverButton>
-          <span class="m5-nav-sep">•</span>
-          <InteractiveHoverButton
-            :to="`/projects/${nextProject.id}`"
-            :accent-color="project.accentColor"
-            title="Press K for Next Project"
-            @click="triggerHaptic"
-          >
-            <span class="m5-cycle-label">{{ nextProject.title }} →</span>
-            <span class="m5-key-tag">[K]</span>
-          </InteractiveHoverButton>
-        </div>
-      </nav>
-
-      <!-- MOBILE TABBED SELECTOR (< 768px viewports) -->
-      <div class="m5-mobile-tab-bar font-mono select-none">
-        <button
-          v-for="(title, i) in ['[01] Purpose', '[02] Stack', '[03] Privacy', '[04] Spec']"
-          :key="i"
-          class="m5-mobile-tab-btn"
-          :class="{ active: activeMobileTab === i }"
-          @click="activeMobileTab = i as 0|1|2|3; triggerHaptic();"
+    <!-- TOP NAVIGATION BAR (With J/K Shortcuts & Return Button) -->
+    <nav class="m5-top-nav font-mono">
+      <div class="m5-top-nav-left">
+        <InteractiveHoverButton
+          to="/projects"
+          :accent-color="project.accentColor"
+          @click="triggerHaptic"
         >
-          {{ title }}
-        </button>
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>BACK TO PROJECTS</span>
+          <span class="m5-esc-hint font-mono">[ESC]</span>
+        </InteractiveHoverButton>
       </div>
 
-      <!-- ROW 1: 4-Column Structured Header Row -->
-      <header class="m5-grid m5-grid-4col m5-header-row">
-        <!-- Col 1: Purpose & Function -->
-        <div class="m5-col" style="--col-index: 0;" :class="{ 'mobile-show': activeMobileTab === 0 }">
-          <span class="m5-bracket-num font-body">{{ project.col1Title }}</span>
-          <p class="m5-para-text font-body">{{ project.col1Text }}</p>
-        </div>
+      <div class="m5-top-nav-right font-mono">
+        <InteractiveHoverButton
+          :to="`/projects/${prevProject.id}`"
+          :accent-color="project.accentColor"
+          title="Press J for Previous Project"
+          @click="triggerHaptic"
+        >
+          <span class="m5-key-tag">[J]</span>
+          <span class="m5-cycle-label">← {{ prevProject.title }}</span>
+        </InteractiveHoverButton>
+        <span class="m5-nav-sep">•</span>
+        <InteractiveHoverButton
+          :to="`/projects/${nextProject.id}`"
+          :accent-color="project.accentColor"
+          title="Press K for Next Project"
+          @click="triggerHaptic"
+        >
+          <span class="m5-cycle-label">{{ nextProject.title }} →</span>
+          <span class="m5-key-tag">[K]</span>
+        </InteractiveHoverButton>
+      </div>
+    </nav>
 
-        <!-- Col 2: Architecture Stack -->
-        <div class="m5-col" style="--col-index: 1;" :class="{ 'mobile-show': activeMobileTab === 1 }">
-          <span class="m5-bracket-num font-body">{{ project.col2Title }}</span>
-          <p class="m5-para-text font-body">{{ project.col2Text }}</p>
-        </div>
-
-        <!-- Col 3: Privacy & Special Feature -->
-        <div class="m5-col" style="--col-index: 2;" :class="{ 'mobile-show': activeMobileTab === 2 }">
-          <span class="m5-bracket-num font-body">{{ project.col3Title }}</span>
-          <p class="m5-para-text font-body">{{ project.col3Text }}</p>
-        </div>
-
-        <!-- Col 4: Engine Spec + Return Link -->
-        <div class="m5-col" style="--col-index: 3;" :class="{ 'mobile-show': activeMobileTab === 3 }">
-          <div class="m5-top-right-header">
-            <span class="m5-bracket-num font-body">{{ project.col4Title }}</span>
-            <NuxtLink to="/projects" class="m5-close-glyph font-mono" title="Back to Projects" @click="triggerHaptic">—</NuxtLink>
-          </div>
-          <p class="m5-para-text font-body">{{ project.col4Text }}</p>
-        </div>
-      </header>
-
-      <!-- ROW 2: Full-Width 2-Line Hero Editorial Statement -->
-      <section class="m5-statement-section">
-        <h1 class="m5-hero-statement font-waverly">
-          {{ project.heroStatement }}
-        </h1>
-      </section>
-
-      <!-- ROW 3: Interactive Inner Banner Box -->
-      <section
-        class="m5-interactive-box"
-        :class="{ 'is-box-hovered': isFilemindImageHovered }"
-        @mouseenter="isFilemindImageHovered = true; triggerHaptic();"
-        @mouseleave="isFilemindImageHovered = false"
-      >
-        <div class="m5-box-inner">
-          <!-- Left Side: App Screenshot -->
-          <div class="m5-box-left">
-            <div class="m5-item-meta font-body">
-              <span class="m5-item-year">{{ project.metaYear }}</span>
-              <span class="m5-item-author">{{ project.metaAuthor }}</span>
-              <span class="m5-item-title font-body">{{ project.metaTitle }}</span>
-            </div>
-            <div class="m5-app-screenshot-frame">
-              <img :src="project.image" :alt="project.title" class="m5-app-img" />
-            </div>
-          </div>
-
-          <!-- Right Side: Same-Size Dithered Image Reveal -->
-          <div class="m5-box-right" aria-hidden="true">
-            <div class="m5-dither-reveal-frame">
-              <img src="/dithered2.png" alt="Dithered Reveal Asset" class="m5-dither-img" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ROW 4: Modernist Action Links -->
-      <footer class="m5-footer-bar font-body">
-        <div class="m5-actions-row">
-          <InteractiveHoverButton
-            to="/projects"
-            :accent-color="project.accentColor"
-            text="[ ← BACK TO PROJECTS ]"
-            @click="triggerHaptic"
-          />
-          <a v-if="project.windowsUrl" :href="project.windowsUrl" target="_blank" rel="noopener" class="m5-action-btn">
-            [ DOWNLOAD .EXE ]
-          </a>
-          <a v-if="project.macUrl" :href="project.macUrl" target="_blank" rel="noopener" class="m5-action-btn">
-            [ DOWNLOAD .DMG ]
-          </a>
-          <a v-if="project.demoUrl" :href="project.demoUrl" target="_blank" rel="noopener" class="m5-action-btn">
-            [ LIVE DEMO ]
-          </a>
-          <a :href="project.githubUrl" target="_blank" rel="noopener" class="m5-action-btn">
-            [ GITHUB REPO ]
-          </a>
-          <a v-if="project.docsUrl" :href="project.docsUrl" target="_blank" rel="noopener" class="m5-action-btn">
-            [ READ DOCS ]
-          </a>
-        </div>
-      </footer>
-    </div>
+    <!-- Recursive Scroll Engine -->
+    <ScrollInception
+      :screens="screens"
+      :url="project.demoUrl || 'hub.dhruvmann.com'"
+      :button-label="'Explore ' + project.title"
+      :accent-color="project.accentColor"
+      :surface-bg="project.surfaceBg"
+      :action-links="actionLinks"
+      :reveal-chrome="true"
+    />
   </div>
 </template>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Abril+Fatface&family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap');
 
-/* Typography: Waverly Display Serif */
-.font-waverly {
-  font-family: 'Waverly', 'Waverly CF', 'Playfair Display', Georgia, serif !important;
-}
-
-/* Typography Pairing: Abril Fatface + Archivo */
-.font-display {
-  font-family: 'Abril Fatface', Georgia, serif !important;
-  font-weight: 400 !important;
-}
-
 .font-body, .font-mono {
   font-family: 'Archivo', system-ui, -apple-system, sans-serif !important;
 }
 
-/* OLED Palette (No Glass, No Neon, No Blurs):
-   Base Background: #08040B (Solid Deep Midnight OLED)
-   Primary Title: #FAAA48 (Vivid Amber)
-   Secondary Title & Labels: #D8BFD8 (Solid Thistle Violet)
-   Prose & Text: #FFDDAC (Warm Soft Cream)
-   Surface Tiles: #120713 (Solid Dark Matte)
-*/
-
-.project-showcase-page {
+.read-page-wrapper {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: var(--project-page-bg, #08040B);
-  color: var(--project-prose, #FFDDAC);
-  padding-top: 100px;
-  padding-bottom: 80px;
-  overflow-x: hidden;
+  background: #08040B; /* Dark background so InceptionScreen blends in */
+  color: #FFDDAC;
 }
 
-/* Ambient Top Shimmer Curtain Reveal */
-.amber-shimmer-curtain {
-  position: absolute;
-  top: 0;
+.m5-top-nav {
+  position: fixed;
+  top: 100px;
   left: 0;
   right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--project-accent, #FAAA48) 40%, #FFDDAC 50%, var(--project-accent, #FAAA48) 60%, transparent);
-  z-index: 99;
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.is-entered .amber-shimmer-curtain {
-  transform: scaleX(1);
-}
-
-.showcase-bg-layer {
-  position: absolute;
-  inset: 0;
-  background: var(--project-page-bg, #08040B);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.showcase-container {
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* Segment 2: Nav Bar Entrance */
-.showcase-nav-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 48px;
   font-size: 0.76rem;
   font-weight: 700;
-  margin-bottom: 2.5rem;
-  opacity: 0;
-  transform: translateY(-16px);
-  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s,
-              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
+  z-index: 50;
+  pointer-events: none; /* Let clicks pass through empty areas */
 }
 
-.is-entered .showcase-nav-bar {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.showcase-back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--project-accent, #FAAA48);
-  text-decoration: none;
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.showcase-back-link:hover {
-  color: var(--project-prose, #FFDDAC);
-  transform: translateX(-3px);
-}
-
-.esc-hint {
-  font-size: 0.65rem;
-  color: var(--project-secondary, #D8BFD8);
-  opacity: 0.6;
-  margin-left: 4px;
-}
-
-.showcase-badge-tag {
-  background: var(--project-surface, #150817);
-  border: 1px solid var(--project-accent, #FAAA48);
-  color: var(--project-prose, #FFDDAC);
-  padding: 4px 12px;
-  border-radius: 4px;
-  letter-spacing: 0.08em;
-}
-
-/* Article Structure */
-.showcase-article {
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
-}
-
-.showcase-header {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-/* Segment 3: Main Title Clip & 3D Blur Reveal */
-.showcase-main-title {
-  font-size: clamp(2.8rem, 5vw, 4.2rem);
-  color: var(--project-accent, #FAAA48);
-  margin: 0;
-  line-height: 1.05;
-  letter-spacing: 0.01em;
-  opacity: 0;
-  filter: blur(10px);
-  transform: translateY(28px) rotateX(10deg);
-  transform-origin: bottom center;
-  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.16s,
-              filter 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.16s,
-              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.16s;
-}
-
-.is-entered .showcase-main-title {
-  opacity: 1;
-  filter: blur(0);
-  transform: translateY(0) rotateX(0deg);
-}
-
-/* Hero Visual Screenshot Bezel Frame */
-.hero-image-frame {
-  margin-top: 1rem;
-  border-radius: 12px;
-  background: var(--project-surface, #0E050D);
-  border: 1px solid var(--project-accent, #FAAA48);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7), 0 0 24px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(22px) scale(0.98);
-  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.38s,
-              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.38s,
-              border-color 0.3s ease;
-}
-
-.is-entered .hero-image-frame {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.frame-header-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px;
-  background: var(--project-surface, rgba(14, 5, 13, 0.95));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.frame-dots {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.frame-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-}
-.frame-dot.red { background: #FF5F56; }
-.frame-dot.yellow { background: #FFBD2E; }
-.frame-dot.green { background: #27C93F; }
-
-.frame-url-title {
-  font-size: 0.7rem;
-  color: var(--project-accent, #FAAA48);
-  letter-spacing: 0.08em;
-}
-
-.frame-status-badge {
-  font-size: 0.62rem;
-  color: var(--project-prose, #FFDDAC);
-  background: rgba(255, 255, 255, 0.06);
-  padding: 2px 8px;
-  border-radius: 4px;
-  letter-spacing: 0.06em;
-}
-
-.frame-image-wrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: var(--project-surface, #050206);
-  overflow: hidden;
-}
-
-.hero-project-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.hero-image-frame:hover .hero-project-img {
-  transform: scale(1.02);
-}
-
-/* Segment 4: Subtitle & Abstract Paragraph */
-/* Segment 4: Subtitle & Abstract Paragraph */
-.showcase-subtitle {
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  color: var(--project-secondary, #D8BFD8);
-  margin: 0;
-  letter-spacing: 0em;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.26s,
-              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.26s;
-}
-
-.is-entered .showcase-subtitle {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.showcase-abstract {
-  font-size: 1.12rem;
-  line-height: 1.65;
-  color: var(--project-prose, rgba(255, 221, 172, 0.9)) !important;
-  margin: 0.4rem 0 0 0;
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.34s,
-              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.34s;
-}
-
-.is-entered .showcase-abstract {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Segment 5: Action Buttons (Solid Matte, Zero Glass, Zero Glow) */
-.showcase-actions-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-  margin-top: 1rem;
-}
-
-.solid-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 11px 22px;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-decoration: none;
-  opacity: 0;
-  transform: translateY(14px) scale(0.96);
-  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-}
-
-.showcase-actions-bar .solid-btn:nth-child(1) { transition-delay: 0.42s, 0.42s, 0s, 0s, 0s; }
-.showcase-actions-bar .solid-btn:nth-child(2) { transition-delay: 0.48s, 0.48s, 0s, 0s, 0s; }
-.showcase-actions-bar .solid-btn:nth-child(3) { transition-delay: 0.54s, 0.54s, 0s, 0s, 0s; }
-
-.is-entered .solid-btn {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.solid-btn.primary-btn {
-  background: var(--project-accent, #FAAA48);
-  color: #08040B;
-  border: 1px solid var(--project-accent, #FAAA48);
-}
-
-.solid-btn.primary-btn:hover {
-  background: #FFFFFF;
-  border-color: #FFFFFF;
-  transform: translateY(-2px);
-}
-
-.solid-btn.secondary-btn {
-  background: var(--project-surface, #180A1A);
-  border: 1px solid var(--project-secondary, #D8BFD8);
-  color: var(--project-secondary, #D8BFD8);
-}
-
-.solid-btn.secondary-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #FFFFFF;
-  transform: translateY(-2px);
-}
-
-.solid-btn.outline-btn {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--project-prose, #FFDDAC);
-}
-
-.solid-btn.outline-btn:hover {
-  border-color: var(--project-accent, #FAAA48);
-  color: var(--project-accent, #FAAA48);
-}
-
-/* Dividers Stagger */
-.solid-divider {
-  border: 0;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.12);
-  margin: 0;
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s;
-}
-
-.is-entered .solid-divider {
-  transform: scaleX(1);
-}
-
-/* Segment 6: Sections Stagger */
-.showcase-section {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.showcase-section:nth-of-type(1) { transition-delay: 0.52s; }
-.showcase-section:nth-of-type(2) { transition-delay: 0.63s; }
-.showcase-section:nth-of-type(3) { transition-delay: 0.74s; }
-.showcase-section:nth-of-type(4) { transition-delay: 0.85s; }
-
-.is-entered .showcase-section {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.section-tag-num {
-  font-size: 0.72rem;
-  font-weight: 800;
-  color: var(--project-accent, #FAAA48);
-  letter-spacing: 0.14em;
-}
-
-.section-title-heading {
-  font-size: 2rem;
-  color: var(--project-prose, #FFDDAC);
-  margin: 0;
-}
-
-.prose-content {
-  font-size: 1.05rem;
-  line-height: 1.7;
-  color: var(--project-prose, rgba(255, 221, 172, 0.88));
-  border-left: 2px solid var(--project-accent, #FAAA48);
-  padding-left: 1.4rem;
-  margin-top: 0.4rem;
-}
-
-.prose-content p {
-  margin: 0;
-  color: var(--project-prose, rgba(255, 221, 172, 0.88)) !important;
-}
-
-.prose-content p::first-letter {
-  font-family: 'Abril Fatface', Georgia, serif;
-  font-size: 2.7rem;
-  line-height: 0.85;
-  float: left;
-  margin-right: 0.6rem;
-  margin-top: 0.1rem;
-  color: var(--project-accent, #FAAA48);
-}
-
-/* Segment 7: Telemetry Tiles Stagger (Solid Surfaces, Zero Glass) */
-.telemetry-specs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 14px;
-  margin-top: 0.5rem;
-}
-
-.telemetry-tile {
-  background: var(--project-surface, #120713);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  padding: 16px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.25s ease;
-}
-
-.telemetry-specs-grid .telemetry-tile:nth-child(1) { transition-delay: 0.76s, 0.76s, 0s; }
-.telemetry-specs-grid .telemetry-tile:nth-child(2) { transition-delay: 0.82s, 0.82s, 0s; }
-.telemetry-specs-grid .telemetry-tile:nth-child(3) { transition-delay: 0.88s, 0.88s, 0s; }
-.telemetry-specs-grid .telemetry-tile:nth-child(4) { transition-delay: 0.94s, 0.94s, 0s; }
-
-.is-entered .telemetry-tile {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.telemetry-tile:hover {
-  transform: translateY(-2px);
-  border-color: var(--project-accent, #FAAA48);
-}
-
-.tile-label {
-  font-size: 0.65rem;
-  font-weight: 800;
-  color: var(--project-secondary, #D8BFD8);
-  letter-spacing: 0.1em;
-}
-
-.tile-value {
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: var(--project-prose, #FFDDAC);
-  font-variant-numeric: tabular-nums;
-}
-
-/* Footer Section */
-.showcase-footer-section {
-  gap: 2rem;
-  margin-top: 1rem;
-}
-
-.stack-tags-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.stack-title-label {
-  font-size: 0.72rem;
-  font-weight: 800;
-  color: var(--project-secondary, #D8BFD8);
-}
-
-.stack-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.stack-pill-tag {
-  background: var(--project-surface, #180A1A);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: var(--project-prose, #FFDDAC);
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 4px 12px;
-  border-radius: 4px;
-}
-
-.showcase-page-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.72rem;
-  color: var(--project-secondary, rgba(255, 221, 172, 0.5));
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  padding-top: 20px;
-}
-
-.footer-nav-links {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.footer-nav-links a {
-  color: var(--project-accent, #FAAA48);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.footer-nav-links a:hover {
-  color: var(--project-prose, #FFDDAC);
-}
-
-/* ==========================================================================
-   5 COLUMNS LAYOUT MODERNISM (DATA-DRIVEN FOR ALL PROJECTS)
-   ========================================================================== */
-.modernist-5col-page {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  background: transparent;
-  color: #FFFFFF;
-  padding-top: 100px;
-  padding-bottom: 80px;
-  overflow-x: hidden;
-  transition: background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.m5-ambient-glow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 900px;
-  pointer-events: none;
-  background: radial-gradient(circle at 50% 20%, var(--m5-paper-bg, rgba(174, 59, 139, 0.15)), transparent 70%);
-  z-index: 0;
-  transition: background 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.modernist-5col-page,
-.modernist-5col-page *,
-.modernist-5col-page *::before,
-.modernist-5col-page *::after,
-.modernist-5col-page a,
-.modernist-5col-page button,
-.modernist-5col-page input,
-.modernist-5col-page [role="button"] {
-  cursor: var(--m5-cursor-url, auto) !important;
-}
-
-.m5-container {
-  position: relative;
-  z-index: 5;
-  width: 100%;
-  max-width: 1380px;
-  margin: 0 auto;
-  padding: 0 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 4.5rem;
-}
-
-.m5-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 28px;
-}
-
-.m5-grid-4col {
-  grid-template-columns: repeat(4, 1fr);
-  gap: 32px;
-}
-
-/* Top Navigation Bar */
-.m5-top-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: -1rem;
-  opacity: 0;
-  transform: translateY(-12px);
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.is-entered .m5-top-nav {
-  opacity: 1;
-  transform: translateY(0);
+.m5-top-nav > * {
+  pointer-events: auto; /* Re-enable clicks on the buttons */
 }
 
 .m5-top-nav-left, .m5-top-nav-right {
@@ -1002,390 +360,23 @@ useSeoMeta({
   gap: 12px;
 }
 
-.m5-back-nav-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  color: var(--m5-accent, #AE3B8B);
-  text-decoration: none;
-  padding: 6px 14px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-}
-
-.m5-back-nav-btn:hover {
-  transform: translateX(-3px);
-  background: rgba(255, 255, 255, 0.12);
-  border-color: var(--m5-accent, #AE3B8B);
-  color: #FFFFFF;
-}
-
-.m5-esc-hint {
-  font-size: 0.7rem;
-  opacity: 0.65;
-  margin-left: 2px;
-}
-
-.m5-cycle-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #FFFFFF;
-  text-decoration: none;
-  padding: 5px 10px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-}
-
-.m5-cycle-btn:hover {
-  transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.12);
-  border-color: var(--m5-accent, #AE3B8B);
-  color: var(--m5-accent, #AE3B8B);
-}
-
-.m5-key-tag {
-  color: var(--m5-accent, #AE3B8B);
-  font-weight: 800;
+.m5-esc-hint, .m5-key-tag {
+  font-size: 0.65rem;
+  opacity: 0.5;
+  margin-left: 4px;
 }
 
 .m5-nav-sep {
-  color: rgba(255, 255, 255, 0.3);
+  opacity: 0.3;
 }
 
-/* Mobile Tabbed Selector (< 768px) */
-.m5-mobile-tab-bar {
-  display: none;
-  gap: 6px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  scrollbar-width: none;
-}
-
-.m5-mobile-tab-btn {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #E5D5D5;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 6px 12px;
-  border-radius: 6px;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.m5-mobile-tab-btn.active {
-  background: var(--m5-accent, #AE3B8B);
-  border-color: var(--m5-accent, #AE3B8B);
-  color: #FFFFFF;
-}
-
-/* Row 1 Header & Staggered Column Animation */
-.m5-header-row {
-  opacity: 0;
-  transform: translateY(-16px);
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.08s,
-              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
-}
-
-/* Zero Card Container: Pure Editorial Text */
-.m5-col {
-  opacity: 0;
-  transform: translateY(-12px);
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0;
-  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  transition-delay: calc(0.08s + var(--col-index, 0) * 0.07s);
-}
-
-.m5-col:hover {
-  border-color: var(--m5-accent, #AE3B8B);
-}
-
-.is-entered .m5-header-row,
-.is-entered .m5-col {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.m5-bracket-num {
-  font-size: 0.85rem;
-  color: var(--m5-accent, #AE3B8B);
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-.m5-para-text {
-  font-size: 0.84rem;
-  line-height: 1.65;
-  color: #E5D5D5;
-  margin: 0;
-}
-
-.m5-top-right-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.m5-close-glyph {
-  font-size: 1.5rem;
-  color: var(--m5-accent, #AE3B8B);
-  text-decoration: none;
-  line-height: 1;
-  font-weight: 700;
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.m5-close-glyph:hover {
-  transform: scale(1.3);
-  color: #FFFFFF;
-}
-
-/* Row 2 Hero Statement */
-.m5-statement-section {
-  margin: 1rem 0;
-  width: 100%;
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s,
-              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
-}
-
-.is-entered .m5-statement-section {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.m5-hero-statement {
-  font-family: 'Waverly', 'Waverly CF', 'Playfair Display', Georgia, serif !important;
-  font-size: clamp(2.4rem, 4.2vw, 3.6rem);
-  line-height: 1.18;
-  letter-spacing: -0.015em;
-  color: #FFFFFF;
-  font-weight: 400;
-  margin: 0;
-  width: 100%;
-  text-wrap: balance;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-}
-
-/* Row 3 Interactive Inner Banner Box */
-.m5-interactive-box {
-  width: 100%;
-  margin: 0.5rem 0;
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.35s,
-              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.35s;
-}
-
-.is-entered .m5-interactive-box {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.m5-box-inner {
-  width: 100%;
-  background: var(--m5-surface-bg, rgba(20, 8, 7, 0.92));
-  border: 1px solid var(--m5-accent, #AE3B8B);
-  border-radius: 12px;
-  padding: 28px 36px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.m5-interactive-box:hover .m5-box-inner {
-  border-color: var(--m5-accent, #AE3B8B);
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
-}
-
-.m5-box-left {
-  flex: 1;
-  max-width: 50%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  z-index: 5;
-}
-
-.m5-item-meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 0.8rem;
-  color: #E17888;
-}
-
-.m5-item-year {
-  color: var(--m5-accent, #AE3B8B);
-  font-weight: 600;
-}
-
-.m5-item-author {
-  color: #FFFFFF;
-  font-weight: 500;
-}
-
-.m5-item-title {
-  color: #E5D5D5;
-  font-style: italic;
-}
-
-.m5-app-screenshot-frame {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  height: 280px;
-  background: #0E0505;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.m5-app-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-.m5-box-right {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  height: 100%;
-  width: 48%;
-  z-index: 4;
-  pointer-events: none;
-}
-
-.m5-dither-reveal-frame {
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  opacity: 0;
-  transform: translateX(16px);
-  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.4) 15%, black 45%);
-  mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.4) 15%, black 45%);
-}
-
-.is-box-hovered .m5-dither-reveal-frame {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.m5-dither-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: right center;
-  display: block;
-  mix-blend-mode: lighten;
-  filter: contrast(1.15) brightness(1.05);
-}
-
-/* Row 4 Footer Actions */
-.m5-footer-bar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  padding-top: 2rem;
-  margin-top: 1rem;
-  opacity: 0;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.48s;
-}
-
-.is-entered .m5-footer-bar {
-  opacity: 1;
-}
-
-.m5-actions-row {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.m5-action-btn {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--m5-accent, #AE3B8B);
-  text-decoration: none;
-  letter-spacing: 0.05em;
-  padding: 4px 6px;
-  background: transparent;
-  border: none;
-  transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
-}
-
-.m5-action-btn:hover {
-  color: #FFFFFF;
-  background: transparent;
-  transform: translateY(-1px);
-  opacity: 0.9;
-}
-
-@media (max-width: 1024px) {
-  .m5-grid-4col {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .m5-box-inner {
+@media (max-width: 768px) {
+  .m5-top-nav {
+    top: 80px;
+    padding: 0 24px;
     flex-direction: column;
-    align-items: stretch;
-  }
-  .m5-box-left, .m5-box-right {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 640px) {
-  .m5-grid-4col {
-    grid-template-columns: 1fr;
-  }
-  .m5-mobile-tab-bar {
-    display: flex;
-  }
-  .m5-top-nav-right {
-    font-size: 0.7rem;
-  }
-  .m5-container {
-    padding: 0 20px;
-    gap: 2.5rem;
-  }
-  .m5-header-row .m5-col {
-    display: none;
-  }
-  .m5-header-row .m5-col.mobile-show {
-    display: block;
+    gap: 16px;
+    align-items: flex-start;
   }
 }
 </style>

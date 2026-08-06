@@ -9,7 +9,7 @@
     <!-- Main Stage: Full-viewport flex row - left content + right full-screen slanted sheet -->
     <div class="stage-container">
       <!-- Left Side: Main Content Column -->
-      <div class="left-content-column">
+      <div class="left-content-column" data-lenis-prevent>
         <!-- Main Section: TECH STACK Title & Primary Accent Line -->
         <main class="content-header-block">
           <!-- Segment 1: Title block — completes at 0.8s -->

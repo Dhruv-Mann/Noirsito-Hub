@@ -44,6 +44,18 @@
   </div>
 </template>
 
+<script lang="ts">
+let globalMouseX = -1
+let globalMouseY = -1
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('mousemove', (e) => {
+    globalMouseX = e.clientX
+    globalMouseY = e.clientY
+  }, { passive: true })
+}
+</script>
+
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import { gsap } from 'gsap'
@@ -143,12 +155,15 @@ function initGsap() {
     const lockColor = props.cursorColorOnTarget ?? '#ffffff'
 
     document.body.classList.add('custom-cursor')
+    
+    const startX = globalMouseX !== -1 ? globalMouseX : window.innerWidth / 2
+    const startY = globalMouseY !== -1 ? globalMouseY : window.innerHeight / 2
 
     gsap.set(cursor, {
       xPercent: -50,
       yPercent: -50,
-      x: window.innerWidth / 2,
-      y: window.innerHeight / 2,
+      x: startX,
+      y: startY,
     })
     corners.forEach((c, i) => gsap.set(c, IDLE_POS[i]))
     gsap.set(dot, { xPercent: -50, yPercent: -50 })

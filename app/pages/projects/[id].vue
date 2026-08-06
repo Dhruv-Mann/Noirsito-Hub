@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { gsap } from 'gsap'
 import DynamicIslandNav from '~/components/core/DynamicIslandNav.vue'
 import InteractiveHoverButton from '~/components/ui/InteractiveHoverButton.vue'
 import TargetCursor from '~/components/ui/TargetCursor.vue'
 import ScrollInception from '~/components/project/ScrollInception.vue'
 import type { InceptionScreenData, ActionLink } from '~/components/project/InceptionScreen.vue'
+
+definePageMeta({
+  key: route => route.fullPath
+})
 
 const route = useRoute()
 const router = useRouter()
@@ -14,6 +19,10 @@ const projectId = computed(() => (route.params.id as string) || 'filemind')
 const isEntered = ref(false)
 const isFilemindImageHovered = ref(false)
 const activeMobileTab = ref<0 | 1 | 2 | 3>(0)
+
+const inkRef = ref<HTMLElement | null>(null)
+const isNavigating = ref(false)
+let ctx: gsap.Context | null = null
 
 // J / K Keyboard Navigation Loop
 const projectKeys = ['noirsito-ui', 'filemind', 'sentinel-vision'] as const
@@ -43,18 +52,45 @@ function triggerHaptic() {
 
 function handleKeyDown(e: KeyboardEvent) {
   if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
-  if (e.metaKey || e.ctrlKey || e.altKey) return
+  if (e.metaKey || e.ctrlKey || e.altKey || isNavigating.value) return
 
   if (e.key === 'Escape') {
     triggerHaptic()
-    router.push('/projects')
+    navigateWithTransition('/projects')
   } else if (e.key.toLowerCase() === 'j') {
     triggerHaptic()
-    router.push(`/projects/${prevProject.value.id}`)
+    navigateWithTransition(`/projects/${prevProject.value.id}`)
   } else if (e.key.toLowerCase() === 'k') {
     triggerHaptic()
-    router.push(`/projects/${nextProject.value.id}`)
+    navigateWithTransition(`/projects/${nextProject.value.id}`)
   }
+}
+
+function navigateWithTransition(path: string) {
+  if (isNavigating.value || !inkRef.value) return
+  isNavigating.value = true
+  triggerHaptic()
+  
+  // Find the target project to get its accent color
+  const targetId = path.split('/').pop()
+  const targetColor = targetId && projectsData[targetId] ? projectsData[targetId].accentColor : '#000000'
+  
+  // Set ink color to match TARGET project accent before swallowing screen
+  gsap.set(inkRef.value, { backgroundColor: targetColor })
+  
+  // Burst from island to cover screen
+  gsap.to(inkRef.value, {
+    scale: 1,
+    duration: 0.85,
+    ease: 'expo.inOut',
+    onComplete: () => {
+      // Force scroll to top while screen is completely covered
+      if (typeof window !== 'undefined') window.scrollTo(0, 0)
+      
+      // Swap data underneath and pass the transition color to the new mount
+      router.push({ path, state: { transitionColor: targetColor } })
+    }
+  })
 }
 
 onMounted(() => {
@@ -69,9 +105,28 @@ onMounted(() => {
   setTimeout(() => {
     isEntered.value = true
   }, 50)
+
+  ctx = gsap.context(() => {
+    if (!inkRef.value) return
+    
+    // Read the passed color from previous transition, default to black if fresh load
+    const transitionColor = window.history.state?.transitionColor || '#000000'
+    
+    // On mount, start with the ink fully covering the screen in the target color
+    gsap.set(inkRef.value, { scale: 1, backgroundColor: transitionColor })
+    
+    // Suck ink into dynamic island
+    gsap.to(inkRef.value, {
+      scale: 0,
+      duration: 1.1,
+      ease: 'expo.inOut',
+      delay: 0.15
+    })
+  })
 })
 
 onUnmounted(() => {
+  if (ctx) ctx.revert()
   window.removeEventListener('keydown', handleKeyDown)
   if (typeof document !== 'undefined') {
     document.documentElement.style.overflow = ''
@@ -268,13 +323,15 @@ useSeoMeta({
       surface-bg="transparent"
     />
 
+    <!-- GSAP Ink Expansion Portal (Originates from Dynamic Island) -->
+    <div ref="inkRef" class="island-expansion-ink" aria-hidden="true"></div>
+
     <!-- TOP NAVIGATION BAR (With J/K Shortcuts & Return Button) -->
     <nav class="m5-top-nav font-mono">
       <div class="m5-top-nav-left">
         <InteractiveHoverButton
-          to="/projects"
+          @click="navigateWithTransition('/projects')"
           :accent-color="project.accentColor"
-          @click="triggerHaptic"
         >
           <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -286,20 +343,18 @@ useSeoMeta({
 
       <div class="m5-top-nav-right font-mono">
         <InteractiveHoverButton
-          :to="`/projects/${prevProject.id}`"
+          @click="navigateWithTransition(`/projects/${prevProject.id}`)"
           :accent-color="project.accentColor"
           title="Press J for Previous Project"
-          @click="triggerHaptic"
         >
           <span class="m5-key-tag">[J]</span>
           <span class="m5-cycle-label">← {{ prevProject.title }}</span>
         </InteractiveHoverButton>
         <span class="m5-nav-sep">•</span>
         <InteractiveHoverButton
-          :to="`/projects/${nextProject.id}`"
+          @click="navigateWithTransition(`/projects/${nextProject.id}`)"
           :accent-color="project.accentColor"
           title="Press K for Next Project"
-          @click="triggerHaptic"
         >
           <span class="m5-cycle-label">{{ nextProject.title }} →</span>
           <span class="m5-key-tag">[K]</span>
@@ -339,6 +394,21 @@ useSeoMeta({
   min-height: 100vh;
   background: #000000;
   color: #EEEEEE;
+}
+
+/* GSAP Ink Portal Expansion from Dynamic Island */
+.island-expansion-ink {
+  position: fixed;
+  top: 45px; /* Exact center of the 42px high dynamic island placed at top: 24px */
+  left: 50%;
+  width: 300vmax;
+  height: 300vmax;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: #000000;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform, background-color;
 }
 
 .m5-top-nav {

@@ -3,6 +3,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import DynamicIslandNav from '~/components/core/DynamicIslandNav.vue'
 import InteractiveHoverButton from '~/components/ui/InteractiveHoverButton.vue'
+import TargetCursor from '~/components/ui/TargetCursor.vue'
 import ScrollInception from '~/components/project/ScrollInception.vue'
 import type { InceptionScreenData, ActionLink } from '~/components/project/InceptionScreen.vue'
 
@@ -315,6 +316,12 @@ useSeoMeta({
       :surface-bg="project.surfaceBg"
       :action-links="actionLinks"
       :reveal-chrome="true"
+    />
+
+    <!-- Custom Parallax Cursor -->
+    <TargetCursor
+      :cursor-color-on-target="project.accentColor"
+      target-selector=".interactive-hover-btn, .pixel-fire-btn, .inception-screen__action-link, a, button"
     />
   </div>
 </template>

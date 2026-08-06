@@ -222,8 +222,7 @@ const screens = computed<InceptionScreenData[]>(() => {
       eyebrow: '01 / OVERVIEW',
       heading: p.title,
       sub: p.description,
-      techStack: p.techStack,
-      image: p.image
+      techStack: p.techStack
     },
     {
       eyebrow: '02 / ARCHITECTURE',

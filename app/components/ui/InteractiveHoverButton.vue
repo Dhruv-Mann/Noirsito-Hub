@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
-
 interface Props {
   text?: string
   wide?: boolean
@@ -9,26 +7,19 @@ interface Props {
   accentColor?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   text: 'Button',
   wide: false,
   to: undefined,
   href: undefined,
   accentColor: '#00A19B'
 })
-
-const componentTag = computed(() => {
-  if (props.to) return 'NuxtLink'
-  if (props.href) return 'a'
-  return 'button'
-})
 </script>
 
 <template>
-  <component
-    :is="componentTag"
+  <NuxtLink
+    v-if="to"
     :to="to"
-    :href="href"
     class="interactive-hover-btn group"
     :class="{ 'min-w-56': wide }"
     :style="{ '--btn-accent': accentColor }"
@@ -48,7 +39,57 @@ const componentTag = computed(() => {
         </slot>
       </slot>
     </div>
-  </component>
+  </NuxtLink>
+
+  <a
+    v-else-if="href"
+    :href="href"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="interactive-hover-btn group"
+    :class="{ 'min-w-56': wide }"
+    :style="{ '--btn-accent': accentColor }"
+  >
+    <div class="btn-dot-expand" aria-hidden="true" />
+    
+    <div class="btn-content-default">
+      <slot name="default">
+        <span>{{ text }}</span>
+      </slot>
+    </div>
+
+    <div class="btn-content-hover">
+      <slot name="hover">
+        <slot name="default">
+          <span>{{ text }}</span>
+        </slot>
+      </slot>
+    </div>
+  </a>
+
+  <button
+    v-else
+    type="button"
+    class="interactive-hover-btn group"
+    :class="{ 'min-w-56': wide }"
+    :style="{ '--btn-accent': accentColor }"
+  >
+    <div class="btn-dot-expand" aria-hidden="true" />
+    
+    <div class="btn-content-default">
+      <slot name="default">
+        <span>{{ text }}</span>
+      </slot>
+    </div>
+
+    <div class="btn-content-hover">
+      <slot name="hover">
+        <slot name="default">
+          <span>{{ text }}</span>
+        </slot>
+      </slot>
+    </div>
+  </button>
 </template>
 
 <style scoped>

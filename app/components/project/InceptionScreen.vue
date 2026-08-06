@@ -73,6 +73,7 @@
           <PixelFireButton
             v-if="level < 2"
             :accent-color="accentColor"
+            @click="openUrl"
           >
             {{ buttonLabel }}
           </PixelFireButton>
@@ -241,6 +242,12 @@ const fauxBtnStyle = computed(() => ({
   position: 'relative' as const,
   overflow: 'hidden',
 }))
+
+function openUrl() {
+  if (props.url && typeof window !== 'undefined') {
+    window.open(props.url.startsWith('http') ? props.url : `https://${props.url}`, '_blank')
+  }
+}
 </script>
 
 <style scoped>

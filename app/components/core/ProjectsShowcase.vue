@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { gsap } from 'gsap'
 import DynamicIslandNav from './DynamicIslandNav.vue'
 
 interface Project {
@@ -21,6 +22,12 @@ const isFolderOpen = ref(false)
 const hoverFolder = ref(false)
 const hoveredCardId = ref<string | null>(null)
 const activeReadProject = ref<Project | null>(null)
+
+// Animation Refs
+const curtainRef = ref<HTMLElement | null>(null)
+const ditherRef = ref<HTMLElement | null>(null)
+const stageRef = ref<HTMLElement | null>(null)
+let ctx: gsap.Context | null = null
 
 // Drag tracking for closing folder
 const dragStartY = ref<number | null>(null)
@@ -148,6 +155,36 @@ function openProjectLink(url: string) {
     window.open(url, '_blank')
   }
 }
+
+onMounted(() => {
+  ctx = gsap.context(() => {
+    const tl = gsap.timeline()
+    
+    // Initial states: hide stage slightly
+    gsap.set(stageRef.value, { y: 40, opacity: 0 })
+
+    // Give browser ~150ms buffer to paint the massive PNG behind the black curtain
+    tl.to({}, { duration: 0.15 })
+    
+    // Reveal stage while curtain wipes up
+    tl.to(curtainRef.value, {
+      yPercent: -100,
+      duration: 1.2,
+      ease: 'power4.inOut'
+    }, 'reveal')
+    
+    tl.to(stageRef.value, {
+      y: 0,
+      opacity: 1,
+      duration: 1.2,
+      ease: 'power3.out'
+    }, 'reveal+=0.3')
+  })
+})
+
+onUnmounted(() => {
+  if (ctx) ctx.revert()
+})
 </script>
 
 <template>
@@ -161,8 +198,12 @@ function openProjectLink(url: string) {
     <!-- Dynamic Island Navigation Header -->
     <DynamicIslandNav active-tab="projects" />
 
+    <!-- GSAP Entry Curtain (Pitch Black) -->
+    <div ref="curtainRef" class="page-curtain" aria-hidden="true"></div>
+
     <!-- Full Background Dithered Overlay (Single Viewport Fitted) -->
     <div
+      ref="ditherRef"
       class="dither-bg-layer"
       :class="{ 'fade-out': hoverFolder || hoveredCardId !== null || isFolderOpen }"
       aria-hidden="true"
@@ -178,7 +219,7 @@ function openProjectLink(url: string) {
     />
 
     <!-- Single Page Fixed Stage Container -->
-    <div class="projects-stage-wrapper">
+    <div ref="stageRef" class="projects-stage-wrapper">
       <!-- Top Section Header & Filters -->
       <header class="section-header">
         <h1 class="projects-title font-display">
@@ -367,6 +408,17 @@ function openProjectLink(url: string) {
   justify-content: space-between;
   padding-top: 80px;
   padding-bottom: 24px;
+}
+
+/* GSAP Entry Curtain */
+.page-curtain {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #050507;
+  z-index: 9999;
+  pointer-events: none;
 }
 
 /* Background Dither Overlay — Single Viewport Fitted */

@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import DynamicIslandNav from '~/components/core/DynamicIslandNav.vue'
+import InteractiveHoverButton from '~/components/ui/InteractiveHoverButton.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -227,13 +228,13 @@ useSeoMeta({
     class="modernist-5col-page font-body select-none"
     :class="{ 'is-entered': isEntered }"
     :style="{
-      '--m5-paper-bg': project.paperBg,
+      '--m5-paper-bg': 'transparent',
       '--m5-accent': project.accentColor,
-      '--m5-surface-bg': project.surfaceBg,
+      '--m5-surface-bg': 'transparent',
       '--m5-cursor-url': cursorSvgUrl
     }"
   >
-    <!-- Dynamic Ambient Backdrop Glow Layer -->
+    <!-- Dynamic Ambient Backdrop Glow Layer (Now transparent) -->
     <div class="m5-ambient-glow" aria-hidden="true" />
 
     <!-- Dynamic Island Navigation Header -->
@@ -241,32 +242,46 @@ useSeoMeta({
       active-tab="projects"
       is-read-page
       :accent-color="project.accentColor"
-      :surface-bg="project.paperBg"
+      surface-bg="transparent"
     />
 
     <div class="m5-container">
       <!-- TOP NAVIGATION BAR (With J/K Shortcuts & Return Button) -->
       <nav class="m5-top-nav font-mono">
         <div class="m5-top-nav-left">
-          <NuxtLink to="/projects" class="m5-back-nav-btn font-body" @click="triggerHaptic">
+          <InteractiveHoverButton
+            to="/projects"
+            :accent-color="project.accentColor"
+            @click="triggerHaptic"
+          >
             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
               <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <span>BACK TO PROJECTS</span>
             <span class="m5-esc-hint font-mono">[ESC]</span>
-          </NuxtLink>
+          </InteractiveHoverButton>
         </div>
 
         <div class="m5-top-nav-right font-mono">
-          <NuxtLink :to="`/projects/${prevProject.id}`" class="m5-cycle-btn" @click="triggerHaptic" title="Press J for Previous Project">
+          <InteractiveHoverButton
+            :to="`/projects/${prevProject.id}`"
+            :accent-color="project.accentColor"
+            title="Press J for Previous Project"
+            @click="triggerHaptic"
+          >
             <span class="m5-key-tag">[J]</span>
             <span class="m5-cycle-label">← {{ prevProject.title }}</span>
-          </NuxtLink>
+          </InteractiveHoverButton>
           <span class="m5-nav-sep">•</span>
-          <NuxtLink :to="`/projects/${nextProject.id}`" class="m5-cycle-btn" @click="triggerHaptic" title="Press K for Next Project">
+          <InteractiveHoverButton
+            :to="`/projects/${nextProject.id}`"
+            :accent-color="project.accentColor"
+            title="Press K for Next Project"
+            @click="triggerHaptic"
+          >
             <span class="m5-cycle-label">{{ nextProject.title }} →</span>
             <span class="m5-key-tag">[K]</span>
-          </NuxtLink>
+          </InteractiveHoverButton>
         </div>
       </nav>
 
@@ -352,9 +367,12 @@ useSeoMeta({
       <!-- ROW 4: Modernist Action Links -->
       <footer class="m5-footer-bar font-body">
         <div class="m5-actions-row">
-          <NuxtLink to="/projects" class="m5-action-btn m5-action-back font-body">
-            [ ← BACK TO PROJECTS ]
-          </NuxtLink>
+          <InteractiveHoverButton
+            to="/projects"
+            :accent-color="project.accentColor"
+            text="[ ← BACK TO PROJECTS ]"
+            @click="triggerHaptic"
+          />
           <a v-if="project.windowsUrl" :href="project.windowsUrl" target="_blank" rel="noopener" class="m5-action-btn">
             [ DOWNLOAD .EXE ]
           </a>

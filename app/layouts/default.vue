@@ -7,7 +7,7 @@ import PageTransitionSheet from '~/components/core/PageTransitionSheet.vue'
   <div class="layout-wrapper">
     <!-- Cinematic Elastic Pink Sheet Sweep Transition Layer -->
     <PageTransitionSheet />
-    <!-- Full Page Background holding Hero_section.png without modifying the image -->
+    <!-- Full Page Background holding me.png without modifying the image -->
     <div class="page-background-image" aria-hidden="true" />
     <AppGrain />
     <main class="layout-main">
@@ -25,7 +25,7 @@ import PageTransitionSheet from '~/components/core/PageTransitionSheet.vue'
   background-color: #341514;
 }
 
-/* Full page background layer with Hero_section.png directly included */
+/* Full page background layer with me.png directly included */
 .page-background-image {
   position: fixed;
   inset: 0;
@@ -33,7 +33,7 @@ import PageTransitionSheet from '~/components/core/PageTransitionSheet.vue'
   height: 100vh;
   pointer-events: none;
   z-index: 0;
-  background-image: url('/Hero_section.png');
+  background-image: url('/me.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

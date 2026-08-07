@@ -409,6 +409,7 @@ onUnmounted(() => {
   z-index: 900;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background: #1E0713;
   backdrop-filter: blur(16px);
@@ -459,6 +460,10 @@ onUnmounted(() => {
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
   margin-left: 2px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: middle;
 }
 
 @keyframes pulse-glow {
@@ -468,12 +473,19 @@ onUnmounted(() => {
 
 .fade-fast-enter-active,
 .fade-fast-leave-active {
-  transition: opacity 0.15s ease;
+  transition: opacity 0.2s ease, max-width 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.25);
 }
 
 .fade-fast-enter-from,
 .fade-fast-leave-to {
   opacity: 0;
+  max-width: 0;
+}
+
+.fade-fast-enter-to,
+.fade-fast-leave-from {
+  opacity: 1;
+  max-width: 150px;
 }
 
 @media (max-width: 640px) {

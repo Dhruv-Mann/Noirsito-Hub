@@ -1,5 +1,6 @@
 <template>
   <footer
+    ref="footerEl"
     class="home-footer font-body select-none"
     :class="{ 'footer-hovered': isHovered }"
     @mouseenter="isHovered = true"
@@ -7,7 +8,7 @@
   >
     <!-- Background Reveal Layer (Dithered asset seamlessly blended on right side) -->
     <div class="reveal-bg-layer" aria-hidden="true">
-      <img src="/ditherit.png" alt="" class="reveal-bg-img" />
+      <img src="/Skull.png" alt="" class="reveal-bg-img" />
     </div>
 
     <!-- Subtle noise texture overlay for background parity -->
@@ -150,42 +151,6 @@ function triggerPinkSweep() {
   align-items: center;
   justify-content: flex-end;
   padding-right: 0;
-  /* Mask: fade completely to transparent on the left edge (where it meets the footer content),
-     fade on top and bottom so the PNG has no hard visible boundary against the background */
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(0, 0, 0, 0.4) 18%,
-    rgba(0, 0, 0, 0.85) 38%,
-    black 60%,
-    black 80%,
-    transparent 100%
-  ),
-  linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 12%,
-    black 88%,
-    transparent 100%
-  );
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(0, 0, 0, 0.4) 18%,
-    rgba(0, 0, 0, 0.85) 38%,
-    black 60%,
-    black 80%,
-    transparent 100%
-  ),
-  linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 12%,
-    black 88%,
-    transparent 100%
-  );
-  mask-composite: intersect;
 }
 
 .home-footer.footer-hovered .reveal-bg-layer {
@@ -205,6 +170,20 @@ function triggerPinkSweep() {
   image-rendering: crisp-edges;
   /* Bump contrast slightly to make dithered dots pop against the dark bg */
   filter: contrast(1.15) brightness(1.05);
+  
+  /* Apply a perfectly feathered radial mask so no rigid borders ever show */
+  -webkit-mask-image: radial-gradient(
+    ellipse 65% 65% at 50% 50%, 
+    black 10%, 
+    rgba(0, 0, 0, 0.8) 40%, 
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 65% 65% at 50% 50%, 
+    black 10%, 
+    rgba(0, 0, 0, 0.8) 40%, 
+    transparent 100%
+  );
 }
 
 /* Subtle noise overlay */

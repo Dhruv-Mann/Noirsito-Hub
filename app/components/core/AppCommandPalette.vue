@@ -16,9 +16,9 @@ const selectedIndex = ref(0)
 const copiedMessage = ref('')
 
 const projectThemes: Record<string, { accent: string; paperBg: string; surfaceBg: string }> = {
-  filemind: { accent: '#00A19B', paperBg: 'rgba(0, 161, 155, 0.15)', surfaceBg: '#031413' },
-  'sentinel-vision': { accent: '#DC2626', paperBg: 'rgba(220, 38, 38, 0.15)', surfaceBg: '#170404' },
-  'noirsito-ui': { accent: '#EA580C', paperBg: 'rgba(234, 88, 12, 0.15)', surfaceBg: '#170A03' }
+  filemind: { accent: '#AF719D', paperBg: 'rgba(175, 113, 157, 0.15)', surfaceBg: '#0A0609' },
+  'sentinel-vision': { accent: '#CB2957', paperBg: 'rgba(203, 41, 87, 0.15)', surfaceBg: '#0A0002' },
+  'noirsito-ui': { accent: '#D97757', paperBg: 'rgba(217, 119, 87, 0.15)', surfaceBg: '#0A0402' }
 }
 
 const activeProjectTheme = computed(() => {

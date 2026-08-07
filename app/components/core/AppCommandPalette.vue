@@ -264,9 +264,7 @@ onUnmounted(() => {
       @click="isOpen = true"
     >
       <span class="cmd-mnemonic font-mono">CTRL+K</span>
-      <Transition name="fade-fast">
-        <span v-if="isTriggerHovered" class="cmd-k-label font-mono">COMMAND PALETTE</span>
-      </Transition>
+      <span class="cmd-k-label font-mono">COMMAND PALETTE</span>
     </button>
 
     <!-- Command Palette Modal -->
@@ -409,7 +407,7 @@ onUnmounted(() => {
   z-index: 900;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 8px;
   background: #1E0713;
   backdrop-filter: blur(16px);
@@ -417,7 +415,7 @@ onUnmounted(() => {
   color: #FFE0EB;
   height: 42px;
   width: 104px;
-  padding: 0 14px;
+  padding: 0 14px 0 23px;
   border-radius: 28px;
   font-size: 0.75rem;
   font-weight: 700;
@@ -469,23 +467,6 @@ onUnmounted(() => {
 @keyframes pulse-glow {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.4; transform: scale(0.85); }
-}
-
-.fade-fast-enter-active,
-.fade-fast-leave-active {
-  transition: opacity 0.2s ease, max-width 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.25);
-}
-
-.fade-fast-enter-from,
-.fade-fast-leave-to {
-  opacity: 0;
-  max-width: 0;
-}
-
-.fade-fast-enter-to,
-.fade-fast-leave-from {
-  opacity: 1;
-  max-width: 150px;
 }
 
 @media (max-width: 640px) {

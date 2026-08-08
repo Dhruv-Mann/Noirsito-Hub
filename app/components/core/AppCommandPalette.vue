@@ -302,7 +302,7 @@ onUnmounted(() => {
           </div>
 
           <!-- Categorized Body -->
-          <div class="palette-body">
+          <div class="palette-body" data-lenis-prevent>
             <div v-if="groupedActions.length > 0" class="actions-list">
               <div v-for="group in groupedActions" :key="group.name" class="category-group">
                 <div class="category-header font-mono">

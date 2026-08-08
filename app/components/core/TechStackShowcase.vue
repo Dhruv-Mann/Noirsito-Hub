@@ -666,4 +666,28 @@ onBeforeUnmount(() => {
     clip-path: none !important;
   }
 }
+
+@media (max-width: 768px) {
+  .left-content-column {
+    padding: 60px 16px 32px 16px;
+    gap: 30px;
+  }
+  
+  .canvas-wrapper {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+  
+  .fullscreen-slanted-sheet {
+    height: 40vh;
+    margin-top: 20px;
+  }
+  
+  .section-headline {
+    font-size: 2.2rem;
+  }
+}
 </style>

@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, inject, type Ref } from 'vue'
 import { gsap } from 'gsap'
 import DynamicIslandNav from './DynamicIslandNav.vue'
+
+const isTouch = inject<Ref<boolean>>('isTouch', ref(false))
 
 interface Project {
   id: string
@@ -82,6 +84,8 @@ const filteredProjects = computed(() => {
 })
 
 function getCardStyle(index: number, total: number) {
+  if (isTouch.value) return {} // Mobile layout is handled entirely by CSS flexbox/scroll
+
   const offset = index - (total - 1) / 2
 
   if (!isFolderOpen.value) {
@@ -1051,8 +1055,84 @@ onUnmounted(() => {
 .modal-fade-leave-active {
   transition: opacity 0.3s ease;
 }
-.modal-fade-enter-from,
-.modal-fade-leave-to {
-  opacity: 0;
+.modal-fade-enter-to,
+.modal-fade-leave-from {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .projects-showcase {
+    padding-top: 60px;
+    padding-bottom: 0;
+  }
+
+  .folder-gallery-viewport {
+    padding-bottom: 0;
+    align-items: flex-start;
+  }
+
+  .folder-stage-container {
+    width: 100vw;
+    max-width: 100vw;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px 24px;
+    margin-top: 20px;
+    /* Allow horizontal scrolling */
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Hide the 3D folder wrapper elements entirely */
+  .folder-back-wall, .folder-front-flap {
+    display: none;
+  }
+
+  .folder-cards-stack-layer {
+    position: relative;
+    bottom: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: max-content;
+  }
+
+  .folder-project-card {
+    position: relative;
+    width: 82vw;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    flex-shrink: 0;
+    scroll-snap-align: center;
+    transform: none !important;
+    opacity: 1 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+  }
+
+  .category-filters {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 16px;
+  }
+
+  .projects-title {
+    font-size: 2.2rem;
+  }
+
+  .project-read-modal-card {
+    width: 95vw;
+    padding: 20px;
+    height: auto;
+    max-height: 85vh;
+  }
+  
+  .read-modal-title {
+    font-size: 1.8rem;
+  }
 }
 </style>

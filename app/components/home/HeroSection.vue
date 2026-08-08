@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, inject, type Ref } from 'vue'
 import PixelMatrixCanvas from './PixelMatrixCanvas.vue'
 import LissajousOrbit from './LissajousOrbit.vue'
 import CornerStarsCanvas from './CornerStarsCanvas.vue'
 import { useSystemState } from '~/composables/useSystemState'
 import { usePageTransition } from '~/composables/usePageTransition'
+
+const isTouch = inject<Ref<boolean>>('isTouch', ref(false))
 
 const { isStarted, isAssembled, triggerInitialization } = useSystemState()
 const { startPinkSweep } = usePageTransition()
@@ -76,7 +78,7 @@ onUnmounted(() => {
 
     <!-- Ambient Dynamic Color Spotlight Mesh (Only visible on initial prompt page before click) -->
     <Transition name="fade">
-      <div v-if="!isStarted" class="ambient-mesh" aria-hidden="true" />
+      <div v-if="!isStarted && !isTouch" class="ambient-mesh" aria-hidden="true" />
     </Transition>
 
     <!-- Big Background Lissajous Harmonic Orbit (Freezes & Expands smoothly over 2.88s on click) -->
@@ -425,5 +427,38 @@ onUnmounted(() => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .hero-content-container {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: 15vh;
+  }
+  
+  .hero-text-block {
+    max-width: 100%;
+  }
+  
+  .first-name {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .hero-emblem-stage {
+    margin-right: 0;
+    margin-top: 40px;
+    align-self: center;
+  }
+  
+  .main-name-heading {
+    margin-bottom: var(--space-phi-sm);
+  }
+  
+  .meta-block {
+    margin-left: 0;
+    margin-top: var(--space-phi-md);
+  }
 }
 </style>

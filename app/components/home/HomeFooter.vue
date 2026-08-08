@@ -217,7 +217,7 @@ function triggerPinkSweep() {
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 768px) {
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 24px;

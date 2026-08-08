@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch, nextTick, inject, type Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useSystemState } from '~/composables/useSystemState'
 
@@ -8,6 +8,7 @@ const router = useRouter()
 const isHomePage = computed(() => route.path === '/')
 
 const { isStarted } = useSystemState()
+const isTouch = inject<Ref<boolean>>('isTouch', ref(false))
 
 const isOpen = ref(false)
 const isTriggerHovered = ref(false)
@@ -263,7 +264,7 @@ onUnmounted(() => {
       @mouseleave="isTriggerHovered = false"
       @click="isOpen = true"
     >
-      <span class="cmd-mnemonic font-mono">CTRL+K</span>
+      <span class="cmd-mnemonic font-mono">{{ isTouch ? 'MENU' : 'CTRL+K' }}</span>
       <span class="cmd-k-label font-mono">COMMAND PALETTE</span>
     </button>
 
@@ -470,8 +471,15 @@ onUnmounted(() => {
 }
 
 @media (max-width: 640px) {
-  .cmd-k-trigger.expanded {
-    width: 170px;
+  .cmd-k-trigger {
+    bottom: 24px;
+    right: 24px;
+  }
+  
+  .palette-modal {
+    width: 95vw;
+    max-width: 100%;
+    margin-top: 10vh;
   }
 }
 

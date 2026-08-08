@@ -1,10 +1,10 @@
 <template>
-  <div ref="containerRef" class="skills-physics-container">
+  <div ref="containerRef" class="skills-physics-container" :class="{ 'is-mobile': isTouch }">
     <div 
       v-for="badge in badges" 
       :key="badge.id"
       class="physics-skill-badge font-mono"
-      :style="{
+      :style="isTouch ? {} : {
         transform: `translate(${badge.x}px, ${badge.y}px)`
       }"
     >
@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, inject, type Ref } from 'vue'
 
 interface PhysicsBadge {
   id: number
@@ -28,6 +28,7 @@ interface PhysicsBadge {
   radius: number
 }
 
+const isTouch = inject<Ref<boolean>>('isTouch', ref(false))
 const containerRef = ref<HTMLDivElement | null>(null)
 let rafId: number | null = null
 
@@ -42,6 +43,11 @@ const skillLabels = [
 const badges = ref<PhysicsBadge[]>([])
 
 function initPhysics() {
+  if (isTouch.value) {
+    badges.value = skillLabels.map((label, i) => ({ id: i, label, x:0, y:0, vx:0, vy:0, width:0, height:0, radius:0 }))
+    return
+  }
+
   const w = window.innerWidth
   const h = window.innerHeight * 0.38
 
@@ -175,7 +181,9 @@ function handleResize() {
 onMounted(() => {
   initPhysics()
   window.addEventListener('resize', handleResize)
-  rafId = requestAnimationFrame(updatePhysics)
+  if (!isTouch.value) {
+    rafId = requestAnimationFrame(updatePhysics)
+  }
 })
 
 onBeforeUnmount(() => {
@@ -216,5 +224,30 @@ onBeforeUnmount(() => {
   user-select: none;
   will-change: transform;
   transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .skills-physics-container.is-mobile {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    z-index: 10;
+    pointer-events: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 16px;
+    margin-top: 20px;
+  }
+  
+  .skills-physics-container.is-mobile .physics-skill-badge {
+    position: relative;
+    transform: none !important;
+    top: auto;
+    left: auto;
+  }
 }
 </style>
